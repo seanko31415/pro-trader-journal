@@ -236,6 +236,23 @@ body {
 }
 .btn-export i { font-size: 0.85rem; }
 
+.storage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: var(--radius-md);
+  background: rgba(16, 185, 129, 0.08);
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.storage-badge i { font-size: 0.88rem; }
+
+
 /* ========================================================================
    8. TAB NAVIGATION
    ======================================================================== */
@@ -1200,6 +1217,16 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
       </div>
     </div>
     <div class="header-actions">
+      <div class="storage-badge" id="storageStatusBadge" title="當前使用的 IndexedDB 資料庫狀態與容量預估">
+        <i class="fas fa-database"></i> <span id="storageBadgeText">檢查資料庫...</span>
+      </div>
+      <button class="btn-export" id="btnExportJSON" title="匯出完整 JSON 備份 (包含 K 線截圖)">
+        <i class="fas fa-file-export"></i> 備份 JSON
+      </button>
+      <button class="btn-export" id="btnImportJSON" title="從 JSON 檔案還原或匯入交易紀錄">
+        <i class="fas fa-file-import"></i> 還原 JSON
+      </button>
+      <input type="file" id="fImportJSON" accept=".json" style="display:none;">
       <button class="btn-export" id="btnExportExcel" title="匯出 Excel">
         <i class="fas fa-file-excel"></i> 匯出 Excel
       </button>
@@ -1518,16 +1545,113 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
      =================================================================== -->
 <script>
 /* ========================================================================
-   1. STATE MANAGEMENT
+   1. STATE & STORAGE MANAGEMENT (IndexedDB + Image Compression)
    ======================================================================== */
-let trades = JSON.parse(localStorage.getItem('protrader_trades') || '[]');
+let trades = [];
 let calYear, calMonth;
 let strategyChartInstance = null;
 let currentSessionFilter = 'All';
 
-function saveTrades() {
-  localStorage.setItem('protrader_trades', JSON.stringify(trades));
+// IndexedDB Helper for unlimited persistent storage
+const dbHelper = {
+  dbName: 'ProTraderDB',
+  storeName: 'tradesStore',
+  async init() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(this.dbName, 1);
+      req.onupgradeneeded = e => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(this.storeName)) {
+          db.createObjectStore(this.storeName, { keyPath: 'id' });
+        }
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async getAll() {
+    const db = await this.init();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.storeName, 'readonly');
+      const store = tx.objectStore(this.storeName);
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async saveAll(tradesArray) {
+    const db = await this.init();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.storeName, 'readwrite');
+      const store = tx.objectStore(this.storeName);
+      store.clear().onsuccess = () => {
+        tradesArray.forEach(item => store.put(item));
+      };
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+};
+
+async function saveTrades() {
+  // 1. Save complete data (with Base64 images) to IndexedDB (Unlimited capacity)
+  await dbHelper.saveAll(trades);
+  
+  // 2. Save lightweight backup (without base64 images) to localStorage so it NEVER hits 5MB limit
+  const lightTrades = trades.map(({ img, ...rest }) => rest);
+  localStorage.setItem('protrader_trades', JSON.stringify(lightTrades));
+
+  updateStorageStatus();
 }
+
+function updateStorageStatus() {
+  const badgeText = document.getElementById('storageBadgeText');
+  if (!badgeText) return;
+  
+  const totalCount = trades.length;
+  const jsonStr = JSON.stringify(trades);
+  const bytes = new Blob([jsonStr]).size;
+  let sizeStr = (bytes / 1024).toFixed(1) + ' KB';
+  if (bytes > 1024 * 1024) {
+    sizeStr = (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+  }
+  badgeText.innerHTML = `${totalCount} 筆交易 / 估計 ${sizeStr} <span style="opacity:0.8;font-size:0.68rem;">(IndexedDB)</span>`;
+}
+
+// JSON Backup & Restore Handlers
+document.getElementById('btnExportJSON').addEventListener('click', () => {
+  if (trades.length === 0) { showToast('沒有交易記錄可匯出', 'error'); return; }
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(trades, null, 2));
+  const dlAnchorElem = document.createElement('a');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", `PRO_TRADER_BACKUP_${new Date().toISOString().slice(0,10)}.json`);
+  dlAnchorElem.click();
+  showToast('完整備份 JSON 已成功下載！', 'success');
+});
+
+document.getElementById('btnImportJSON').addEventListener('click', () => {
+  document.getElementById('fImportJSON').click();
+});
+
+document.getElementById('fImportJSON').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (event) => {
+    try {
+      const imported = JSON.parse(event.target.result);
+      if (!Array.isArray(imported)) throw new Error('格式錯誤');
+      trades = imported;
+      await saveTrades();
+      renderDashboard();
+      renderAnalytics();
+      showToast(`成功匯入 ${trades.length} 筆交易紀錄！`, 'success');
+    } catch (err) {
+      showToast('JSON 備份檔解析錯誤', 'error');
+    }
+  };
+  reader.readAsText(file);
+});
 
 /* ========================================================================
    HELPER: Session Detection
@@ -1816,14 +1940,42 @@ fImage.addEventListener('change', () => { if (fImage.files.length) handleImageFi
 
 function handleImageFile(file) {
   if (!file.type.startsWith('image/')) { showToast('請上傳圖片格式檔案', 'error'); return; }
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    currentImgBase64 = e.target.result;
+  
+  // Create an image object to compress via HTML5 Canvas
+  const img = new Image();
+  const objectUrl = URL.createObjectURL(file);
+  img.onload = () => {
+    URL.revokeObjectURL(objectUrl);
+    const canvas = document.createElement('canvas');
+    let width = img.width;
+    let height = img.height;
+    const maxDimension = 1440; // Max 1440px to keep high quality while saving ~95% size
+
+    if (width > height) {
+      if (width > maxDimension) {
+        height = Math.round((height * maxDimension) / width);
+        width = maxDimension;
+      }
+    } else {
+      if (height > maxDimension) {
+        width = Math.round((width * maxDimension) / height);
+        height = maxDimension;
+      }
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, width, height);
+
+    // Export as high-quality JPEG (0.82) for optimal sharpness/size balance
+    currentImgBase64 = canvas.toDataURL('image/jpeg', 0.82);
     imgPreview.src = currentImgBase64;
     imgPreview.style.display = 'block';
     imgRemove.style.display = 'inline-block';
+    showToast('截圖已自動高畫質壓縮優化', 'success');
   };
-  reader.readAsDataURL(file);
+  img.src = objectUrl;
 }
 
 imgRemove.addEventListener('click', (e) => {
@@ -2286,10 +2438,30 @@ function doPDFExport() {
 /* ========================================================================
    10. INITIALIZATION
    ======================================================================== */
-function init() {
+async function init() {
   const now = new Date();
   calYear = now.getFullYear();
   calMonth = now.getMonth();
+
+  try {
+    // 1. Try loading from IndexedDB first
+    trades = await dbHelper.getAll();
+
+    // 2. If IndexedDB is empty, check if there is existing data in localStorage and migrate seamlessly
+    if (trades.length === 0) {
+      const localTrades = JSON.parse(localStorage.getItem('protrader_trades') || '[]');
+      if (localTrades.length > 0) {
+        trades = localTrades;
+        await saveTrades();
+        showToast('已自動將歷史紀錄遷移至 IndexedDB 永久無限資料庫！', 'success');
+      }
+    }
+  } catch (err) {
+    console.error('IndexedDB error, fallback to localStorage:', err);
+    trades = JSON.parse(localStorage.getItem('protrader_trades') || '[]');
+  }
+
+  updateStorageStatus();
   renderDashboard();
   renderAnalytics();
 }
