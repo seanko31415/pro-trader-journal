@@ -1352,15 +1352,136 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   font-weight: 700;
 }
 
+/* ========================================================================
+   12. BALANCED JOURNAL FORM & DUAL CHARTS LAYOUT
+   ======================================================================== */
+.journal-form-grid {
+  display: grid;
+  grid-template-columns: 1.14fr 0.86fr;
+  gap: 26px;
+  align-items: start;
+}
+.journal-col-left, .journal-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.form-panel-box {
+  padding: 26px 28px !important;
+  background: rgba(17, 24, 39, 0.72) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45) !important;
+}
+.dual-dropzone-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 6px;
+}
+.drop-zone.dual-zone {
+  min-height: 195px !important;
+  padding: 15px 10px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.drop-zone-title {
+  font-size: 0.83rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.drop-zone-desc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  text-align: center;
+}
+@media (max-width: 1024px) {
+  .journal-form-grid { grid-template-columns: 1fr; gap: 20px; }
+}
+@media (max-width: 640px) {
+  .dual-dropzone-grid { grid-template-columns: 1fr; }
+}
+
+/* Dual Chart Lightbox */
+.dual-image-modal-box {
+  max-width: 1320px !important;
+  width: 95% !important;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 28px !important;
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid rgba(212, 175, 55, 0.45) !important;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.85), 0 0 50px rgba(212, 175, 55, 0.2) !important;
+}
+.dual-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 18px;
+}
+.dual-modal-header h3 {
+  font-size: 1.16rem;
+  color: var(--gold);
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dual-modal-body {
+  overflow-y: auto;
+  max-height: 78vh;
+  display: grid;
+  gap: 20px;
+  align-items: start;
+}
+.dual-modal-body.two-charts { grid-template-columns: 1fr 1fr; }
+.dual-modal-body.single-chart { grid-template-columns: minmax(320px, 880px); justify-content: center; }
+@media (max-width: 900px) {
+  .dual-modal-body.two-charts { grid-template-columns: 1fr; }
+}
+.chart-panel-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(30, 41, 59, 0.5);
+  padding: 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.chart-panel-label {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chart-panel-item img {
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  object-fit: contain;
+  max-height: 65vh;
+  background: #000;
+}
 
 /* ========================================================================
-   12. IMAGE MODAL (Lightbox)
+   12b. IMAGE MODAL (Lightbox Overlay)
    ======================================================================== */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(8px);
+  background: rgba(0,0,0,0.82);
+  backdrop-filter: blur(10px);
   z-index: 1000;
   display: none;
   align-items: center;
@@ -1484,11 +1605,14 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
 <div class="ambient-blob blob-blue"></div>
 <div class="ambient-blob blob-gold"></div>
 
-<!-- ===== IMAGE MODAL ===== -->
+<!-- ===== DUAL IMAGE MODAL (Lightbox for HTF & LTF Charts) ===== -->
 <div class="modal-overlay" id="imageModal">
-  <div class="modal-content">
-    <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
-    <img id="modalImg" src="" alt="K線截圖">
+  <div class="glass-panel modal-content dual-image-modal-box">
+    <div class="dual-modal-header">
+      <h3 id="dualModalTitle"><i class="fas fa-images"></i> 復盤 K 線截圖對照</h3>
+      <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="dual-modal-body" id="dualModalBody"></div>
   </div>
 </div>
 
@@ -1626,166 +1750,199 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   <!-- ============================================================
        TAB 2: JOURNAL FORM
        ============================================================ -->
+  <!-- ============================================================
+       TAB 2: BALANCED 2-COLUMN JOURNAL FORM
+       ============================================================ -->
   <section class="tab-panel" id="panelJournal">
-    <form class="glass-panel journal-form" id="tradeForm" autocomplete="off">
+    <form class="journal-form-grid" id="tradeForm" autocomplete="off">
 
-      <!-- Section 1: Market Basics -->
-      <div class="form-section-title"><i class="fas fa-chart-candlestick"></i> 行情基礎</div>
-      <div class="form-row cols-4">
-        <div class="form-group">
-          <label>日期 <span class="required">*</span></label>
-          <input type="date" class="form-control" id="fDate" required>
-        </div>
-        <div class="form-group">
-          <label>交易時間 (HH:MM)</label>
-          <input type="time" class="form-control" id="fTradeTime" placeholder="e.g. 15:30">
-        </div>
-        <div class="form-group">
-          <label>時間級別 <span class="required">*</span></label>
-          <select class="form-control" id="fTimeframe" required>
-            <option value="">請選擇...</option>
-            <option value="M1">M1</option><option value="M5">M5</option>
-            <option value="M15">M15</option><option value="M30">M30</option>
-            <option value="H1">H1</option><option value="H4">H4</option>
-            <option value="D1">D1</option><option value="W1">W1</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>方向 <span class="required">*</span></label>
-          <select class="form-control" id="fDirection" required>
-            <option value="">請選擇...</option>
-            <option value="Long">多 Long</option>
-            <option value="Short">空 Short</option>
-          </select>
-        </div>
-      </div>
+      <!-- LEFT COLUMN: Market Basics, Strategy Core, P&L, Reason -->
+      <div class="journal-col-left">
+        <div class="glass-panel form-panel-box">
+          <!-- Section 1: Market Basics -->
+          <div class="form-section-title"><i class="fas fa-chart-candlestick"></i> 行情基礎</div>
+          <div class="form-row cols-4">
+            <div class="form-group">
+              <label>日期 <span class="required">*</span></label>
+              <input type="date" class="form-control" id="fDate" required>
+            </div>
+            <div class="form-group">
+              <label>交易時間 (HH:MM)</label>
+              <input type="time" class="form-control" id="fTradeTime" placeholder="e.g. 15:30">
+            </div>
+            <div class="form-group">
+              <label>時間級別 <span class="required">*</span></label>
+              <select class="form-control" id="fTimeframe" required>
+                <option value="">請選擇...</option>
+                <option value="M1">M1</option><option value="M5">M5</option>
+                <option value="M15">M15</option><option value="M30">M30</option>
+                <option value="H1">H1</option><option value="H4">H4</option>
+                <option value="D1">D1</option><option value="W1">W1</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>方向 <span class="required">*</span></label>
+              <select class="form-control" id="fDirection" required>
+                <option value="">請選擇...</option>
+                <option value="Long">多 Long</option>
+                <option value="Short">空 Short</option>
+              </select>
+            </div>
+          </div>
 
-      <!-- Session Auto-detect Display -->
-      <div class="session-detect-display" id="sessionDetectDisplay" style="display:none;">
-        <i class="fas fa-clock session-detect-icon"></i>
-        <div class="session-detect-text" id="sessionDetectText">—</div>
-      </div>
+          <!-- Session Auto-detect Display -->
+          <div class="session-detect-display" id="sessionDetectDisplay" style="display:none;margin-top:12px;">
+            <i class="fas fa-clock session-detect-icon"></i>
+            <div class="session-detect-text" id="sessionDetectText">—</div>
+          </div>
 
-      <!-- Section 2: Strategy Core -->
-      <div class="form-section-title"><i class="fas fa-crosshairs"></i> 策略核心</div>
-      <div class="form-row cols-4">
-        <div class="form-group">
-          <label>交易策略 <span class="required">*</span></label>
-          <select class="form-control" id="fStrategy" required>
-            <option value="">請選擇...</option>
-            <option value="ICT Order Block">ICT Order Block</option>
-            <option value="SMC FVG">SMC FVG</option>
-            <option value="BOS/ChoCh">BOS / ChoCh</option>
-            <option value="Liquidity Sweep">Liquidity Sweep</option>
-            <option value="Supply & Demand">Supply & Demand</option>
-            <option value="Trend Following">Trend Following</option>
-            <option value="Breakout">Breakout</option>
-            <option value="Mean Reversion">Mean Reversion</option>
-            <option value="Fibonacci">Fibonacci</option>
-            <option value="Custom">自訂策略</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>市場偏見 <span class="required">*</span></label>
-          <input type="text" class="form-control" id="fBias" placeholder="e.g. Bullish MSS" required>
-        </div>
-        <div class="form-group">
-          <label>訂單狀態 <span class="required">*</span></label>
-          <select class="form-control" id="fStatus" required>
-            <option value="">請選擇...</option>
-            <option value="TP">止盈 Take Profit</option>
-            <option value="SL">止損 Stop Loss</option>
-            <option value="Open">進行中 Open</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>情緒 / 心理狀態</label>
-          <select class="form-control" id="fEmotion">
-            <option value="">請選擇...</option>
-            <option value="Calm">😌 冷靜 Calm</option>
-            <option value="Confident">💪 自信 Confident</option>
-            <option value="FOMO">🔥 害怕錯過 FOMO</option>
-            <option value="Revenge">💢 報復交易 Revenge</option>
-            <option value="Anxious">😰 焦慮 Anxious</option>
-          </select>
-        </div>
-      </div>
+          <!-- Section 2: Strategy Core (Custom free input + Datalist suggestions) -->
+          <div class="form-section-title" style="margin-top:22px;"><i class="fas fa-crosshairs"></i> 策略核心 (可下拉選擇或自由填寫)</div>
+          <div class="form-row cols-2">
+            <div class="form-group">
+              <label>交易策略 <span class="required">*</span> <span style="font-size:0.7rem;color:var(--gold);font-weight:700;">(支援自由填寫)</span></label>
+              <input type="text" class="form-control" id="fStrategy" list="strategyOptions" placeholder="點擊選擇經典策略或自由填寫自訂名稱..." required>
+              <datalist id="strategyOptions">
+                <option value="ICT Order Block (訂單塊進場)">
+                <option value="SMC FVG (合理價值缺口)">
+                <option value="BOS / CHoCH (結構破壞與轉變)">
+                <option value="Liquidity Sweep (流動性掠奪)">
+                <option value="Supply & Demand (供需區間)">
+                <option value="Trend Following (順勢交易)">
+                <option value="Breakout (突破策略)">
+                <option value="Mean Reversion (均值回歸)">
+                <option value="Fibonacci Retracement (斐波那契回撤)">
+                <option value="亞洲盤假突破 / 倫敦銀彈">
+              </datalist>
+            </div>
+            <div class="form-group">
+              <label>市場偏見 / 結構趨勢 <span class="required">*</span></label>
+              <input type="text" class="form-control" id="fBias" placeholder="e.g. Bullish MSS / H4 順向破底翻" required>
+            </div>
+          </div>
+          <div class="form-row cols-2" style="margin-top:14px;">
+            <div class="form-group">
+              <label>訂單狀態 <span class="required">*</span></label>
+              <select class="form-control" id="fStatus" required>
+                <option value="">請選擇...</option>
+                <option value="TP">止盈 Take Profit</option>
+                <option value="SL">止損 Stop Loss</option>
+                <option value="Open">進行中 Open</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>情緒 / 心理狀態</label>
+              <select class="form-control" id="fEmotion">
+                <option value="">請選擇...</option>
+                <option value="Calm">😌 冷靜 Calm</option>
+                <option value="Confident">💪 自信 Confident</option>
+                <option value="FOMO">🔥 害怕錯過 FOMO</option>
+                <option value="Revenge">💢 報復交易 Revenge</option>
+                <option value="Anxious">😰 焦慮 Anxious</option>
+              </select>
+            </div>
+          </div>
 
-      <!-- Section 3: P&L + Position Sizing -->
-      <div class="form-section-title"><i class="fas fa-coins"></i> 資金盈虧 & 倉位計算</div>
-      <div class="form-row cols-4">
-        <div class="form-group">
-          <label>實際平倉收益率 (%) <span class="required">*</span></label>
-          <input type="number" step="0.01" class="form-control" id="fPct" placeholder="e.g. 1.50" required>
-        </div>
-        <div class="form-group">
-          <label>剩餘資金 (USD) <span class="required">*</span></label>
-          <input type="number" step="0.01" class="form-control" id="fBalance" placeholder="e.g. 10250.00" required>
-        </div>
-        <div class="form-group">
-          <label>風險比例 (%)</label>
-          <input type="number" step="0.1" min="0.1" max="100" class="form-control" id="fRiskPct" placeholder="e.g. 1.0">
-        </div>
-        <div class="form-group">
-          <label>止損距離 (Pips)</label>
-          <input type="number" step="0.1" min="0.1" class="form-control" id="fSlPips" placeholder="e.g. 30">
-        </div>
-      </div>
+          <!-- Section 3: P&L + Position Sizing -->
+          <div class="form-section-title" style="margin-top:22px;"><i class="fas fa-coins"></i> 資金盈虧 & 倉位風控計算</div>
+          <div class="form-row cols-4">
+            <div class="form-group">
+              <label>平倉收益率 (%) <span class="required">*</span></label>
+              <input type="number" step="0.01" class="form-control" id="fPct" placeholder="e.g. 1.50" required>
+            </div>
+            <div class="form-group">
+              <label>剩餘資金 (USD) <span class="required">*</span></label>
+              <input type="number" step="0.01" class="form-control" id="fBalance" placeholder="e.g. 10250.00" required>
+            </div>
+            <div class="form-group">
+              <label>風險比例 (%)</label>
+              <input type="number" step="0.1" min="0.1" max="100" class="form-control" id="fRiskPct" placeholder="e.g. 1.0">
+            </div>
+            <div class="form-group">
+              <label>止損距離 (Pips)</label>
+              <input type="number" step="0.1" min="0.1" class="form-control" id="fSlPips" placeholder="e.g. 30">
+            </div>
+          </div>
 
-      <!-- Position Sizing Calculator Display -->
-      <div class="pos-calc-display" id="posCalcDisplay" style="display:none;">
-        <div class="pos-calc-card" id="calcMaxLossCard">
-          <div class="calc-label"><i class="fas fa-shield-halved" style="margin-right:4px;"></i> 最大允許虧損</div>
-          <div class="calc-value" id="calcMaxLoss">$ —</div>
-        </div>
-        <div class="pos-calc-card">
-          <div class="calc-label"><i class="fas fa-layer-group" style="margin-right:4px;"></i> 建議手數</div>
-          <div class="calc-value" id="calcLotSize">— Lots</div>
-        </div>
-      </div>
+          <!-- Position Sizing Calculator Display -->
+          <div class="pos-calc-display" id="posCalcDisplay" style="display:none;margin-top:12px;">
+            <div class="pos-calc-card" id="calcMaxLossCard">
+              <div class="calc-label"><i class="fas fa-shield-halved" style="margin-right:4px;"></i> 最大允許虧損</div>
+              <div class="calc-value" id="calcMaxLoss">$ —</div>
+            </div>
+            <div class="pos-calc-card">
+              <div class="calc-label"><i class="fas fa-layer-group" style="margin-right:4px;"></i> 建議手數</div>
+              <div class="calc-value" id="calcLotSize">— Lots</div>
+            </div>
+          </div>
 
-      <!-- Section 4: Reflection -->
-      <div class="form-section-title"><i class="fas fa-brain"></i> 主觀覆盤與反思</div>
-      <div class="form-row cols-1">
-        <div class="form-group">
-          <label>開倉理由 / 交易計畫 <span class="required">*</span></label>
-          <textarea class="form-control" id="fReason" rows="3" placeholder="詳述你的開倉邏輯、入場訊號、結構分析..." required></textarea>
-        </div>
-      </div>
-      <div class="form-row cols-2">
-        <div class="form-group">
-          <label>改進想法</label>
-          <textarea class="form-control" id="fImprove" rows="2" placeholder="下次可以改進的地方..."></textarea>
-        </div>
-        <div class="form-group">
-          <label>老師建議 / 導師反饋</label>
-          <textarea class="form-control" id="fAdvice" rows="2" placeholder="導師或教練的指導意見..."></textarea>
-        </div>
-      </div>
-      <div class="form-row cols-1">
-        <div class="form-group">
-          <label>今日學習心得</label>
-          <textarea class="form-control" id="fLearning" rows="2" placeholder="今天從市場學到了什麼..."></textarea>
-        </div>
-      </div>
-
-      <!-- Section 5: Media -->
-      <div class="form-section-title"><i class="fas fa-image"></i> 多媒體 K 線截圖</div>
-      <div class="form-row cols-1">
-        <div class="form-group">
-          <div class="drop-zone" id="dropZone">
-            <div class="drop-zone-icon"><i class="fas fa-cloud-arrow-up"></i></div>
-            <div class="drop-zone-text">拖放圖片至此，或 <span>點擊選擇檔案</span></div>
-            <input type="file" id="fImage" accept="image/*">
-            <img class="drop-zone-preview" id="imgPreview" alt="預覽">
-            <button type="button" class="drop-zone-remove" id="imgRemove"><i class="fas fa-trash-can"></i> 移除圖片</button>
+          <!-- Section 4: Reflection Core -->
+          <div class="form-section-title" style="margin-top:22px;"><i class="fas fa-brain"></i> 開倉理由與策略計畫</div>
+          <div class="form-group">
+            <textarea class="form-control" id="fReason" rows="3" placeholder="詳述你的進場邏輯、共振訊號、資金流向與止損止盈規劃..." required></textarea>
           </div>
         </div>
       </div>
 
-      <button type="submit" class="btn-submit">
-        <i class="fas fa-plus-circle"></i> 儲存交易紀錄
-      </button>
+      <!-- RIGHT COLUMN: Reflections, Learning Notes, and DUAL K-LINE CHARTS -->
+      <div class="journal-col-right">
+        <div class="glass-panel form-panel-box">
+          <div class="form-section-title"><i class="fas fa-lightbulb"></i> 檢討反思 & 導師反饋</div>
+          <div class="form-row cols-2">
+            <div class="form-group">
+              <label>改進想法 / 盲點</label>
+              <textarea class="form-control" id="fImprove" rows="3" placeholder="下單時的心理盲點或下次能做得更好的地方..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>老師建議 / 教練反饋</label>
+              <textarea class="form-control" id="fAdvice" rows="3" placeholder="教練或群友針對此單的建議與點評..."></textarea>
+            </div>
+          </div>
+
+          <div class="form-section-title" style="margin-top:20px;"><i class="fas fa-graduation-cap"></i> 今日學習心得</div>
+          <div class="form-group">
+            <textarea class="form-control" id="fLearning" rows="3" placeholder="今天從市場或此單中學到了最重要的教訓與精華是什麼..."></textarea>
+          </div>
+
+          <!-- Section 5: DUAL K-LINE CHARTS right below learning notes -->
+          <div class="form-section-title" style="margin-top:22px;">
+            <i class="fas fa-images"></i> 雙 K 線多媒體截圖 (雙圖對照：大格局 vs 小時框)
+          </div>
+          <div class="dual-dropzone-grid">
+            <!-- Chart 1: Higher Timeframe / Macro -->
+            <div class="form-group">
+              <div class="drop-zone dual-zone" id="dropZone1">
+                <div class="drop-zone-title"><i class="fas fa-chart-line"></i> 圖一：大時框趨勢 (HTF)</div>
+                <div class="drop-zone-desc">例如 H4 / D1 宏觀趨勢與關鍵支撐壓力</div>
+                <div class="drop-zone-icon" style="font-size:1.6rem;margin:5px 0;"><i class="fas fa-cloud-arrow-up"></i></div>
+                <div class="drop-zone-text" style="font-size:0.76rem;">拖放或 <span>點擊選擇</span></div>
+                <input type="file" id="fImage1" accept="image/*" style="display:none;">
+                <img class="drop-zone-preview" id="imgPreview1" alt="大時框截圖">
+                <button type="button" class="drop-zone-remove" id="imgRemove1" title="移除圖一">&times;</button>
+              </div>
+            </div>
+            <!-- Chart 2: Lower Timeframe / Execution -->
+            <div class="form-group">
+              <div class="drop-zone dual-zone" id="dropZone2">
+                <div class="drop-zone-title"><i class="fas fa-crosshairs"></i> 圖二：進場執行 (LTF)</div>
+                <div class="drop-zone-desc">例如 M5 / M15 精確進場點與 K 線型態</div>
+                <div class="drop-zone-icon" style="font-size:1.6rem;margin:5px 0;"><i class="fas fa-cloud-arrow-up"></i></div>
+                <div class="drop-zone-text" style="font-size:0.76rem;">拖放或 <span>點擊選擇</span></div>
+                <input type="file" id="fImage2" accept="image/*" style="display:none;">
+                <img class="drop-zone-preview" id="imgPreview2" alt="進場截圖">
+                <button type="button" class="drop-zone-remove" id="imgRemove2" title="移除圖二">&times;</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions" style="margin-top:24px;">
+            <button type="submit" class="btn-submit" id="btnSubmitTrade" style="width:100%;justify-content:center;font-size:1rem;padding:15px;">
+              <i class="fas fa-save"></i> 儲存交易紀錄至無限資料庫 (自動高畫質雙圖對照)
+            </button>
+          </div>
+        </div>
+      </div>
+
     </form>
   </section>
 
@@ -2440,26 +2597,45 @@ fBalance.addEventListener('input', updatePosCalc);
 fRiskPct.addEventListener('input', updatePosCalc);
 fSlPips.addEventListener('input', updatePosCalc);
 
-// ---- Drop Zone ----
-const dropZone = document.getElementById('dropZone');
-const fImage = document.getElementById('fImage');
-const imgPreview = document.getElementById('imgPreview');
-const imgRemove = document.getElementById('imgRemove');
+// ---- Dual Drop Zones (Chart 1: HTF, Chart 2: LTF) ----
+let currentImgBase64_1 = null;
+let currentImgBase64_2 = null;
 
-dropZone.addEventListener('click', () => fImage.click());
-dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-dropZone.addEventListener('drop', e => {
-  e.preventDefault();
-  dropZone.classList.remove('drag-over');
-  if (e.dataTransfer.files.length) handleImageFile(e.dataTransfer.files[0]);
-});
-fImage.addEventListener('change', () => { if (fImage.files.length) handleImageFile(fImage.files[0]); });
+function setupDropZone(dzId, inputId, previewId, removeId, idx) {
+  const dz = document.getElementById(dzId);
+  const fImg = document.getElementById(inputId);
+  const prev = document.getElementById(previewId);
+  const rm = document.getElementById(removeId);
 
-function handleImageFile(file) {
+  if (!dz || !fImg || !prev || !rm) return;
+
+  dz.addEventListener('click', () => fImg.click());
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+  dz.addEventListener('drop', e => {
+    e.preventDefault();
+    dz.classList.remove('drag-over');
+    if (e.dataTransfer.files.length) handleDualImageFile(e.dataTransfer.files[0], idx, prev, rm);
+  });
+  fImg.addEventListener('change', () => { if (fImg.files.length) handleDualImageFile(fImg.files[0], idx, prev, rm); });
+
+  rm.addEventListener('click', e => {
+    e.stopPropagation();
+    if (idx === 1) currentImgBase64_1 = null;
+    else currentImgBase64_2 = null;
+    prev.style.display = 'none';
+    rm.style.display = 'none';
+    prev.src = '';
+    fImg.value = '';
+  });
+}
+
+setupDropZone('dropZone1', 'fImage1', 'imgPreview1', 'imgRemove1', 1);
+setupDropZone('dropZone2', 'fImage2', 'imgPreview2', 'imgRemove2', 2);
+
+function handleDualImageFile(file, idx, prevEl, rmEl) {
   if (!file.type.startsWith('image/')) { showToast('請上傳圖片格式檔案', 'error'); return; }
   
-  // Create an image object to compress via HTML5 Canvas
   const img = new Image();
   const objectUrl = URL.createObjectURL(file);
   img.onload = () => {
@@ -2467,7 +2643,7 @@ function handleImageFile(file) {
     const canvas = document.createElement('canvas');
     let width = img.width;
     let height = img.height;
-    const maxDimension = 1440; // Max 1440px to keep high quality while saving ~95% size
+    const maxDimension = 1440;
 
     if (width > height) {
       if (width > maxDimension) {
@@ -2486,24 +2662,17 @@ function handleImageFile(file) {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0, width, height);
 
-    // Export as high-quality JPEG (0.82) for optimal sharpness/size balance
-    currentImgBase64 = canvas.toDataURL('image/jpeg', 0.82);
-    imgPreview.src = currentImgBase64;
-    imgPreview.style.display = 'block';
-    imgRemove.style.display = 'inline-block';
-    showToast('截圖已自動高畫質壓縮優化', 'success');
+    const base64 = canvas.toDataURL('image/jpeg', 0.82);
+    if (idx === 1) currentImgBase64_1 = base64;
+    else currentImgBase64_2 = base64;
+
+    prevEl.src = base64;
+    prevEl.style.display = 'block';
+    rmEl.style.display = 'inline-block';
+    showToast(`圖 ${idx === 1 ? '一 (大時框)' : '二 (進場圖)'} 已自動高畫質壓縮優化`, 'success');
   };
   img.src = objectUrl;
 }
-
-imgRemove.addEventListener('click', (e) => {
-  e.stopPropagation();
-  currentImgBase64 = null;
-  imgPreview.style.display = 'none';
-  imgRemove.style.display = 'none';
-  imgPreview.src = '';
-  fImage.value = '';
-});
 
 // ---- Form Submit ----
 tradeForm.addEventListener('submit', e => {
@@ -2529,7 +2698,9 @@ tradeForm.addEventListener('submit', e => {
     improve: document.getElementById('fImprove').value || '',
     advice: document.getElementById('fAdvice').value || '',
     learning: document.getElementById('fLearning').value || '',
-    img: currentImgBase64 || null
+    img1: currentImgBase64_1 || null,
+    img2: currentImgBase64_2 || null,
+    img: currentImgBase64_1 || currentImgBase64_2 || null
   };
 
   trades.push(trade);
@@ -2540,10 +2711,18 @@ tradeForm.addEventListener('submit', e => {
   tradeForm.reset();
   document.getElementById('fDate').value = savedDate || new Date().toISOString().slice(0,10);
   fPct.disabled = false;
-  currentImgBase64 = null;
-  imgPreview.style.display = 'none';
-  imgRemove.style.display = 'none';
-  imgPreview.src = '';
+  
+  currentImgBase64_1 = null;
+  currentImgBase64_2 = null;
+  const prev1 = document.getElementById('imgPreview1');
+  const rm1 = document.getElementById('imgRemove1');
+  const prev2 = document.getElementById('imgPreview2');
+  const rm2 = document.getElementById('imgRemove2');
+  if (prev1) { prev1.style.display = 'none'; prev1.src = ''; }
+  if (rm1) rm1.style.display = 'none';
+  if (prev2) { prev2.style.display = 'none'; prev2.src = ''; }
+  if (rm2) rm2.style.display = 'none';
+
   document.getElementById('posCalcDisplay').style.display = 'none';
   document.getElementById('sessionDetectDisplay').style.display = 'none';
 
@@ -2845,19 +3024,54 @@ function renderDataTable() {
 }
 
 /* ========================================================================
-   7. IMAGE MODAL
+   7. DUAL IMAGE MODAL (HTF & LTF Lightbox)
    ======================================================================== */
 const imageModal = document.getElementById('imageModal');
-const modalImg = document.getElementById('modalImg');
-document.getElementById('modalClose').addEventListener('click', () => imageModal.classList.remove('show'));
-imageModal.addEventListener('click', e => { if (e.target === imageModal) imageModal.classList.remove('show'); });
+const modalCloseBtn = document.getElementById('modalClose');
+if (modalCloseBtn) modalCloseBtn.addEventListener('click', () => imageModal.classList.remove('show'));
+if (imageModal) imageModal.addEventListener('click', e => { if (e.target === imageModal) imageModal.classList.remove('show'); });
 
 function openImageModal(tradeId) {
-  const trade = trades.find(t => String(t.id) === String(tradeId));
-  if (trade && trade.img) {
-    modalImg.src = trade.img;
-    imageModal.classList.add('show');
+  const t = trades.find(item => String(item.id) === String(tradeId));
+  if (!t) return;
+  const modal = document.getElementById('imageModal');
+  const title = document.getElementById('dualModalTitle');
+  const body = document.getElementById('dualModalBody');
+
+  if (!modal || !title || !body) return;
+
+  const img1 = t.img1 || t.img || null;
+  const img2 = t.img2 || null;
+
+  title.innerHTML = `<i class="fas fa-images"></i> 「${t.date || ''} ${t.tradeTime || ''}」 ${t.strategy || '自訂策略'} 復盤 K 線對照`;
+
+  if (img1 && img2) {
+    body.className = 'dual-modal-body two-charts';
+    body.innerHTML = `
+      <div class="chart-panel-item">
+        <div class="chart-panel-label"><i class="fas fa-chart-line"></i> 圖一：大時框宏觀趨勢圖 (HTF)</div>
+        <img src="${img1}" alt="大時框趨勢圖">
+      </div>
+      <div class="chart-panel-item">
+        <div class="chart-panel-label"><i class="fas fa-crosshairs"></i> 圖二：小時框進場執行圖 (LTF)</div>
+        <img src="${img2}" alt="進場執行圖">
+      </div>
+    `;
+  } else if (img1 || img2) {
+    body.className = 'dual-modal-body single-chart';
+    const singleSrc = img1 || img2;
+    const labelText = img1 ? '圖一：大時框宏觀趨勢圖 (HTF)' : '圖二：小時框進場執行圖 (LTF)';
+    body.innerHTML = `
+      <div class="chart-panel-item">
+        <div class="chart-panel-label"><i class="fas fa-image"></i> ${labelText}</div>
+        <img src="${singleSrc}" alt="K線圖">
+      </div>
+    `;
+  } else {
+    body.innerHTML = `<div class="empty-state"><p>此筆交易無附圖記錄</p></div>`;
   }
+
+  modal.classList.add('show');
 }
 
 /* ========================================================================
