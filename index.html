@@ -1747,6 +1747,74 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
 .empty-state p { font-size: 0.82rem; }
 
 /* ========================================================================
+   14.5 MARKET BASICS ROW & TIME PICKER BUTTONS (自由轉盤選取與防錯位排版)
+   ======================================================================== */
+.market-basics-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px 28px;
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+.time-picker-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.time-picker-input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+}
+.time-trigger-btn {
+  margin: 0 !important;
+  padding: 0 16px !important;
+  height: 44px !important;
+  background: rgba(212, 175, 55, 0.16) !important;
+  border: 1px solid var(--gold) !important;
+  color: var(--gold) !important;
+  border-radius: var(--radius-md) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  font-weight: 700 !important;
+  font-size: 0.88rem !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.18) !important;
+  backdrop-filter: blur(14px) !important;
+  flex-shrink: 0;
+}
+.time-trigger-btn:hover {
+  background: rgba(212, 175, 55, 0.28) !important;
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35) !important;
+  transform: translateY(-2px);
+}
+.time-trigger-btn.now-btn {
+  background: rgba(56, 189, 248, 0.16) !important;
+  border: 1px solid rgba(56, 189, 248, 0.6) !important;
+  color: #38bdf8 !important;
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.18) !important;
+}
+.time-trigger-btn.now-btn:hover {
+  background: rgba(56, 189, 248, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* 確保全體中文字體變動與寬度計算不會造成版面位移 */
+.form-group, .form-control, .form-panel-box, .journal-col-left, .journal-col-right {
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  word-break: break-word !important;
+}
+
+/* ========================================================================
    15. RESPONSIVE
    ======================================================================== */
 @media (max-width: 1180px) {
@@ -1754,21 +1822,23 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   .analytics-top { grid-template-columns: 1fr; }
   .analytics-kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .form-row.cols-3, .form-row.cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 20px; }
-  .form-row.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 20px; }
+  /* 平板下行情基礎與所有表單雙欄自動降為單垂直直列，100% 寬度不重疊不破框 */
+  .market-basics-row { grid-template-columns: minmax(0, 1fr) !important; gap: 18px !important; }
+  .form-row.cols-3, .form-row.cols-4 { grid-template-columns: minmax(0, 1fr) !important; gap: 18px !important; }
+  .form-row.cols-2 { grid-template-columns: minmax(0, 1fr) !important; gap: 18px !important; }
   .form-panel-box { padding: 22px 20px !important; }
 }
 @media (max-width: 820px) {
   .header { flex-direction: column; align-items: flex-start; gap: 12px; }
   .tab-nav { width: 100%; overflow-x: auto; flex-wrap: nowrap; }
   .tab-btn { white-space: nowrap; flex-shrink: 0; }
-  .form-row.cols-2, .form-row.cols-3, .form-row.cols-4 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px 16px;
+  .market-basics-row, .form-row.cols-2, .form-row.cols-3, .form-row.cols-4 {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 16px !important;
   }
   .form-control {
     padding: 10px 12px;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
   }
   input[type="date"].form-control,
   input[type="time"].form-control {
@@ -2183,19 +2253,17 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
         <div class="glass-panel form-panel-box">
           <!-- Section 1: Market Basics -->
           <div class="form-section-title"><i class="fas fa-chart-candlestick"></i> 行情基礎</div>
-          <div class="form-row cols-2" style="gap:24px 28px; margin-bottom:22px;">
+          <div class="form-row market-basics-row" style="margin-bottom:22px;">
             <div class="form-group">
               <label>日期 <span class="required">*</span></label>
-              <input type="date" class="form-control" id="fDate" required>
+              <input type="date" class="form-control" id="fDate" required style="cursor:pointer; font-family:var(--font-mono); font-weight:700; color:var(--text-primary); box-sizing:border-box; width:100%; max-width:100%;" onclick="try{if(this.showPicker)this.showPicker();}catch(e){}" title="點擊直接開啟日曆選擇日期">
             </div>
             <div class="form-group">
               <label>交易時間 (HH:MM)</label>
-              <input type="time" class="form-control" id="fTradeTime" placeholder="e.g. 15:30">
-              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
-                <button type="button" class="time-quick-btn" onclick="setQuickTime('now')" title="點此設為目前真實時間"><i class="fas fa-clock"></i> 現在</button>
-                <button type="button" class="time-quick-btn" onclick="setQuickTime('09:00')" title="亞盤開盤">亞盤 09:00</button>
-                <button type="button" class="time-quick-btn" onclick="setQuickTime('15:30')" title="歐盤開盤">歐盤 15:30</button>
-                <button type="button" class="time-quick-btn" onclick="setQuickTime('21:30')" title="美盤開盤">美盤 21:30</button>
+              <div class="time-picker-wrapper">
+                <input type="time" class="form-control time-picker-input" id="fTradeTime" style="cursor:pointer; font-family:var(--font-mono); font-size:1.05rem; font-weight:700; color:var(--gold); text-align:center; box-sizing:border-box;" onclick="try{if(this.showPicker)this.showPicker();}catch(e){}" title="點擊在轉盤/彈窗內自由選擇或直接鍵入任意時間">
+                <button type="button" class="btn-export time-trigger-btn" onclick="openTimeInputPicker(event)" title="點擊開啟時間選擇轉盤/彈窗，挑選任意時分"><i class="fas fa-clock"></i> <span>選取時間</span></button>
+                <button type="button" class="btn-export time-trigger-btn now-btn" onclick="setQuickTime('now')" title="一鍵自動填入當前真實時間"><i class="fas fa-bolt"></i> <span>現在</span></button>
               </div>
             </div>
           </div>
@@ -3322,6 +3390,25 @@ function setQuickTime(val) {
     timeInput.value = val;
   }
   timeInput.dispatchEvent(new Event('input'));
+}
+
+function openTimeInputPicker(event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  const timeInput = document.getElementById('fTradeTime');
+  if (!timeInput) return;
+  try {
+    timeInput.focus();
+    if (typeof timeInput.showPicker === 'function') {
+      timeInput.showPicker();
+    } else {
+      timeInput.click();
+    }
+  } catch(e) {
+    timeInput.focus();
+  }
 }
 
 function isLegacyStrategy(name) {
