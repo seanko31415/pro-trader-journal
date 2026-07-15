@@ -2453,7 +2453,11 @@ const dbHelper = {
 
 async function saveTrades() {
   // 1. Save complete data (with Base64 images) to IndexedDB asynchronously (Unlimited capacity, 0 UI block)
-  await dbHelper.saveAll(trades);
+  try {
+    await dbHelper.saveAll(trades);
+  } catch (err) {
+    console.error('IndexedDB saveAll error:', err);
+  }
   
   // 2. Save lightweight backup (without ANY base64 images: img, img1, img2, imgLearning) to localStorage so it NEVER blocks UI thread or hits 5MB limit
   try {
@@ -2462,6 +2466,13 @@ async function saveTrades() {
   } catch (err) {
     console.warn('localStorage backup skipped due to storage limit:', err);
   }
+
+  // 3. Auto-sync to Cloud in background without blocking UI if token is set
+  try {
+    if (localStorage.getItem('protrader_cloud_token')) {
+      setTimeout(() => { try { pushToCloudSync(true); } catch(e){} }, 400);
+    }
+  } catch(e) {}
 
   updateStorageStatus();
 }
@@ -3760,10 +3771,10 @@ function saveCloudSyncToken() {
   showToast('✅ 雲端同步 API 金鑰已成功保存！', 'success');
 }
 
-async function pushToCloudSync() {
+async function pushToCloudSync(silent = false) {
   const token = localStorage.getItem('protrader_cloud_token');
-  if (!token) { showToast('請先輸入並儲存您的 JSONBin / Gist 雲端 Token', 'error'); return; }
-  showToast('⏳ 正在連線雲端上傳資料庫，請稍候...', 'info');
+  if (!token) { if (!silent) showToast('請先輸入並儲存您的 JSONBin / Gist 雲端 Token', 'error'); return; }
+  if (!silent) showToast('⏳ 正在連線雲端上傳資料庫，請稍候...', 'info');
   try {
     let url = token.startsWith('http') ? token : `https://api.jsonbin.io/v3/b/${token}`;
     const res = await fetch(url, {
@@ -3772,10 +3783,16 @@ async function pushToCloudSync() {
       body: JSON.stringify({ trades: trades, updatedAt: new Date().toISOString() })
     });
     if (!res.ok) throw new Error('Cloud HTTP error');
-    showToast('✅ 全站交易資料已成功雲端備份與同步！手機隨時可拉取。', 'success');
+    if (!silent) showToast('✅ 全站交易資料已成功雲端備份與同步！手機隨時可拉取。', 'success');
   } catch (err) {
     console.error('Cloud push error:', err);
-    showToast('❌ 上傳雲端失敗，請確認 API 網址或 Token 金鑰正確性', 'error');
+    if (!silent) showToast('❌ 上傳雲端失敗，請確認 API 網址或 Token 金鑰正確性', 'error');
+  }
+}
+
+function triggerCloudAutoBackup() {
+  if (localStorage.getItem('protrader_cloud_token')) {
+    setTimeout(() => { try { pushToCloudSync(true); } catch(e){} }, 300);
   }
 }
 
