@@ -886,6 +886,15 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   border: 1px solid var(--glass-border);
   display: none;
 }
+.drop-zone.dual-zone .drop-zone-preview {
+  max-width: 96%;
+  max-height: 230px;
+  width: auto;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  margin-top: 12px;
+}
 .drop-zone-remove {
   display: none;
   margin-top: 8px;
@@ -900,33 +909,47 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   font-weight: 600;
 }
 
-/* Submit Button */
+/* Submit Button - Sleek Crystal Glass Reflective Button */
 .btn-submit {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 14px 40px;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--gold), #c49b2a);
-  color: var(--bg-deepest);
+  background: rgba(23, 32, 51, 0.68) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: #f8fafc !important;
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
   letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: all var(--transition-smooth);
-  box-shadow: 0 4px 20px rgba(212,175,55,0.2);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.3) !important;
   margin-top: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.btn-submit i {
+  color: var(--gold);
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
 }
 .btn-submit:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(212,175,55,0.3);
+  transform: translateY(-4px) !important;
+  border-color: rgba(255, 255, 255, 0.55) !important;
+  background: rgba(30, 43, 68, 0.85) !important;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65), inset 0 1px 3px rgba(255, 255, 255, 0.5) !important;
+  color: #ffffff !important;
+}
+.btn-submit:hover i {
+  transform: scale(1.15) rotate(-6deg);
 }
 .btn-submit:active {
-  transform: scale(0.96);
-  filter: brightness(0.9);
+  transform: scale(0.96) !important;
+  filter: brightness(0.92);
 }
 
 /* ========================================================================
@@ -1407,39 +1430,40 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   justify-content: space-between;
 }
 .dual-dropzone-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 10px;
 }
 .drop-zone.dual-zone {
-  min-height: 195px !important;
-  padding: 15px 10px !important;
+  min-height: 250px !important;
+  padding: 22px 16px !important;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex: 1;
 }
 .drop-zone-title {
-  font-size: 0.83rem;
+  font-size: 0.88rem;
   font-weight: 700;
   color: var(--gold);
-  margin-bottom: 3px;
+  margin-bottom: 4px;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 .drop-zone-desc {
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   color: var(--text-muted);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   text-align: center;
 }
 @media (max-width: 1024px) {
   .journal-form-grid { grid-template-columns: 1fr; gap: 20px; }
 }
 @media (max-width: 640px) {
-  .dual-dropzone-grid { grid-template-columns: 1fr; }
+  .dual-dropzone-grid { gap: 16px; }
 }
 
 /* Dual Chart Lightbox */
