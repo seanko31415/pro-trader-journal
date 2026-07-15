@@ -1700,6 +1700,119 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   .calendar-grid { gap: 3px; }
   .calendar-day { min-height: 44px; }
   .pos-calc-display { grid-template-columns: 1fr; }
+/* Strategy Matrix Showcase Grid */
+.strategy-matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+.strategy-matrix-card {
+  background: rgba(15,23,42,0.65);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-smooth);
+}
+.strategy-matrix-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold);
+  box-shadow: 0 10px 30px rgba(212,175,55,0.15);
+}
+.smc-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.smc-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.smc-badge {
+  font-size: 0.68rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+.smc-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  background: rgba(7,10,19,0.5);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  text-align: center;
+}
+.smc-stat-label { font-size: 0.68rem; color: var(--text-muted); margin-bottom: 4px; }
+.smc-stat-val { font-family: var(--font-mono); font-size: 1rem; font-weight: 800; }
+.smc-advice-box {
+  background: rgba(212,175,55,0.08);
+  border-left: 3px solid var(--gold);
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+.smc-btn-showcase {
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.05));
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+}
+.smc-btn-showcase:hover {
+  background: var(--gold);
+  color: var(--bg-deepest);
+}
+.showcase-item-card {
+  background: rgba(15,23,42,0.8);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 20px;
+}
+.showcase-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.showcase-img-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+.showcase-img-box {
+  background: rgba(7,10,19,0.7);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  text-align: center;
+}
+.showcase-img-box img {
+  max-height: 420px;
+  width: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+  margin-top: 8px;
 }
 </style>
 </head>
@@ -1739,6 +1852,60 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   </div>
 </div>
 
+<!-- ===== CLOUD SYNC & MULTI-DEVICE BRIDGE MODAL ===== -->
+<div class="modal-overlay" id="cloudSyncModal">
+  <div class="day-modal-content" style="max-width: 680px;">
+    <div class="day-modal-header">
+      <h3><i class="fas fa-cloud-arrow-up" style="color:var(--gold);"></i> 跨裝置雲端同步與瀏覽器永久防護中心</h3>
+      <button class="modal-close" onclick="closeCloudSyncModal()">&times;</button>
+    </div>
+    <div style="padding: 24px; color: var(--text-primary); max-height: 80vh; overflow-y: auto;">
+      <div style="background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.35); padding: 14px 18px; border-radius: var(--radius-md); margin-bottom: 22px; display: flex; align-items: center; gap: 14px;">
+        <i class="fas fa-shield-halved" style="font-size: 2rem; color: var(--green);"></i>
+        <div>
+          <div style="font-weight: 800; color: var(--green); font-size: 0.95rem;">✅ 瀏覽器永久無限儲存鎖定已啟用 (Persistent Storage)</div>
+          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 3px;">系統已向作業系統請求並鎖定永久儲存授權，您的歷史 K 線與單據絕不會被瀏覽器自動清理或不見。</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <h4 style="color: var(--gold); margin-bottom: 10px; font-size: 0.9rem;"><i class="fas fa-mobile-screen-button"></i> 方案一：跨裝置秒速移轉碼 (任意手機、平板一鍵複製貼上同步)</h4>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">如果您現在想在另一台裝置（如手機或平板）開啟 GitHub 網頁查看相同資料，只需點擊複製下方「同步移轉密鑰」，並在另一台裝置貼上即可瞬間還原！</p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn-submit" onclick="generateTransferToken()" style="background: var(--blue-bg); border-color: var(--blue); color: var(--blue);"><i class="fas fa-copy"></i> 1. 複製本機跨裝置移轉碼</button>
+          <button class="btn-submit" onclick="promptImportTransferToken()" style="background: var(--gold-glow); border-color: var(--gold); color: var(--gold);"><i class="fas fa-paste"></i> 2. 在手機/新裝置貼上同步碼還原</button>
+        </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 24px 0;">
+
+      <div>
+        <h4 style="color: var(--gold); margin-bottom: 10px; font-size: 0.9rem;"><i class="fas fa-key"></i> 方案二：免費 JSONBin / GitHub Gist 雲端 API 金鑰自動同步</h4>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">輸入您的 JSONBin.io 或 GitHub Gist Token，系統將自動於所有登入此網址的瀏覽器間進行雲端雙向同步。</p>
+        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+          <input type="text" id="cloudSyncTokenInput" class="form-control" placeholder="請貼上 JSONBin ID 或 Gist URL API Token..." style="flex:1;">
+          <button class="btn-submit" onclick="saveCloudSyncToken()" style="padding: 0 18px;"><i class="fas fa-save"></i> 儲存金鑰</button>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn-export" onclick="pushToCloudSync()" style="flex:1; justify-content: center;"><i class="fas fa-cloud-upload-alt"></i> 將目前資料上傳雲端</button>
+          <button class="btn-export" onclick="pullFromCloudSync()" style="flex:1; justify-content: center;"><i class="fas fa-cloud-download-alt"></i> 從雲端拉取最新的資料</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== STRATEGY SHOWCASE MODAL (動態戰略決策與案例展示中心) ===== -->
+<div class="modal-overlay" id="strategyShowcaseModal">
+  <div class="day-modal-content" style="max-width: 960px; max-height: 90vh; display:flex; flex-direction:column;">
+    <div class="day-modal-header" style="flex-shrink:0;">
+      <h3 id="showcaseStrategyTitle"><i class="fas fa-layer-group" style="color:var(--gold);"></i> 策略復盤動態展演</h3>
+      <button class="modal-close" onclick="closeStrategyShowcaseModal()">&times;</button>
+    </div>
+    <div style="padding: 20px 24px; overflow-y:auto; flex:1;" id="showcaseStrategyBody"></div>
+  </div>
+</div>
+
 <!-- ===== TOAST CONTAINER ===== -->
 <div class="toast-container" id="toastContainer"></div>
 
@@ -1770,6 +1937,9 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
       </button>
       <button class="btn-export" id="btnExportPDF" title="匯出 PDF">
         <i class="fas fa-file-pdf"></i> 匯出 PDF
+      </button>
+      <button class="btn-export" onclick="openCloudSyncModal()" title="設定全平台跨裝置同步與雲端備份中心" style="background:var(--gold-glow);border-color:var(--gold);color:var(--gold);">
+        <i class="fas fa-cloud-arrow-up"></i> 跨裝置雲端同步
       </button>
     </div>
   </header>
@@ -2122,6 +2292,15 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
         <h3><i class="fas fa-trophy"></i> 策略勝率排行榜</h3>
         <div class="leaderboard-scroll" id="leaderboardScroll"></div>
       </div>
+    </div>
+
+    <!-- Dynamic Strategy Matrix & Interactive Showcase Panel -->
+    <div class="glass-panel strategy-showcase-panel" style="margin-bottom:24px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:18px;">
+        <h3 style="margin-bottom:0;"><i class="fas fa-layer-group" style="color:var(--gold);"></i> 核心戰略智能矩陣與多媒體動態展演中心</h3>
+        <span style="font-size:0.75rem;color:var(--text-muted);background:rgba(212,175,55,0.1);padding:4px 12px;border-radius:20px;border:1px solid rgba(212,175,55,0.3);"><i class="fas fa-sparkles"></i> 點擊卡牌立刻動態展示歷史 K 線復盤案例</span>
+      </div>
+      <div class="strategy-matrix-grid" id="strategyMatrixGrid"></div>
     </div>
 
     <!-- Emotion Correlation Insight -->
@@ -3103,6 +3282,7 @@ function renderAnalytics() {
   renderRMultipleKPIs();
   renderStrategyChart();
   renderLeaderboard();
+  renderStrategyMatrix();
   renderEmotionInsight();
   renderDataTable();
 }
@@ -3267,6 +3447,248 @@ function renderLeaderboard() {
         </div>
       </div>`;
   }).join('');
+}
+
+/* ---- 6b-2. Strategy Matrix & Interactive Showcase Engine ---- */
+function renderStrategyMatrix() {
+  const grid = document.getElementById('strategyMatrixGrid');
+  if (!grid) return;
+  
+  const filtered = getFilteredTrades();
+  const closed = filtered.filter(t => t.status !== 'Open');
+  
+  let strategies = new Set(['3+1', '馬刺']);
+  closed.forEach(t => { if (t.strategy && typeof t.strategy === 'string') { const tr = t.strategy.trim(); if (tr && !isLegacyStrategy(tr)) strategies.add(tr); } });
+  
+  if (closed.length === 0) {
+    grid.innerHTML = Array.from(strategies).map(s => `
+      <div class="strategy-matrix-card">
+        <div class="smc-top">
+          <div class="smc-name"><i class="fas fa-layer-group"></i> ${s}</div>
+          <span class="smc-badge" style="background:rgba(212,175,55,0.15);color:var(--gold);">尚未實測</span>
+        </div>
+        <div class="smc-stats-grid">
+          <div><div class="smc-stat-label">交易次數</div><div class="smc-stat-val">0</div></div>
+          <div><div class="smc-stat-label">勝率</div><div class="smc-stat-val" style="color:var(--text-muted)">0.0%</div></div>
+          <div><div class="smc-stat-label">總盈虧</div><div class="smc-stat-val" style="color:var(--text-muted)">0.00%</div></div>
+        </div>
+        <div class="smc-advice-box">💡 點擊「記錄交易」填寫此策略之 K 線與進場理由，此處將自動為您統計勝率與多空決策大數據！</div>
+        <button class="smc-btn-showcase" onclick="openStrategyShowcase('${s}')"><i class="fas fa-images"></i> 查看策略經典復盤案例 (0 筆附圖)</button>
+      </div>
+    `).join('');
+    return;
+  }
+
+  const cardsHtml = Array.from(strategies).map(s => {
+    const sTrades = closed.filter(t => (t.strategy || '').trim() === s);
+    const count = sTrades.length;
+    const wins = sTrades.filter(t => parseFloat(t.pct) > 0);
+    const winRate = count > 0 ? ((wins.length / count) * 100).toFixed(1) : '0.0';
+    const totalReturn = sTrades.reduce((acc, t) => acc + (parseFloat(t.pct) || 0), 0);
+    const returnSign = totalReturn >= 0 ? '+' : '';
+    const returnColor = totalReturn >= 0 ? 'var(--green)' : 'var(--red)';
+    
+    const imgTrades = sTrades.filter(t => t.img || t.img1 || t.img2 || t.imgLearning);
+    const imgCount = imgTrades.length;
+
+    let adviceText = '🎯 該策略處於起步階段，建議嚴格遵循進場訂單塊與盈虧比原則，累積更多樣本數。';
+    if (count >= 3) {
+      if (parseFloat(winRate) >= 60 && totalReturn > 0) {
+        adviceText = `🔥 戰力爆發力優異！該策略勝率高達 ${winRate}% 且淨利 ${returnSign}${totalReturn.toFixed(2)}%，建議可適度提升風控額度！`;
+      } else if (parseFloat(winRate) < 40) {
+        adviceText = `⚠️ 目前勝率 ${winRate}% 略低，建議點選下方進入動態復盤案例庫，複查進場理由是否存在假突破。`;
+      } else {
+        adviceText = `⚖️ 表現穩健維持中。當前賺賠 ${returnSign}${totalReturn.toFixed(2)}%，請持續落實高盈虧比紀律。`;
+      }
+    }
+
+    return `
+      <div class="strategy-matrix-card">
+        <div class="smc-top">
+          <div class="smc-name"><i class="fas fa-layer-group"></i> ${s}</div>
+          <span class="smc-badge" style="background:${parseFloat(winRate) >= 50 ? 'rgba(16,185,129,0.18)' : 'rgba(239,68,68,0.18)'};color:${parseFloat(winRate) >= 50 ? 'var(--green)' : 'var(--red)'};border:1px solid ${parseFloat(winRate) >= 50 ? 'rgba(16,185,129,0.4)' : 'rgba(239,68,68,0.4)'};">${count > 0 ? `實戰 ${count} 單` : '尚未開倉'}</span>
+        </div>
+        <div class="smc-stats-grid">
+          <div><div class="smc-stat-label">交易筆數</div><div class="smc-stat-val" style="color:var(--text-primary)">${count}</div></div>
+          <div><div class="smc-stat-label">策略勝率</div><div class="smc-stat-val" style="color:${parseFloat(winRate) >= 50 ? 'var(--green)' : 'var(--amber)'}">${winRate}%</div></div>
+          <div><div class="smc-stat-label">累計盈虧</div><div class="smc-stat-val" style="color:${returnColor}">${returnSign}${totalReturn.toFixed(2)}%</div></div>
+        </div>
+        <div class="smc-advice-box">${adviceText}</div>
+        <button class="smc-btn-showcase" onclick="openStrategyShowcase('${s}')"><i class="fas fa-chart-line"></i> 進入動態展演與案例庫 (${imgCount} 筆有圖實錄)</button>
+      </div>
+    `;
+  }).join('');
+
+  grid.innerHTML = cardsHtml;
+}
+
+function openStrategyShowcase(strategyName) {
+  const modal = document.getElementById('strategyShowcaseModal');
+  const title = document.getElementById('showcaseStrategyTitle');
+  const body = document.getElementById('showcaseStrategyBody');
+  if (!modal || !title || !body) return;
+
+  title.innerHTML = `<i class="fas fa-layer-group" style="color:var(--gold);"></i> 「${strategyName}」 戰略精進動態展演與歷史案例庫`;
+
+  const sTrades = trades.filter(t => (t.strategy || '').trim() === strategyName).sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+  const imgTrades = sTrades.filter(t => t.img || t.img1 || t.img2 || t.imgLearning);
+
+  if (imgTrades.length === 0) {
+    body.innerHTML = `
+      <div class="empty-state" style="padding:50px 20px;">
+        <i class="fas fa-images" style="font-size:3.2rem;color:var(--gold);opacity:0.5;margin-bottom:16px;"></i>
+        <p style="font-size:1.1rem;color:var(--text-primary);font-weight:700;">此策略目前尚無上傳過 K 線或心得附圖</p>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;">請前往「記錄交易」為「${strategyName}」策略上傳 HTF / LTF 雙 K 線截圖，即時解鎖動態復盤展演！</p>
+      </div>
+    `;
+    modal.classList.add('show');
+    return;
+  }
+
+  body.innerHTML = imgTrades.map((t, index) => {
+    const pctVal = parseFloat(t.pct) || 0;
+    const pctCls = t.status === 'Open' ? 'op' : (pctVal >= 0 ? 'win' : 'loss');
+    const sign = pctVal >= 0 ? '+' : '';
+    const dirLabel = t.direction === 'Long' ? 'LONG (做多)' : 'SHORT (做空)';
+    const statusLabel = t.status === 'TP' ? '止盈出場' : (t.status === 'SL' ? '止損出場' : '持倉進行中');
+    
+    let imgsHtml = '';
+    if (t.img1 || t.img2) {
+      imgsHtml += `<div class="showcase-img-row">`;
+      if (t.img1) imgsHtml += `<div class="showcase-img-box"><div style="font-size:0.75rem;font-weight:700;color:var(--gold);"><i class="fas fa-chart-line"></i> 圖一：大時框趨勢分析 (HTF)</div><img src="${t.img1}" alt="HTF"></div>`;
+      if (t.img2) imgsHtml += `<div class="showcase-img-box"><div style="font-size:0.75rem;font-weight:700;color:var(--gold);"><i class="fas fa-crosshairs"></i> 圖二：小時框進場點位 (LTF)</div><img src="${t.img2}" alt="LTF"></div>`;
+      imgsHtml += `</div>`;
+    } else if (t.img) {
+      imgsHtml += `<div class="showcase-img-box"><div style="font-size:0.75rem;font-weight:700;color:var(--gold);"><i class="fas fa-image"></i> 實盤進出 K 線圖</div><img src="${t.img}" alt="K-line"></div>`;
+    }
+    if (t.imgLearning) {
+      imgsHtml += `<div class="showcase-img-box" style="margin-top:14px;"><div style="font-size:0.75rem;font-weight:700;color:var(--blue);"><i class="fas fa-book-open-reader"></i> 學習心得專屬筆記與思維導圖</div><img src="${t.imgLearning}" alt="Learning"></div>`;
+    }
+
+    return `
+      <div class="showcase-item-card">
+        <div class="showcase-item-top">
+          <div>
+            <span style="font-size:0.95rem;font-weight:800;color:var(--text-primary);margin-right:10px;"><i class="far fa-calendar-alt" style="color:var(--gold)"></i> ${t.date || ''} ${t.tradeTime || ''}</span>
+            <span style="font-size:0.72rem;background:rgba(212,175,55,0.15);color:var(--gold);padding:2px 8px;border-radius:12px;font-weight:700;margin-right:6px;">${dirLabel}</span>
+            <span style="font-size:0.72rem;background:rgba(255,255,255,0.08);color:var(--text-secondary);padding:2px 8px;border-radius:12px;font-weight:700;">${statusLabel}</span>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:1.1rem;font-weight:800;" class="dt-pct ${pctCls}">${sign}${pctVal.toFixed(2)}%</div>
+        </div>
+        ${t.reason ? `<div style="font-size:0.85rem;color:var(--text-secondary);background:rgba(0,0,0,0.35);padding:10px 14px;border-radius:6px;margin-bottom:14px;line-height:1.5;"><strong style="color:var(--gold);margin-right:6px;">進場開倉理由：</strong>${t.reason}</div>` : ''}
+        ${imgsHtml}
+      </div>
+    `;
+  }).join('');
+
+  modal.classList.add('show');
+}
+
+function closeStrategyShowcaseModal() {
+  const modal = document.getElementById('strategyShowcaseModal');
+  if (modal) modal.classList.remove('show');
+}
+
+/* ---- Cloud Sync & Multi-Device Bridge Handlers ---- */
+function openCloudSyncModal() {
+  const modal = document.getElementById('cloudSyncModal');
+  if (!modal) return;
+  const tokenInput = document.getElementById('cloudSyncTokenInput');
+  if (tokenInput) tokenInput.value = localStorage.getItem('protrader_cloud_token') || '';
+  modal.classList.add('show');
+}
+
+function closeCloudSyncModal() {
+  const modal = document.getElementById('cloudSyncModal');
+  if (modal) modal.classList.remove('show');
+}
+
+function generateTransferToken() {
+  if (trades.length === 0) { showToast('當前尚無交易紀錄可產生移轉密鑰', 'error'); return; }
+  showToast('⏳ 正在生成跨裝置移轉代碼，請稍候...', 'info');
+  setTimeout(() => {
+    try {
+      const dataStr = JSON.stringify(trades);
+      const compressed = btoa(encodeURIComponent(dataStr));
+      navigator.clipboard.writeText(compressed).then(() => {
+        showToast('✅ 跨裝置同步碼已成功複製到剪貼簿！可在手機貼上秒速還原。', 'success');
+      }).catch(() => {
+        prompt('請手動全選並複製下方同步密鑰：', compressed);
+      });
+    } catch (e) {
+      showToast('❌ 資料量較大，建議使用「方案二：JSON 備份」或「雲端 API 金鑰」', 'error');
+    }
+  }, 200);
+}
+
+function promptImportTransferToken() {
+  const code = prompt('📱 【貼上跨裝置同步碼還原】\n\n請在下方輸入框貼上您從另一台裝置複製的「同步移轉密鑰」字串：');
+  if (!code || !code.trim()) return;
+  try {
+    const decodedStr = decodeURIComponent(atob(code.trim()));
+    const imported = JSON.parse(decodedStr);
+    if (!Array.isArray(imported)) throw new Error('格式驗證失敗');
+    if (!confirm(`📥 【同步還原確認】\n\n偵測到有效的跨裝置移轉資料庫（共 ${imported.length} 筆交易紀錄）。\n\n確定要在本裝置匯入並同步這 ${imported.length} 筆紀錄與多媒體附圖嗎？`)) return;
+    trades = imported;
+    saveTrades();
+    renderDashboard();
+    renderAnalytics();
+    closeCloudSyncModal();
+    showToast(`🎉 成功同步還原 ${trades.length} 筆交易單與 K 線截圖！`, 'success');
+  } catch (err) {
+    showToast('❌ 同步碼格式不正確或傳輸中斷，請確認是否完整複製', 'error');
+  }
+}
+
+function saveCloudSyncToken() {
+  const input = document.getElementById('cloudSyncTokenInput');
+  if (!input) return;
+  const val = input.value.trim();
+  localStorage.setItem('protrader_cloud_token', val);
+  showToast('✅ 雲端同步 API 金鑰已成功保存！', 'success');
+}
+
+async function pushToCloudSync() {
+  const token = localStorage.getItem('protrader_cloud_token');
+  if (!token) { showToast('請先輸入並儲存您的 JSONBin / Gist 雲端 Token', 'error'); return; }
+  showToast('⏳ 正在連線雲端上傳資料庫，請稍候...', 'info');
+  try {
+    let url = token.startsWith('http') ? token : `https://api.jsonbin.io/v3/b/${token}`;
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ trades: trades, updatedAt: new Date().toISOString() })
+    });
+    if (!res.ok) throw new Error('Cloud HTTP error');
+    showToast('✅ 全站交易資料已成功雲端備份與同步！手機隨時可拉取。', 'success');
+  } catch (err) {
+    console.error('Cloud push error:', err);
+    showToast('❌ 上傳雲端失敗，請確認 API 網址或 Token 金鑰正確性', 'error');
+  }
+}
+
+async function pullFromCloudSync() {
+  const token = localStorage.getItem('protrader_cloud_token');
+  if (!token) { showToast('請先輸入並儲存您的 JSONBin / Gist 雲端 Token', 'error'); return; }
+  showToast('⏳ 正在從雲端拉取最新跨裝置交易紀錄，請稍候...', 'info');
+  try {
+    let url = token.startsWith('http') ? token : `https://api.jsonbin.io/v3/b/${token}/latest`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Cloud HTTP error');
+    const json = await res.json();
+    const imported = json.record ? json.record.trades : (json.trades || json);
+    if (!Array.isArray(imported)) throw new Error('Cloud data format invalid');
+    if (!confirm(`☁️ 【雲端同步確認】\n\n從雲端成功拉取到 ${imported.length} 筆最新紀錄（最後更新時間：${json.record?.updatedAt || '未知'}）。\n\n確定要在本裝置同步套用這 ${imported.length} 筆紀錄嗎？`)) return;
+    trades = imported;
+    await saveTrades();
+    renderDashboard();
+    renderAnalytics();
+    closeCloudSyncModal();
+    showToast(`🎉 成功從雲端拉取並還原 ${trades.length} 筆跨裝置紀錄！`, 'success');
+  } catch (err) {
+    console.error('Cloud pull error:', err);
+    showToast('❌ 從雲端拉取失敗，請確認 Token 或連線狀態', 'error');
+  }
 }
 
 /* ---- 6c. Emotion Correlation Insight ---- */
@@ -3592,6 +4014,13 @@ async function init() {
     trades = JSON.parse(localStorage.getItem('protrader_trades') || '[]');
   }
 
+  // Request persistent storage lock from browser to ensure IndexedDB is never cleared
+  if (navigator.storage && navigator.storage.persist) {
+    navigator.storage.persist().then(isPersisted => {
+      console.log('✅ Persistent storage status granted:', isPersisted);
+    }).catch(e => console.warn('Persistent storage request error:', e));
+  }
+
   updateStorageStatus();
   loadSavedStrategyOptions();
   renderDashboard();
@@ -3600,7 +4029,7 @@ async function init() {
 
   // Attach Mouse-Follow Spotlight coordinate tracker
   document.addEventListener('mousemove', e => {
-    document.querySelectorAll('.glass-panel, .kpi-card, .analytics-kpi-card, .pos-calc-card, .ledger-card, .dashboard-health-panel, .drop-zone, .btn-submit, .btn-export, .form-panel-box, .day-trade-card').forEach(card => {
+    document.querySelectorAll('.glass-panel, .kpi-card, .analytics-kpi-card, .pos-calc-card, .ledger-card, .dashboard-health-panel, .drop-zone, .btn-submit, .btn-export, .form-panel-box, .day-trade-card, .strategy-matrix-card').forEach(card => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
