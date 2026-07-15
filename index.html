@@ -162,6 +162,117 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   filter: brightness(0.92);
 }
 
+/* 5. Mouse-Follow Glass Spotlight & Self-Moving Glass Shimmer */
+.glass-panel, .kpi-card, .analytics-kpi-card, .pos-calc-card, .ledger-card, .lb-card, .btn-submit {
+  position: relative;
+  overflow: hidden;
+}
+.glass-panel::before, .kpi-card::before, .analytics-kpi-card::before, .pos-calc-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(420px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(212, 175, 55, 0.15), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 1;
+}
+.glass-panel:hover::before, .kpi-card:hover::before, .analytics-kpi-card:hover::before, .pos-calc-card:hover::before {
+  opacity: 1;
+}
+
+.glass-shimmer::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.08) 45%, rgba(212, 175, 55, 0.2) 50%, transparent 55%);
+  pointer-events: none;
+  z-index: 2;
+  animation: glassShimmer 7s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+@keyframes glassShimmer {
+  0% { transform: translate(-80%, -80%) rotate(25deg); opacity: 0; }
+  25% { transform: translate(80%, 80%) rotate(25deg); opacity: 1; }
+  40%, 100% { transform: translate(80%, 80%) rotate(25deg); opacity: 0; }
+}
+
+/* Dashboard Dynamic Health & Flow Meter Panel */
+.dashboard-health-panel {
+  padding: 22px 26px;
+  margin-top: 20px;
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.65), rgba(30, 41, 59, 0.55)) !important;
+  border: 1px solid rgba(212, 175, 55, 0.2) !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+.health-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.health-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.health-title i { color: var(--gold); font-size: 1.15rem; animation: softPulse 2.5s infinite; }
+.health-status-badge {
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--gold);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+.health-bar-container {
+  height: 14px;
+  background: rgba(239, 68, 68, 0.25);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+}
+.health-bar-win {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.health-bar-loss {
+  height: 100%;
+  background: linear-gradient(90deg, #f87171, #ef4444);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.health-metrics-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+.h-metric strong {
+  margin-left: 4px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+
 /* ========================================================================
    5. CUSTOM SCROLLBAR
    ======================================================================== */
@@ -1313,6 +1424,25 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
         <div class="kpi-value" id="kpiMaxLoss">— %</div>
       </div>
     </div>
+    <!-- Dashboard Dynamic Analytics & Health Meter -->
+    <div class="glass-panel glass-shimmer dashboard-health-panel" id="dashboardHealthPanel">
+      <div class="health-header">
+        <div class="health-title">
+          <i class="fas fa-heart-pulse"></i> <span>動態交易分析儀表 (Live Performance Health & Flow)</span>
+        </div>
+        <div class="health-status-badge" id="dashHealthStatus">計算中...</div>
+      </div>
+      <div class="health-bar-container">
+        <div class="health-bar-win" id="dashBarWin" style="width: 50%"></div>
+        <div class="health-bar-loss" id="dashBarLoss" style="width: 50%"></div>
+      </div>
+      <div class="health-metrics-row">
+        <div class="h-metric">獲利交易佔比: <strong id="dashMetricWinPct" style="color:var(--green)">0%</strong></div>
+        <div class="h-metric">系統期望值 (Expectancy): <strong id="dashMetricExp" style="color:var(--gold)">0.00 R</strong></div>
+        <div class="h-metric">情緒紀律穩定度: <strong id="dashMetricDiscipline" style="color:var(--blue)">100%</strong></div>
+        <div class="h-metric">虧損交易佔比: <strong id="dashMetricLossPct" style="color:var(--red)">0%</strong></div>
+      </div>
+    </div>
   </section>
 
   <!-- ============================================================
@@ -1840,22 +1970,107 @@ function renderLedger() {
   }).join('');
 }
 
-/* ---- 4c. KPIs ---- */
+/* ---- 4c. KPIs with Animated Counters & Dynamic Health Meter ---- */
+function animateNumber(el, start, end, decimals = 2, prefix = '', suffix = '', duration = 800) {
+  if (!el) return;
+  const startTime = performance.now();
+  function update(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const current = start + (end - start) * ease;
+    el.textContent = `${prefix}${current.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}${suffix}`;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+function updateDashboardHealthMeter(closedTrades) {
+  const dashBarWin = document.getElementById('dashBarWin');
+  const dashBarLoss = document.getElementById('dashBarLoss');
+  const dashMetricWinPct = document.getElementById('dashMetricWinPct');
+  const dashMetricLossPct = document.getElementById('dashMetricLossPct');
+  const dashMetricExp = document.getElementById('dashMetricExp');
+  const dashMetricDiscipline = document.getElementById('dashMetricDiscipline');
+  const dashHealthStatus = document.getElementById('dashHealthStatus');
+
+  if (!dashBarWin) return;
+
+  if (closedTrades.length === 0) {
+    dashBarWin.style.width = '50%';
+    dashBarLoss.style.width = '50%';
+    if (dashMetricWinPct) dashMetricWinPct.textContent = '0%';
+    if (dashMetricLossPct) dashMetricLossPct.textContent = '0%';
+    if (dashMetricExp) dashMetricExp.textContent = '0.00 R';
+    if (dashMetricDiscipline) dashMetricDiscipline.textContent = '100%';
+    if (dashHealthStatus) {
+      dashHealthStatus.innerHTML = '⚖️ 尚無交易 - 等待首筆復盤';
+      dashHealthStatus.style.borderColor = 'rgba(212,175,55,0.3)';
+    }
+    return;
+  }
+
+  const wins = closedTrades.filter(t => parseFloat(t.pct) > 0);
+  const losses = closedTrades.filter(t => parseFloat(t.pct) < 0);
+  const winCount = wins.length;
+  const lossCount = losses.length;
+  const totalCount = closedTrades.length;
+  const winPct = (winCount / totalCount) * 100;
+  const lossPct = (lossCount / totalCount) * 100;
+
+  dashBarWin.style.width = `${winPct}%`;
+  dashBarLoss.style.width = `${lossPct}%`;
+  if (dashMetricWinPct) dashMetricWinPct.textContent = `${winPct.toFixed(1)}%`;
+  if (dashMetricLossPct) dashMetricLossPct.textContent = `${lossPct.toFixed(1)}%`;
+
+  const avgWin = winCount > 0 ? wins.reduce((acc, t) => acc + parseFloat(t.pct), 0) / winCount : 0;
+  const avgLoss = lossCount > 0 ? Math.abs(losses.reduce((acc, t) => acc + parseFloat(t.pct), 0) / lossCount) : 1;
+  const winRate = winCount / totalCount;
+  const lossRate = lossCount / totalCount;
+  const expectancy = (winRate * (avgWin / avgLoss)) - (lossRate * 1);
+  if (dashMetricExp) dashMetricExp.textContent = `${expectancy >= 0 ? '+' : ''}${expectancy.toFixed(2)} R`;
+
+  const disciplinedTrades = closedTrades.filter(t => !t.emotion || t.emotion === 'calm' || t.emotion === 'confident').length;
+  const disciplinePct = (disciplinedTrades / totalCount) * 100;
+  if (dashMetricDiscipline) dashMetricDiscipline.textContent = `${disciplinePct.toFixed(0)}%`;
+
+  if (dashHealthStatus) {
+    if (expectancy > 0.6 && winPct >= 60) {
+      dashHealthStatus.innerHTML = '🔥 頂級獲利心流狀態 (S-Class Flow)';
+      dashHealthStatus.style.color = '#10b981';
+      dashHealthStatus.style.borderColor = '#10b981';
+    } else if (expectancy > 0 && winPct >= 50) {
+      dashHealthStatus.innerHTML = '🚀 期望值正向累積中 (Positive Expectancy)';
+      dashHealthStatus.style.color = '#d4af37';
+      dashHealthStatus.style.borderColor = '#d4af37';
+    } else if (expectancy <= 0 || winPct < 40) {
+      dashHealthStatus.innerHTML = '🛡️ 建議控管部位防守 (Check Risk & Discipline)';
+      dashHealthStatus.style.color = '#ef4444';
+      dashHealthStatus.style.borderColor = '#ef4444';
+    } else {
+      dashHealthStatus.innerHTML = '⚖️ 策略平穩運行 (Stable Strategy)';
+      dashHealthStatus.style.color = '#60a5fa';
+      dashHealthStatus.style.borderColor = '#60a5fa';
+    }
+  }
+}
+
 function renderKPIs() {
   const closedTrades = trades.filter(t => t.status !== 'Open');
   const allTrades = trades;
 
   if (allTrades.length > 0) {
     const latest = [...allTrades].sort((a, b) => (b.date || '').localeCompare(a.date || ''))[0];
-    document.getElementById('kpiBalance').textContent = `$ ${parseFloat(latest.balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const balVal = parseFloat(latest.balance || 0);
+    animateNumber(document.getElementById('kpiBalance'), 0, balVal, 2, '$ ');
   } else {
     document.getElementById('kpiBalance').textContent = '$ —';
   }
 
   if (closedTrades.length > 0) {
     const wins = closedTrades.filter(t => parseFloat(t.pct) > 0).length;
-    const wr = ((wins / closedTrades.length) * 100).toFixed(1);
-    document.getElementById('kpiWinRate').textContent = `${wr}%`;
+    const wrVal = (wins / closedTrades.length) * 100;
+    animateNumber(document.getElementById('kpiWinRate'), 0, wrVal, 1, '', '%');
   } else {
     document.getElementById('kpiWinRate').textContent = '— %';
   }
@@ -1864,12 +2079,14 @@ function renderKPIs() {
     const pcts = closedTrades.map(t => parseFloat(t.pct) || 0);
     const maxW = Math.max(...pcts);
     const maxL = Math.min(...pcts);
-    document.getElementById('kpiMaxWin').textContent = `+${maxW.toFixed(2)}%`;
-    document.getElementById('kpiMaxLoss').textContent = `${maxL.toFixed(2)}%`;
+    animateNumber(document.getElementById('kpiMaxWin'), 0, maxW, 2, '+', '%');
+    animateNumber(document.getElementById('kpiMaxLoss'), 0, maxL, 2, '', '%');
   } else {
     document.getElementById('kpiMaxWin').textContent = '— %';
     document.getElementById('kpiMaxLoss').textContent = '— %';
   }
+
+  updateDashboardHealthMeter(closedTrades);
 }
 
 /* ========================================================================
@@ -2485,6 +2702,17 @@ async function init() {
   updateStorageStatus();
   renderDashboard();
   renderAnalytics();
+
+  // Attach Mouse-Follow Spotlight coordinate tracker
+  document.addEventListener('mousemove', e => {
+    document.querySelectorAll('.glass-panel, .kpi-card, .analytics-kpi-card, .pos-calc-card, .ledger-card, .dashboard-health-panel').forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
 }
 
 init();
