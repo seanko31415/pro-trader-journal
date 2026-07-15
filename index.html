@@ -137,10 +137,11 @@ body {
 }
 
 /* 2 & 3. Mouse Hover: Y-axis offset (-4px), border-color glass reflection, and ice-glass shine */
+/* 2 & 3. Mouse Hover: Y-axis offset (-4px), subtle base border, and localized spotlight border reflection */
 .glass-panel:hover, .kpi-card:hover, .ledger-card:hover, .lb-card:hover, .analytics-kpi-card:hover, .pos-calc-card:hover, .emotion-insight-item:hover, .drop-zone:hover {
   transform: translateY(-4px) !important;
-  border-color: rgba(255, 255, 255, 0.45) !important;
-  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.65), inset 0 1px 2px rgba(255, 255, 255, 0.45) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.65), inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
   background: rgba(23, 32, 51, 0.75) !important;
 }
 
@@ -163,28 +164,53 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   filter: brightness(0.92);
 }
 
-/* 5. Mouse-Follow Glass Spotlight & Self-Moving Glass Shimmer */
+/* 5. Mouse-Follow Spotlight Border Ring & Inner Glass Glow (Only illuminates right under the mouse!) */
 .glass-panel, .kpi-card, .analytics-kpi-card, .pos-calc-card, .ledger-card, .lb-card, .btn-submit {
   position: relative;
   overflow: hidden;
 }
-.glass-panel::before, .kpi-card::before, .analytics-kpi-card::before, .pos-calc-card::before {
+.glass-panel::before, .kpi-card::before, .analytics-kpi-card::before, .pos-calc-card::before, .ledger-card::before, .lb-card::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(420px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(212, 175, 55, 0.15), transparent 45%);
+  background: radial-gradient(350px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(212, 175, 55, 0.14), transparent 50%);
   opacity: 0;
   transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
   z-index: 1;
 }
-.glass-panel:hover::before, .kpi-card:hover::before, .analytics-kpi-card:hover::before, .pos-calc-card:hover::before {
+.glass-panel:hover::before, .kpi-card:hover::before, .analytics-kpi-card:hover::before, .pos-calc-card:hover::before, .ledger-card:hover::before, .lb-card:hover::before {
   opacity: 1;
 }
 
-.glass-shimmer::after {
+/* Localized Spotlight Border Ring - exactly links to mouse coordinate without flashing the whole card border */
+.glass-panel::after, .kpi-card::after, .analytics-kpi-card::after, .pos-calc-card::after, .ledger-card::after, .lb-card::after {
   content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.8px;
+  background: radial-gradient(
+    230px circle at var(--mouse-x, -100%) var(--mouse-y, -100%),
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(212, 175, 55, 0.92) 28%,
+    rgba(255, 255, 255, 0.35) 55%,
+    transparent 80%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 10;
+}
+.glass-panel:hover::after, .kpi-card:hover::after, .analytics-kpi-card:hover::after, .pos-calc-card:hover::after, .ledger-card:hover::after, .lb-card:hover::after {
+  opacity: 1;
+}
+
+.shimmer-wave {
   position: absolute;
   top: -50%;
   left: -50%;
@@ -1740,7 +1766,8 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
       </div>
     </div>
     <!-- Dashboard Dynamic Analytics & Health Meter -->
-    <div class="glass-panel glass-shimmer dashboard-health-panel" id="dashboardHealthPanel">
+    <div class="glass-panel dashboard-health-panel" id="dashboardHealthPanel">
+      <div class="shimmer-wave"></div>
       <div class="health-header">
         <div class="health-title">
           <i class="fas fa-heart-pulse"></i> <span>動態交易分析儀表 (Live Performance Health & Flow)</span>
@@ -2000,22 +2027,22 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
     <div class="analytics-kpi-row" id="analyticsKpiRow">
       <div class="analytics-kpi-card">
         <div class="akpi-icon" style="background:var(--gold-glow);color:var(--gold);"><i class="fas fa-scale-balanced"></i></div>
-        <div class="akpi-label">系統期望值</div>
+        <div class="akpi-label">系統期望值 <span style="font-size:0.62rem;background:rgba(212,175,55,0.18);color:var(--gold);padding:1px 5px;border-radius:4px;margin-left:4px;vertical-align:middle;border:1px solid rgba(212,175,55,0.35);"><i class="fas fa-gem"></i> 期望指標</span></div>
         <div class="akpi-value" id="akpiExpectancy" style="color:var(--gold);">—</div>
       </div>
       <div class="analytics-kpi-card">
-        <div class="akpi-icon" style="background:var(--green-bg);color:var(--green);"><i class="fas fa-arrow-up-right-dots"></i></div>
-        <div class="akpi-label">平均盈利 R</div>
+        <div class="akpi-icon" style="background:var(--green-bg);color:var(--green);"><i class="fas fa-arrow-trend-up"></i></div>
+        <div class="akpi-label">平均盈利 R <span style="font-size:0.62rem;background:rgba(16,185,129,0.18);color:var(--green);padding:1px 5px;border-radius:4px;margin-left:4px;vertical-align:middle;border:1px solid rgba(16,185,129,0.35);"><i class="fas fa-arrow-up"></i> 單筆均賺</span></div>
         <div class="akpi-value" id="akpiAvgWinR" style="color:var(--green);">—</div>
       </div>
       <div class="analytics-kpi-card">
-        <div class="akpi-icon" style="background:var(--red-bg);color:var(--red);"><i class="fas fa-arrow-down-right-dots"></i></div>
-        <div class="akpi-label">平均虧損 R</div>
+        <div class="akpi-icon" style="background:var(--red-bg);color:var(--red);"><i class="fas fa-triangle-exclamation"></i></div>
+        <div class="akpi-label">平均虧損 R <span style="font-size:0.62rem;background:rgba(239,68,68,0.22);color:#fca5a5;padding:1px 5px;border-radius:4px;margin-left:4px;vertical-align:middle;border:1px solid rgba(239,68,68,0.4);"><i class="fas fa-shield-halved"></i> 風控均值</span></div>
         <div class="akpi-value" id="akpiAvgLossR" style="color:var(--red);">—</div>
       </div>
       <div class="analytics-kpi-card">
         <div class="akpi-icon" style="background:var(--blue-bg);color:var(--blue);"><i class="fas fa-chart-pie"></i></div>
-        <div class="akpi-label">盈虧比 (RRR)</div>
+        <div class="akpi-label">盈虧比 (RRR) <span style="font-size:0.62rem;background:rgba(59,130,246,0.18);color:var(--blue);padding:1px 5px;border-radius:4px;margin-left:4px;vertical-align:middle;border:1px solid rgba(59,130,246,0.35);"><i class="fas fa-balance-scale"></i> 獲利賠比</span></div>
         <div class="akpi-value" id="akpiRRR" style="color:var(--blue);">—</div>
       </div>
     </div>
