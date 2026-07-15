@@ -2101,7 +2101,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
             <tr>
               <th>#</th><th>日期</th><th>時間</th><th>時段</th><th>時間級別</th><th>方向</th><th>策略</th>
               <th>市場偏見</th><th>狀態</th><th>情緒</th><th>收益率%</th><th>剩餘資金</th>
-              <th>開倉理由</th><th>改進想法</th><th>老師建議</th><th>學習心得</th><th>附圖</th>
+              <th>開倉理由</th><th>改進想法</th><th>老師建議</th><th>學習心得</th><th>附圖</th><th>操作</th>
             </tr>
           </thead>
           <tbody id="dataTableBody"></tbody>
@@ -2237,12 +2237,15 @@ function autoCheckAndNotifyCleanOldTrades() {
 // JSON Backup & Restore Handlers
 document.getElementById('btnExportJSON').addEventListener('click', () => {
   if (trades.length === 0) { showToast('沒有交易記錄可匯出', 'error'); return; }
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(trades, null, 2));
-  const dlAnchorElem = document.createElement('a');
-  dlAnchorElem.setAttribute("href", dataStr);
-  dlAnchorElem.setAttribute("download", `PRO_TRADER_BACKUP_${new Date().toISOString().slice(0,10)}.json`);
-  dlAnchorElem.click();
-  showToast('完整備份 JSON 已成功下載！', 'success');
+  showToast('⏳ 正在備份打包所有交易單與高畫質多媒體截圖，請稍候...', 'info');
+  setTimeout(() => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(trades, null, 2));
+    const dlAnchorElem = document.createElement('a');
+    dlAnchorElem.setAttribute("href", dataStr);
+    dlAnchorElem.setAttribute("download", `PRO_TRADER_BACKUP_${new Date().toISOString().slice(0,10)}.json`);
+    dlAnchorElem.click();
+    showToast('✅ 完整備份 JSON 已成功匯出下載！', 'success');
+  }, 150);
 });
 
 document.getElementById('btnImportJSON').addEventListener('click', () => {
@@ -2257,12 +2260,22 @@ document.getElementById('fImportJSON').addEventListener('change', e => {
     try {
       const imported = JSON.parse(event.target.result);
       if (!Array.isArray(imported)) throw new Error('格式錯誤');
+      if (!confirm(`📥 【還原 / 匯入備份資料確認】\n\n您即將從檔案「${file.name}」匯入 ${imported.length} 筆交易紀錄。\n\n⚠️ 注意：匯入後將覆蓋現有資料庫的 ${trades.length} 筆記錄！確定要繼續匯入還原嗎？`)) {
+        showToast('❌ 已取消匯入動作，現有資料安全保留', 'info');
+        e.target.value = '';
+        return;
+      }
       trades = imported;
       await saveTrades();
       renderDashboard();
       renderAnalytics();
-      showToast(`成功匯入 ${trades.length} 筆交易紀錄！`, 'success');
+      showToast(`🎉 成功匯入並還原 ${trades.length} 筆交易紀錄與多媒體附圖！`, 'success');
+      e.target.value = '';
     } catch (err) {
+      showToast('❌ 匯入失敗：檔案格式錯誤或損毀', 'error');
+      e.target.value = '';
+    }
+  };
       showToast('JSON 備份檔解析錯誤', 'error');
     }
   };
@@ -2502,14 +2515,30 @@ function closeDayDetailModal() {
   if (modal) modal.classList.remove('open');
 }
 
-async function deleteDayTrade(tradeId) {
-  if (!confirm('確定要刪除這筆當日交易紀錄嗎？')) return;
-  trades = trades.filter(t => String(t.id) !== String(tradeId));
+async function deleteTradeById(tradeId, event) {
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+  const t = trades.find(item => String(item.id) === String(tradeId));
+  const dateInfo = t ? `${t.date || '未知日期'}${t.tradeTime ? ' ' + t.tradeTime : ''}` : '該單';
+  if (!confirm(`🗑️ 【永久刪除交易紀錄確認】\n\n確定要刪除日期時間為 [ ${dateInfo} ] 的這筆交易紀錄與其關聯的雙K線多媒體截圖嗎？\n\n⚠️ 注意：此動作會立刻從資料庫抹除，且無法復原！`)) {
+    showToast('❌ 已取消刪除動作，交易紀錄安全保留', 'info');
+    return;
+  }
+  trades = trades.filter(item => String(item.id) !== String(tradeId));
   await saveTrades();
-  if (currentSelectedDay) openDayDetailModal(currentSelectedDay);
+  if (typeof currentSelectedDay !== 'undefined' && currentSelectedDay) {
+    const modal = document.getElementById('dayDetailModal');
+    if (modal && modal.classList.contains('open')) openDayDetailModal(currentSelectedDay);
+  }
   renderDashboard();
   renderAnalytics();
-  showToast('交易紀錄已成功刪除', 'success');
+  showToast(`🗑️ 成功刪除「${dateInfo}」交易單與相關附圖！`, 'success');
+}
+
+async function deleteDayTrade(tradeId) {
+  return deleteTradeById(tradeId);
 }
 
 document.getElementById('calPrev').addEventListener('click', () => {
@@ -2546,7 +2575,10 @@ function renderLedger() {
       <div class="ledger-card">
         <div class="ledger-card-top">
           <span class="ledger-date"><i class="far fa-calendar" style="margin-right:4px;"></i>${t.date || '—'}${t.tradeTime ? ' ' + t.tradeTime : ''}</span>
-          <span class="ledger-pct ${pctCls}">${sign}${pctVal.toFixed(2)}%</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="ledger-pct ${pctCls}">${sign}${pctVal.toFixed(2)}%</span>
+            <button class="dt-btn del" onclick="deleteTradeById('${t.id}', event)" title="永久刪除此單" style="padding:2px 7px;border-radius:4px;background:var(--red-bg);border:1px solid var(--red);color:var(--red);cursor:pointer;"><i class="fas fa-trash-alt"></i></button>
+          </div>
         </div>
         <div class="ledger-card-bottom">
           <span class="ledger-dir ${dirCls}">${dirLabel}</span>
@@ -2774,6 +2806,7 @@ function setupDropZone(dzId, inputId, previewId, removeId, idx) {
 
   rm.addEventListener('click', e => {
     e.stopPropagation();
+    if (!confirm('🗑️ 【移除多媒體截圖確認】\n\n確定要自本次表單中移除此張已選擇的上傳圖片嗎？')) return;
     if (idx === 1) currentImgBase64_1 = null;
     else if (idx === 2) currentImgBase64_2 = null;
     else currentImgBase64_Learning = null;
@@ -2781,6 +2814,7 @@ function setupDropZone(dzId, inputId, previewId, removeId, idx) {
     rm.style.display = 'none';
     prev.src = '';
     fImg.value = '';
+    showToast('🗑️ 已自上傳框移除附圖截圖', 'info');
   });
 }
 
@@ -3182,6 +3216,9 @@ function renderDataTable() {
       <td class="wrap-cell">${t.advice || '—'}</td>
       <td class="wrap-cell">${t.learning || '—'}</td>
       <td>${imgCell}</td>
+      <td style="text-align:center;">
+        <button class="dt-btn del" onclick="deleteTradeById('${t.id}', event)" title="永久刪除此筆記錄" style="padding:4px 8px;border-radius:4px;background:var(--red-bg);border:1px solid var(--red);color:var(--red);cursor:pointer;"><i class="fas fa-trash-alt"></i></button>
+      </td>
     </tr>`;
   }).join('');
 }
@@ -3258,6 +3295,7 @@ function openImageModal(tradeId) {
    ======================================================================== */
 document.getElementById('btnExportExcel').addEventListener('click', () => {
   if (trades.length === 0) { showToast('沒有交易記錄可匯出', 'error'); return; }
+  showToast('⏳ 正在為您排版並生成 Excel 交易試算表，請稍候...', 'info');
 
   if (typeof XLSX !== 'undefined') {
     doExcelExport();
@@ -3265,7 +3303,7 @@ document.getElementById('btnExportExcel').addEventListener('click', () => {
     const s = document.createElement('script');
     s.src = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
     s.onload = doExcelExport;
-    s.onerror = () => showToast('Excel 庫加載失敗', 'error');
+    s.onerror = () => showToast('❌ Excel 庫加載失敗', 'error');
     document.head.appendChild(s);
   }
 });
@@ -3310,6 +3348,7 @@ function doExcelExport() {
    ======================================================================== */
 document.getElementById('btnExportPDF').addEventListener('click', () => {
   if (trades.length === 0) { showToast('沒有交易記錄可匯出', 'error'); return; }
+  showToast('⏳ 正在將「策略分析圖表與數據」排版轉換為高畫質 PDF，請稍候約 2~3 秒...', 'info');
 
   switchTab('analytics');
 
@@ -3320,7 +3359,7 @@ document.getElementById('btnExportPDF').addEventListener('click', () => {
       const s = document.createElement('script');
       s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js';
       s.onload = () => setTimeout(doPDFExport, 300);
-      s.onerror = () => showToast('PDF 庫加載失敗', 'error');
+      s.onerror = () => showToast('❌ PDF 庫加載失敗', 'error');
       document.head.appendChild(s);
     }
   }, 500);
