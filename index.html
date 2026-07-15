@@ -809,11 +809,8 @@ input[type="time"].form-control {
   width: 100%;
   box-sizing: border-box;
   min-width: 0;
-  -webkit-appearance: none;
-  appearance: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: block;
+  cursor: pointer;
 }
 input[type="date"]::-webkit-date-and-time-value,
 input[type="time"]::-webkit-date-and-time-value {
@@ -822,7 +819,8 @@ input[type="time"]::-webkit-date-and-time-value {
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  filter: invert(0.8);
+  filter: invert(0.85);
+  padding: 4px;
 }
 .form-control:hover {
   border-color: rgba(255, 255, 255, 0.88) !important;
@@ -837,8 +835,26 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .form-control:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+.time-quick-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--text-secondary);
+  padding: 4px 9px;
+  border-radius: 4px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
-.form-control::placeholder { color: var(--text-muted); }
+.time-quick-btn:hover {
+  background: rgba(212, 175, 55, 0.22);
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.35);
+}
 textarea.form-control {
   resize: vertical;
   min-height: 110px !important;
@@ -1758,7 +1774,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
     max-width: 100%;
     width: 100%;
     min-width: 0;
-    overflow: hidden;
+    box-sizing: border-box;
   }
 }
 @media (max-width: 640px) {
@@ -2189,6 +2205,12 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
             <div class="form-group">
               <label>交易時間 (HH:MM)</label>
               <input type="time" class="form-control" id="fTradeTime" placeholder="e.g. 15:30">
+              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
+                <button type="button" class="time-quick-btn" onclick="setQuickTime('now')" title="點此設為目前真實時間"><i class="fas fa-clock"></i> 現在</button>
+                <button type="button" class="time-quick-btn" onclick="setQuickTime('09:00')" title="亞盤開盤">亞盤 09:00</button>
+                <button type="button" class="time-quick-btn" onclick="setQuickTime('15:30')" title="歐盤開盤">歐盤 15:30</button>
+                <button type="button" class="time-quick-btn" onclick="setQuickTime('21:30')" title="美盤開盤">美盤 21:30</button>
+              </div>
             </div>
           </div>
           <div class="form-row cols-2" style="gap:24px 28px; margin-bottom:12px;">
@@ -2223,11 +2245,13 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
           <div class="form-row cols-2">
             <div class="form-group">
               <label>交易策略 <span class="required">*</span></label>
-              <input type="text" class="form-control" id="fStrategy" list="strategyOptions" placeholder="請輸入或選取交易策略..." required>
-              <datalist id="strategyOptions">
-                <option value="3+1">
-                <option value="馬刺">
-              </datalist>
+              <select class="form-control" id="fStrategy" required style="cursor:pointer;">
+                <option value="">請選擇交易策略...</option>
+                <option value="3+1">⚡ 3+1</option>
+                <option value="馬刺">🔥 馬刺</option>
+                <option value="CUSTOM">➕ 自訂新策略 (自行填寫名稱...)</option>
+              </select>
+              <input type="text" class="form-control" id="fStrategyCustom" placeholder="✍️ 請輸入自訂策略名稱 (例: 突破回踩 / 雙底反轉)..." style="display:none; margin-top:8px; border-color:var(--gold);">
             </div>
             <div class="form-group">
               <label>市場偏見 / 結構趨勢 <span class="required">*</span></label>
@@ -3300,8 +3324,20 @@ function handleDualImageFile(file, idx, prevEl, rmEl) {
 }
 
 /* ========================================================================
-   CUSTOM STRATEGY OPTIONS PERSISTENCE (Dynamically add custom inputs to datalist)
+   CUSTOM STRATEGY & QUICK TIME HELPERS
    ======================================================================== */
+function setQuickTime(val) {
+  const timeInput = document.getElementById('fTradeTime');
+  if (!timeInput) return;
+  if (val === 'now') {
+    const now = new Date();
+    timeInput.value = now.toTimeString().slice(0, 5);
+  } else {
+    timeInput.value = val;
+  }
+  timeInput.dispatchEvent(new Event('input'));
+}
+
 function isLegacyStrategy(name) {
   if (!name || typeof name !== 'string') return true;
   const n = name.trim();
@@ -3319,15 +3355,22 @@ function isLegacyStrategy(name) {
 function addCustomStrategyToOptions(strategyName) {
   if (!strategyName || typeof strategyName !== 'string') return;
   const name = strategyName.trim();
-  if (!name || isLegacyStrategy(name)) return;
-  const datalist = document.getElementById('strategyOptions');
-  if (!datalist) return;
+  if (!name || isLegacyStrategy(name) || name === '3+1' || name === '馬刺' || name === 'CUSTOM') return;
   
-  const exists = Array.from(datalist.options).some(opt => opt.value === name);
-  if (!exists) {
-    const opt = document.createElement('option');
-    opt.value = name;
-    datalist.appendChild(opt);
+  const select = document.getElementById('fStrategy');
+  if (select && select.tagName === 'SELECT') {
+    const exists = Array.from(select.options).some(opt => opt.value === name);
+    if (!exists) {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = `🎯 ${name}`;
+      const customOpt = Array.from(select.options).find(o => o.value === 'CUSTOM');
+      if (customOpt) {
+        select.insertBefore(opt, customOpt);
+      } else {
+        select.appendChild(opt);
+      }
+    }
   }
   
   try {
@@ -3343,12 +3386,12 @@ function addCustomStrategyToOptions(strategyName) {
 }
 
 function loadSavedStrategyOptions() {
-  const datalist = document.getElementById('strategyOptions');
-  if (!datalist) return;
+  const select = document.getElementById('fStrategy');
+  if (!select || select.tagName !== 'SELECT') return;
   
-  // 1. Scrub any legacy options out of the datalist right away
-  Array.from(datalist.options).forEach(opt => {
-    if (opt.value !== '3+1' && opt.value !== '馬刺' && isLegacyStrategy(opt.value)) {
+  // 1. Scrub any legacy options
+  Array.from(select.options).forEach(opt => {
+    if (opt.value !== '' && opt.value !== '3+1' && opt.value !== '馬刺' && opt.value !== 'CUSTOM' && isLegacyStrategy(opt.value)) {
       opt.remove();
     }
   });
@@ -3366,26 +3409,38 @@ function loadSavedStrategyOptions() {
     trades.forEach(t => {
       if (t.strategy && typeof t.strategy === 'string') {
         const trimmed = t.strategy.trim();
-        if (trimmed && !isLegacyStrategy(trimmed) && trimmed !== '3+1' && trimmed !== '馬刺') {
+        if (trimmed && !isLegacyStrategy(trimmed) && trimmed !== '3+1' && trimmed !== '馬刺' && trimmed !== 'CUSTOM') {
           allKnown.add(trimmed);
         }
       }
     });
   }
   allKnown.forEach(name => {
-    if (name && !Array.from(datalist.options).some(opt => opt.value === name)) {
+    if (name && !Array.from(select.options).some(opt => opt.value === name)) {
       const opt = document.createElement('option');
       opt.value = name;
-      datalist.appendChild(opt);
+      opt.textContent = `🎯 ${name}`;
+      const customOpt = Array.from(select.options).find(o => o.value === 'CUSTOM');
+      if (customOpt) {
+        select.insertBefore(opt, customOpt);
+      } else {
+        select.appendChild(opt);
+      }
     }
   });
 }
 
-const fStrategyInput = document.getElementById('fStrategy');
-if (fStrategyInput) {
-  fStrategyInput.addEventListener('change', e => {
-    if (e.target.value && e.target.value.trim()) {
-      addCustomStrategyToOptions(e.target.value);
+const fStrategySelect = document.getElementById('fStrategy');
+const fStrategyCustomInput = document.getElementById('fStrategyCustom');
+if (fStrategySelect && fStrategyCustomInput) {
+  fStrategySelect.addEventListener('change', e => {
+    if (e.target.value === 'CUSTOM') {
+      fStrategyCustomInput.style.display = 'block';
+      fStrategyCustomInput.required = true;
+      fStrategyCustomInput.focus();
+    } else {
+      fStrategyCustomInput.style.display = 'none';
+      fStrategyCustomInput.required = false;
     }
   });
 }
@@ -3395,6 +3450,16 @@ tradeForm.addEventListener('submit', e => {
   e.preventDefault();
   const tradeTime = fTradeTime.value || '';
   const session = detectSession(tradeTime);
+  
+  let chosenStrategy = document.getElementById('fStrategy').value;
+  if (chosenStrategy === 'CUSTOM') {
+    chosenStrategy = (document.getElementById('fStrategyCustom').value || '').trim();
+    if (!chosenStrategy) {
+      showToast('❌ 選擇「自訂新策略」時，請填寫自訂策略名稱！', 'error');
+      return;
+    }
+  }
+
   const trade = {
     id: Date.now(),
     date: document.getElementById('fDate').value,
@@ -3402,7 +3467,7 @@ tradeForm.addEventListener('submit', e => {
     session: session,
     timeframe: document.getElementById('fTimeframe').value,
     direction: document.getElementById('fDirection').value,
-    strategy: document.getElementById('fStrategy').value,
+    strategy: chosenStrategy,
     bias: document.getElementById('fBias').value,
     status: fStatus.value,
     emotion: document.getElementById('fEmotion').value || '',
@@ -3427,6 +3492,10 @@ tradeForm.addEventListener('submit', e => {
   // Keep the date you just saved instead of jumping back to today, so you can smoothly record multiple trades for the exact same day!
   const savedDate = trade.date;
   tradeForm.reset();
+  if (fStrategyCustomInput) {
+    fStrategyCustomInput.style.display = 'none';
+    fStrategyCustomInput.required = false;
+  }
   document.getElementById('fDate').value = savedDate || new Date().toISOString().slice(0,10);
   fPct.disabled = false;
   
