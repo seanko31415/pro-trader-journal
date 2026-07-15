@@ -19,8 +19,8 @@
   --bg-deep: #151e33;
   --bg-card: rgba(17, 24, 39, 0.55);
   --bg-card-hover: rgba(17, 24, 39, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.07);
-  --glass-border-hover: rgba(212, 175, 55, 0.35);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-hover: rgba(255, 255, 255, 0.38);
   --glass-blur: 16px;
   --gold: #d4af37;
   --gold-dim: rgba(212, 175, 55, 0.25);
@@ -127,7 +127,8 @@ body {
   background: rgba(17, 24, 39, 0.55);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-lg);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
@@ -135,12 +136,12 @@ body {
               background 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* 2 & 3. Mouse Hover: Y-axis offset (-4px), border-color fade into gold, and drop-shadow-gold */
+/* 2 & 3. Mouse Hover: Y-axis offset (-4px), border-color glass reflection, and ice-glass shine */
 .glass-panel:hover, .kpi-card:hover, .ledger-card:hover, .lb-card:hover, .analytics-kpi-card:hover, .pos-calc-card:hover, .emotion-insight-item:hover, .drop-zone:hover {
   transform: translateY(-4px) !important;
-  border-color: #d4af37 !important;
-  box-shadow: 0 8px 40px rgba(212, 175, 55, 0.22) !important;
-  background: rgba(17, 24, 39, 0.72) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.65), inset 0 1px 2px rgba(255, 255, 255, 0.45) !important;
+  background: rgba(23, 32, 51, 0.75) !important;
 }
 
 /* All buttons cubic-bezier smooth transition */
@@ -150,8 +151,8 @@ button, .btn-export, .tab-btn, .calendar-nav-btn, .btn-submit, .filter-btn, .img
 
 button:hover, .btn-export:hover, .btn-submit:hover, .calendar-nav-btn:hover, .filter-btn:hover, .img-badge:hover, .modal-close:hover {
   transform: translateY(-4px) !important;
-  border-color: #d4af37 !important;
-  box-shadow: 0 6px 30px rgba(212, 175, 55, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.48) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.5) !important;
 }
 
 /* 4. Touch/Click active: instant transform scale-96 for physical button feedback */
@@ -205,8 +206,8 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   padding: 22px 26px;
   margin-top: 20px;
   background: linear-gradient(135deg, rgba(17, 24, 39, 0.65), rgba(30, 41, 59, 0.55)) !important;
-  border: 1px solid rgba(212, 175, 55, 0.2) !important;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.25);
 }
 .health-header {
   display: flex;
@@ -832,18 +833,20 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
 
 /* Image Drop Zone */
 .drop-zone {
-  border: 2px dashed rgba(212,175,55,0.2);
+  border: 1px dashed rgba(255, 255, 255, 0.22);
   border-radius: var(--radius-md);
   padding: 30px;
   text-align: center;
   cursor: pointer;
   transition: all var(--transition-smooth);
-  background: rgba(15, 23, 42, 0.3);
+  background: rgba(20, 29, 48, 0.45);
   position: relative;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
 }
 .drop-zone:hover, .drop-zone.drag-over {
-  border-color: var(--gold-dim);
-  background: rgba(212,175,55,0.04);
+  border-color: rgba(255, 255, 255, 0.48) !important;
+  background: rgba(30, 41, 65, 0.6) !important;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.45) !important;
 }
 .drop-zone-icon { font-size: 2rem; color: var(--text-muted); margin-bottom: 8px; }
 .drop-zone-text { font-size: 0.78rem; color: var(--text-muted); }
@@ -1205,8 +1208,8 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   flex-direction: column;
   padding: 24px 28px !important;
   background: rgba(15, 23, 42, 0.92) !important;
-  border: 1px solid rgba(212, 175, 55, 0.4) !important;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.75), 0 0 45px rgba(212, 175, 55, 0.18) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.75), inset 0 1px 2px rgba(255, 255, 255, 0.35) !important;
 }
 .day-detail-header {
   display: flex;
@@ -1417,8 +1420,8 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   flex-direction: column;
   padding: 24px 28px !important;
   background: rgba(15, 23, 42, 0.95) !important;
-  border: 1px solid rgba(212, 175, 55, 0.45) !important;
-  box-shadow: 0 25px 80px rgba(0,0,0,0.85), 0 0 50px rgba(212, 175, 55, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.85), inset 0 1px 2px rgba(255, 255, 255, 0.38) !important;
 }
 .dual-modal-header {
   display: flex;
@@ -1904,6 +1907,24 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
             <textarea class="form-control" id="fLearning" rows="3" placeholder="今天從市場或此單中學到了最重要的教訓與精華是什麼..."></textarea>
           </div>
 
+          <!-- Learning Notes Image Attachment (Separated from Dual K-Line Charts) -->
+          <div class="form-group" style="margin-top:10px;">
+            <div class="drop-zone learning-zone" id="dropZoneLearning" style="padding:14px 18px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.2);">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                <div style="text-align:left;">
+                  <div style="font-size:0.83rem;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:6px;"><i class="fas fa-book-open-reader" style="color:var(--blue);"></i> 學習心得專屬筆記附圖</div>
+                  <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">上傳與今日心得相關的教材、筆記或總結思維導圖 (獨立於 K 線圖)</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--blue);font-weight:600;">
+                  <i class="fas fa-paperclip"></i> <span style="text-decoration:underline;">點擊或拖放上傳</span>
+                </div>
+              </div>
+              <input type="file" id="fImageLearning" accept="image/*" style="display:none;">
+              <img class="drop-zone-preview" id="imgPreviewLearning" alt="心得附圖" style="max-height:130px;margin-top:10px;">
+              <button type="button" class="drop-zone-remove" id="imgRemoveLearning" title="移除心得附圖">&times;</button>
+            </div>
+          </div>
+
           <!-- Section 5: DUAL K-LINE CHARTS right below learning notes -->
           <div class="form-section-title" style="margin-top:22px;">
             <i class="fas fa-images"></i> 雙 K 線多媒體截圖 (雙圖對照：大格局 vs 小時框)
@@ -2326,7 +2347,7 @@ function openDayDetailModal(dateStr) {
             <div style="font-size:0.7rem;color:var(--text-muted);">${t.status === 'Open' ? '進行中' : (pctVal >= 0 ? '獲利' : '虧損')}</div>
           </div>
           <div class="dt-actions">
-            ${t.img ? `<button class="dt-btn" onclick="openImageModal('${t.id}')" title="查看K線截圖"><i class="fas fa-image"></i></button>` : ''}
+            ${(t.img || t.img1 || t.img2 || t.imgLearning) ? `<button class="dt-btn" onclick="openImageModal('${t.id}')" title="查看K線與心得截圖"><i class="fas fa-image"></i></button>` : ''}
             <button class="dt-btn del" onclick="deleteDayTrade('${t.id}')" title="刪除此筆記錄"><i class="fas fa-trash-alt"></i></button>
           </div>
         </div>
@@ -2597,9 +2618,10 @@ fBalance.addEventListener('input', updatePosCalc);
 fRiskPct.addEventListener('input', updatePosCalc);
 fSlPips.addEventListener('input', updatePosCalc);
 
-// ---- Dual Drop Zones (Chart 1: HTF, Chart 2: LTF) ----
+// ---- Dual Drop Zones (Chart 1: HTF, Chart 2: LTF) + Learning Notes Attachment ----
 let currentImgBase64_1 = null;
 let currentImgBase64_2 = null;
+let currentImgBase64_Learning = null;
 
 function setupDropZone(dzId, inputId, previewId, removeId, idx) {
   const dz = document.getElementById(dzId);
@@ -2622,7 +2644,8 @@ function setupDropZone(dzId, inputId, previewId, removeId, idx) {
   rm.addEventListener('click', e => {
     e.stopPropagation();
     if (idx === 1) currentImgBase64_1 = null;
-    else currentImgBase64_2 = null;
+    else if (idx === 2) currentImgBase64_2 = null;
+    else currentImgBase64_Learning = null;
     prev.style.display = 'none';
     rm.style.display = 'none';
     prev.src = '';
@@ -2632,6 +2655,7 @@ function setupDropZone(dzId, inputId, previewId, removeId, idx) {
 
 setupDropZone('dropZone1', 'fImage1', 'imgPreview1', 'imgRemove1', 1);
 setupDropZone('dropZone2', 'fImage2', 'imgPreview2', 'imgRemove2', 2);
+setupDropZone('dropZoneLearning', 'fImageLearning', 'imgPreviewLearning', 'imgRemoveLearning', 'Learning');
 
 function handleDualImageFile(file, idx, prevEl, rmEl) {
   if (!file.type.startsWith('image/')) { showToast('請上傳圖片格式檔案', 'error'); return; }
@@ -2664,12 +2688,14 @@ function handleDualImageFile(file, idx, prevEl, rmEl) {
 
     const base64 = canvas.toDataURL('image/jpeg', 0.82);
     if (idx === 1) currentImgBase64_1 = base64;
-    else currentImgBase64_2 = base64;
+    else if (idx === 2) currentImgBase64_2 = base64;
+    else currentImgBase64_Learning = base64;
 
     prevEl.src = base64;
     prevEl.style.display = 'block';
     rmEl.style.display = 'inline-block';
-    showToast(`圖 ${idx === 1 ? '一 (大時框)' : '二 (進場圖)'} 已自動高畫質壓縮優化`, 'success');
+    const labelStr = idx === 1 ? '圖一 (大時框)' : (idx === 2 ? '圖二 (進場圖)' : '心得附圖');
+    showToast(`${labelStr} 已自動高畫質壓縮優化`, 'success');
   };
   img.src = objectUrl;
 }
@@ -2700,7 +2726,8 @@ tradeForm.addEventListener('submit', e => {
     learning: document.getElementById('fLearning').value || '',
     img1: currentImgBase64_1 || null,
     img2: currentImgBase64_2 || null,
-    img: currentImgBase64_1 || currentImgBase64_2 || null
+    imgLearning: currentImgBase64_Learning || null,
+    img: currentImgBase64_1 || currentImgBase64_2 || currentImgBase64_Learning || null
   };
 
   trades.push(trade);
@@ -2714,14 +2741,19 @@ tradeForm.addEventListener('submit', e => {
   
   currentImgBase64_1 = null;
   currentImgBase64_2 = null;
+  currentImgBase64_Learning = null;
   const prev1 = document.getElementById('imgPreview1');
   const rm1 = document.getElementById('imgRemove1');
   const prev2 = document.getElementById('imgPreview2');
   const rm2 = document.getElementById('imgRemove2');
+  const prevL = document.getElementById('imgPreviewLearning');
+  const rmL = document.getElementById('imgRemoveLearning');
   if (prev1) { prev1.style.display = 'none'; prev1.src = ''; }
   if (rm1) rm1.style.display = 'none';
   if (prev2) { prev2.style.display = 'none'; prev2.src = ''; }
   if (rm2) rm2.style.display = 'none';
+  if (prevL) { prevL.style.display = 'none'; prevL.src = ''; }
+  if (rmL) rmL.style.display = 'none';
 
   document.getElementById('posCalcDisplay').style.display = 'none';
   document.getElementById('sessionDetectDisplay').style.display = 'none';
@@ -2997,7 +3029,7 @@ function renderDataTable() {
     const session = t.session || detectSession(t.tradeTime);
     const sessionCls = getSessionBadgeClass(session);
     const emotionCls = t.emotion ? t.emotion.toLowerCase() : '';
-    const imgCell = t.img
+    const imgCell = (t.img || t.img1 || t.img2 || t.imgLearning)
       ? `<span class="img-badge" onclick="openImageModal('${t.id}')"><i class="fas fa-paperclip"></i> 附圖</span>`
       : '<span style="color:var(--text-muted);font-size:0.7rem;">—</span>';
 
@@ -3042,12 +3074,14 @@ function openImageModal(tradeId) {
 
   const img1 = t.img1 || t.img || null;
   const img2 = t.img2 || null;
+  const imgLearning = t.imgLearning || null;
 
-  title.innerHTML = `<i class="fas fa-images"></i> 「${t.date || ''} ${t.tradeTime || ''}」 ${t.strategy || '自訂策略'} 復盤 K 線對照`;
+  title.innerHTML = `<i class="fas fa-images"></i> 「${t.date || ''} ${t.tradeTime || ''}」 ${t.strategy || '自訂策略'} 復盤 K 線與心得對照`;
 
+  let chartsHtml = '';
   if (img1 && img2) {
     body.className = 'dual-modal-body two-charts';
-    body.innerHTML = `
+    chartsHtml = `
       <div class="chart-panel-item">
         <div class="chart-panel-label"><i class="fas fa-chart-line"></i> 圖一：大時框宏觀趨勢圖 (HTF)</div>
         <img src="${img1}" alt="大時框趨勢圖">
@@ -3061,12 +3095,26 @@ function openImageModal(tradeId) {
     body.className = 'dual-modal-body single-chart';
     const singleSrc = img1 || img2;
     const labelText = img1 ? '圖一：大時框宏觀趨勢圖 (HTF)' : '圖二：小時框進場執行圖 (LTF)';
-    body.innerHTML = `
+    chartsHtml = `
       <div class="chart-panel-item">
         <div class="chart-panel-label"><i class="fas fa-image"></i> ${labelText}</div>
         <img src="${singleSrc}" alt="K線圖">
       </div>
     `;
+  }
+
+  if (imgLearning) {
+    if (!chartsHtml) body.className = 'dual-modal-body single-chart';
+    chartsHtml += `
+      <div class="chart-panel-item" style="grid-column: 1 / -1; margin-top: ${chartsHtml ? '8px' : '0'}; border-top: ${chartsHtml ? '1px solid rgba(255,255,255,0.1)' : 'none'}; padding-top: ${chartsHtml ? '14px' : '14px'};">
+        <div class="chart-panel-label" style="color: var(--blue);"><i class="fas fa-book-open-reader"></i> 學習心得專屬筆記附圖 (教材 / 思維導圖 / 檢討筆記)</div>
+        <img src="${imgLearning}" alt="心得附圖" style="max-height: 520px; object-fit: contain;">
+      </div>
+    `;
+  }
+
+  if (chartsHtml) {
+    body.innerHTML = chartsHtml;
   } else {
     body.innerHTML = `<div class="empty-state"><p>此筆交易無附圖記錄</p></div>`;
   }
