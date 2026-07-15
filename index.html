@@ -64,6 +64,7 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark !important;
 }
 
 body {
@@ -73,6 +74,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+  color-scheme: dark !important;
   letter-spacing: 0.015em;
   line-height: 1.6;
 }
@@ -802,6 +804,11 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   font-size: 0.88rem;
   transition: all var(--transition-smooth);
   outline: none;
+  color-scheme: dark !important;
+}
+option {
+  background-color: #0b0f19 !important;
+  color: #f8fafc !important;
 }
 input[type="date"].form-control,
 input[type="time"].form-control {
@@ -811,15 +818,18 @@ input[type="time"].form-control {
   min-width: 0;
   display: block;
   cursor: pointer;
+  color-scheme: dark !important;
+  color: var(--text-primary) !important;
 }
 input[type="date"]::-webkit-date-and-time-value,
 input[type="time"]::-webkit-date-and-time-value {
   text-align: left;
+  color: var(--text-primary) !important;
 }
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  filter: invert(0.85);
+  filter: invert(0.9) !important;
   padding: 4px;
 }
 .form-control:hover {
@@ -2260,11 +2270,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
             </div>
             <div class="form-group">
               <label>交易時間 (HH:MM)</label>
-              <div class="time-picker-wrapper">
-                <input type="time" class="form-control time-picker-input" id="fTradeTime" style="cursor:pointer; font-family:var(--font-mono); font-size:1.05rem; font-weight:700; color:var(--gold); text-align:center; box-sizing:border-box;" onclick="try{if(this.showPicker)this.showPicker();}catch(e){}" title="點擊在轉盤/彈窗內自由選擇或直接鍵入任意時間">
-                <button type="button" class="btn-export time-trigger-btn" onclick="openTimeInputPicker(event)" title="點擊開啟時間選擇轉盤/彈窗，挑選任意時分"><i class="fas fa-clock"></i> <span>選取時間</span></button>
-                <button type="button" class="btn-export time-trigger-btn now-btn" onclick="setQuickTime('now')" title="一鍵自動填入當前真實時間"><i class="fas fa-bolt"></i> <span>現在</span></button>
-              </div>
+              <input type="time" class="form-control" id="fTradeTime" placeholder="e.g. 15:30" style="cursor:pointer; font-family:var(--font-mono); font-size:1.05rem; font-weight:700; color:var(--text-primary) !important; box-sizing:border-box; width:100%; max-width:100%;" onclick="try{if(this.showPicker)this.showPicker();}catch(e){}" title="點擊直接挑選任意時間 (下午/時/分)">
             </div>
           </div>
           <div class="form-row cols-2" style="gap:24px 28px; margin-bottom:12px;">
