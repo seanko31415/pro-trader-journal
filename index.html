@@ -771,17 +771,17 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
 .form-section-title i { font-size: 0.8rem; }
 .form-row {
   display: grid;
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: 22px 26px;
+  margin-bottom: 22px;
 }
-.form-row.cols-3 { grid-template-columns: repeat(3, 1fr); }
-.form-row.cols-2 { grid-template-columns: repeat(2, 1fr); }
-.form-row.cols-1 { grid-template-columns: 1fr; }
-.form-row.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.form-row.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.form-row.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.form-row.cols-1 { grid-template-columns: minmax(0, 1fr); }
+.form-row.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
-.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .form-group label {
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -790,13 +790,15 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
 .form-group label .required { color: var(--red); margin-left: 2px; }
 .form-control {
   width: 100%;
-  padding: 10px 14px;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 11px 14px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--glass-border);
   background: rgba(15, 23, 42, 0.6);
   color: var(--text-primary);
   font-family: var(--font-ui);
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   transition: all var(--transition-smooth);
   outline: none;
 }
@@ -1713,8 +1715,8 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   .analytics-top { grid-template-columns: 1fr; }
   .analytics-kpi-row { grid-template-columns: repeat(2, 1fr); }
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-  .form-row.cols-3 { grid-template-columns: 1fr 1fr; }
-  .form-row.cols-4 { grid-template-columns: 1fr 1fr; }
+  .form-row.cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 26px; }
+  .form-row.cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 26px; }
 }
 @media (max-width: 640px) {
   .main-app { padding: 12px 14px 30px; }
@@ -1723,7 +1725,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   .tab-btn { padding: 10px 16px; font-size: 0.78rem; }
   .kpi-grid { grid-template-columns: 1fr 1fr; }
   .analytics-kpi-row { grid-template-columns: 1fr 1fr; }
-  .form-row.cols-3, .form-row.cols-2, .form-row.cols-4 { grid-template-columns: 1fr; }
+  .form-row.cols-3, .form-row.cols-2, .form-row.cols-4 { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .journal-form { padding: 20px 16px; }
   .calendar-grid { gap: 3px; }
   .calendar-day { min-height: 44px; }
@@ -2156,7 +2158,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
         <div class="glass-panel form-panel-box">
           <!-- Section 1: Market Basics -->
           <div class="form-section-title"><i class="fas fa-chart-candlestick"></i> 行情基礎</div>
-          <div class="form-row cols-4">
+          <div class="form-row cols-2" style="gap:24px 28px; margin-bottom:22px;">
             <div class="form-group">
               <label>日期 <span class="required">*</span></label>
               <input type="date" class="form-control" id="fDate" required>
@@ -2165,6 +2167,8 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
               <label>交易時間 (HH:MM)</label>
               <input type="time" class="form-control" id="fTradeTime" placeholder="e.g. 15:30">
             </div>
+          </div>
+          <div class="form-row cols-2" style="gap:24px 28px; margin-bottom:12px;">
             <div class="form-group">
               <label>時間級別 <span class="required">*</span></label>
               <select class="form-control" id="fTimeframe" required>
@@ -2232,7 +2236,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
 
           <!-- Section 3: P&L + Position Sizing -->
           <div class="form-section-title" style="margin-top:22px;"><i class="fas fa-coins"></i> 資金盈虧 & 倉位風控計算</div>
-          <div class="form-row cols-4">
+          <div class="form-row cols-2" style="gap:24px 28px; margin-bottom:22px;">
             <div class="form-group">
               <label>平倉收益率 (%) <span class="required">*</span></label>
               <input type="number" step="0.01" class="form-control" id="fPct" placeholder="e.g. 1.50" required>
@@ -2241,6 +2245,8 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
               <label>剩餘資金 (USD) <span class="required">*</span></label>
               <input type="number" step="0.01" class="form-control" id="fBalance" placeholder="e.g. 10250.00" required>
             </div>
+          </div>
+          <div class="form-row cols-2" style="gap:24px 28px; margin-bottom:12px;">
             <div class="form-group">
               <label>風險比例 (%)</label>
               <input type="number" step="0.1" min="0.1" max="100" class="form-control" id="fRiskPct" placeholder="e.g. 1.0">
