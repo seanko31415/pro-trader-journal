@@ -1722,15 +1722,19 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
    STRATEGY MATRIX SHOWCASE GRID & GLASSMORPHIC CARDS
    ======================================================================== */
 .strategy-matrix-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 24px;
-  width: 100%;
-  margin: 0 auto;
-  align-items: stretch;
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  align-items: stretch;
+  gap: 28px;
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
 }
 .strategy-matrix-card {
+  flex: 1 1 450px;
+  max-width: 540px;
+  min-width: 340px;
   background: rgba(17, 24, 39, 0.65);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -1910,9 +1914,11 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
 <!-- ===== CLOUD SYNC & MULTI-DEVICE BRIDGE MODAL ===== -->
 <div class="modal-overlay" id="cloudSyncModal">
   <div class="day-modal-content" style="max-width: 680px;">
-    <div class="day-modal-header">
+    <div class="day-modal-header" style="display:flex; justify-content:space-between; align-items:center;">
       <h3><i class="fas fa-cloud-arrow-up" style="color:var(--gold);"></i> 跨裝置雲端同步與瀏覽器永久防護中心</h3>
-      <button class="modal-close" onclick="closeCloudSyncModal()">&times;</button>
+      <button class="btn-export" onclick="closeCloudSyncModal()" style="background:rgba(239,68,68,0.22); border:1px solid var(--red); color:var(--text-primary); padding:6px 16px; border-radius:20px; font-weight:700; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; gap:6px;">
+        <i class="fas fa-arrow-left"></i> 返回主網站
+      </button>
     </div>
     <div style="padding: 24px; color: var(--text-primary); max-height: 80vh; overflow-y: auto;">
       <div style="background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.35); padding: 14px 18px; border-radius: var(--radius-md); margin-bottom: 22px; display: flex; align-items: center; gap: 14px;">
@@ -1945,6 +1951,13 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
           <button class="btn-export" onclick="pushToCloudSync()" style="flex:1; justify-content: center;"><i class="fas fa-cloud-upload-alt"></i> 將目前資料上傳雲端</button>
           <button class="btn-export" onclick="pullFromCloudSync()" style="flex:1; justify-content: center;"><i class="fas fa-cloud-download-alt"></i> 從雲端拉取最新的資料</button>
         </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 24px 0;">
+      <div style="display:flex; justify-content:center; padding-top:4px; padding-bottom:12px;">
+        <button class="btn-submit" onclick="closeCloudSyncModal()" style="padding: 12px 36px; background: rgba(212,175,55,0.22); border: 1px solid var(--gold); color: var(--gold); font-size: 1rem; font-weight: 700; border-radius: 30px; box-shadow: 0 4px 20px rgba(212,175,55,0.2); cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s ease;">
+          <i class="fas fa-house"></i> 返回主網站 (關閉同步防護中心)
+        </button>
       </div>
     </div>
   </div>
@@ -2131,12 +2144,12 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
             <div class="session-detect-text" id="sessionDetectText">—</div>
           </div>
 
-          <!-- Section 2: Strategy Core (Custom free input + Datalist suggestions) -->
-          <div class="form-section-title" style="margin-top:22px;"><i class="fas fa-crosshairs"></i> 策略核心 (可下拉選擇或自由填寫)</div>
+          <!-- Section 2: Strategy Core -->
+          <div class="form-section-title" style="margin-top:22px;"><i class="fas fa-crosshairs"></i> 策略核心</div>
           <div class="form-row cols-2">
             <div class="form-group">
-              <label>交易策略 <span class="required">*</span> <span style="font-size:0.7rem;color:var(--gold);font-weight:700;">(可選「3+1 / 馬刺」或自由填寫，新寫策略會自動加入選擇塊)</span></label>
-              <input type="text" class="form-control" id="fStrategy" list="strategyOptions" placeholder="點擊選取 3+1、馬刺，或直接填寫自訂策略..." required>
+              <label>交易策略 <span class="required">*</span></label>
+              <input type="text" class="form-control" id="fStrategy" list="strategyOptions" placeholder="請輸入或選取交易策略..." required>
               <datalist id="strategyOptions">
                 <option value="3+1">
                 <option value="馬刺">
@@ -2235,14 +2248,14 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
 
             <!-- Learning Notes Image Attachment -->
             <div class="form-group" style="margin-top:10px;">
-              <div class="drop-zone learning-zone" id="dropZoneLearning" style="padding:14px 18px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.2);">
+              <div class="drop-zone learning-zone" id="dropZoneLearning" tabindex="0" style="padding:14px 18px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.2);">
                 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
                   <div style="text-align:left;">
                     <div style="font-size:0.83rem;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:6px;"><i class="fas fa-book-open-reader" style="color:var(--blue);"></i> 學習心得專屬筆記附圖</div>
-                    <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">上傳與今日心得相關的教材、筆記或總結思維導圖 (獨立於 K 線圖)</div>
+                    <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">支援 Ctrl+V 貼上、點擊或拖放上傳教材與筆記思維導圖 (獨立於 K 線圖)</div>
                   </div>
                   <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--blue);font-weight:600;">
-                    <i class="fas fa-paperclip"></i> <span style="text-decoration:underline;">點擊或拖放上傳</span>
+                    <i class="fas fa-paste"></i> <span style="text-decoration:underline;">點擊 / 拖放 / Ctrl+V 貼上</span>
                   </div>
                 </div>
                 <input type="file" id="fImageLearning" accept="image/*" style="display:none;">
@@ -2253,16 +2266,16 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
 
             <!-- Section 2 (Right): DUAL K-LINE CHARTS -->
             <div class="form-section-title" style="margin-top:22px;">
-              <i class="fas fa-images"></i> 雙 K 線多媒體截圖 (雙圖對照：大格局 vs 小時框)
+              <i class="fas fa-images"></i> 雙 K 線多媒體截圖 (雙圖對照：大格局 vs 小時框，支援 Ctrl+V 秒速貼上)
             </div>
             <div class="dual-dropzone-grid">
               <!-- Chart 1: Higher Timeframe / Macro -->
               <div class="form-group">
-                <div class="drop-zone dual-zone" id="dropZone1">
+                <div class="drop-zone dual-zone" id="dropZone1" tabindex="0">
                   <div class="drop-zone-title"><i class="fas fa-chart-line"></i> 圖一：大時框趨勢 (HTF)</div>
                   <div class="drop-zone-desc">例如 H4 / D1 宏觀趨勢與關鍵支撐壓力</div>
                   <div class="drop-zone-icon" style="font-size:1.6rem;margin:5px 0;"><i class="fas fa-cloud-arrow-up"></i></div>
-                  <div class="drop-zone-text" style="font-size:0.76rem;">拖放或 <span>點擊選擇</span></div>
+                  <div class="drop-zone-text" style="font-size:0.76rem;">拖放、點擊 或 <span style="color:var(--gold);font-weight:700;">Ctrl+V 貼上</span></div>
                   <input type="file" id="fImage1" accept="image/*" style="display:none;">
                   <img class="drop-zone-preview" id="imgPreview1" alt="大時框截圖">
                   <button type="button" class="drop-zone-remove" id="imgRemove1" title="移除圖一"><i class="fas fa-trash-can"></i> 刪除 / 重新選擇圖片</button>
@@ -2270,11 +2283,11 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
               </div>
               <!-- Chart 2: Lower Timeframe / Execution -->
               <div class="form-group">
-                <div class="drop-zone dual-zone" id="dropZone2">
+                <div class="drop-zone dual-zone" id="dropZone2" tabindex="0">
                   <div class="drop-zone-title"><i class="fas fa-crosshairs"></i> 圖二：進場執行 (LTF)</div>
                   <div class="drop-zone-desc">例如 M5 / M15 精確進場點與 K 線型態</div>
                   <div class="drop-zone-icon" style="font-size:1.6rem;margin:5px 0;"><i class="fas fa-cloud-arrow-up"></i></div>
-                  <div class="drop-zone-text" style="font-size:0.76rem;">拖放或 <span>點擊選擇</span></div>
+                  <div class="drop-zone-text" style="font-size:0.76rem;">拖放、點擊 或 <span style="color:var(--gold);font-weight:700;">Ctrl+V 貼上</span></div>
                   <input type="file" id="fImage2" accept="image/*" style="display:none;">
                   <img class="drop-zone-preview" id="imgPreview2" alt="進場截圖">
                   <button type="button" class="drop-zone-remove" id="imgRemove2" title="移除圖二"><i class="fas fa-trash-can"></i> 刪除 / 重新選擇圖片</button>
@@ -2349,10 +2362,12 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
     </div>
 
     <!-- Dynamic Strategy Matrix & Interactive Showcase Panel -->
-    <div class="glass-panel strategy-showcase-panel" style="margin-bottom:24px;padding:26px;">
-      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;margin-bottom:26px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.08);">
-        <h3 style="margin-bottom:0;font-size:1.2rem;font-weight:800;letter-spacing:0.04em;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--text-primary);"><i class="fas fa-layer-group" style="color:var(--gold);font-size:1.3rem;"></i> 核心戰略智能矩陣與多媒體動態展演中心</h3>
-        <span style="font-size:0.8rem;color:var(--text-secondary);background:rgba(212,175,55,0.12);padding:5px 16px;border-radius:20px;border:1px solid rgba(212,175,55,0.35);font-weight:600;"><i class="fas fa-sparkles" style="color:var(--gold);"></i> 點擊卡牌立刻動態展示歷史 K 線與案例庫實錄</span>
+    <div class="glass-panel strategy-showcase-panel" style="margin-bottom:24px;padding:28px 26px;">
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;margin:0 auto 28px auto;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.08);max-width:850px;">
+        <h3 style="margin-bottom:6px;font-size:1.3rem;font-weight:800;letter-spacing:0.05em;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--text-primary);text-align:center;"><i class="fas fa-layer-group" style="color:var(--gold);font-size:1.35rem;"></i> 核心戰略與動態展演</h3>
+        <div style="display:flex;justify-content:center;align-items:center;width:100%;margin-top:4px;">
+          <span style="font-size:0.82rem;color:var(--text-secondary);background:rgba(212,175,55,0.12);padding:6px 20px;border-radius:24px;border:1px solid rgba(212,175,55,0.35);font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-align:center;box-shadow:0 4px 15px rgba(212,175,55,0.08);"><i class="fas fa-sparkles" style="color:var(--gold);"></i> 點擊卡牌立刻動態展示歷史 K 線與案例庫實錄</span>
+        </div>
       </div>
       <div class="strategy-matrix-grid" id="strategyMatrixGrid"></div>
     </div>
@@ -3072,6 +3087,7 @@ fSlPips.addEventListener('input', updatePosCalc);
 let currentImgBase64_1 = null;
 let currentImgBase64_2 = null;
 let currentImgBase64_Learning = null;
+let activeHoverDropZone = null;
 
 function setupDropZone(dzId, inputId, previewId, removeId, idx) {
   const dz = document.getElementById(dzId);
@@ -3089,6 +3105,8 @@ function setupDropZone(dzId, inputId, previewId, removeId, idx) {
     dz.classList.remove('drag-over');
     if (e.dataTransfer.files.length) handleDualImageFile(e.dataTransfer.files[0], idx, prev, rm);
   });
+  dz.addEventListener('mouseenter', () => { activeHoverDropZone = idx; });
+  dz.addEventListener('mouseleave', () => { if (activeHoverDropZone === idx) activeHoverDropZone = null; });
   fImg.addEventListener('change', () => { if (fImg.files.length) handleDualImageFile(fImg.files[0], idx, prev, rm); });
 
   rm.addEventListener('click', e => {
@@ -3107,6 +3125,47 @@ function setupDropZone(dzId, inputId, previewId, removeId, idx) {
 setupDropZone('dropZone1', 'fImage1', 'imgPreview1', 'imgRemove1', 1);
 setupDropZone('dropZone2', 'fImage2', 'imgPreview2', 'imgRemove2', 2);
 setupDropZone('dropZoneLearning', 'fImageLearning', 'imgPreviewLearning', 'imgRemoveLearning', 'Learning');
+
+// ---- Global Ctrl+V Screenshot Paste Handler (秒速貼上截圖功能) ----
+window.addEventListener('paste', e => {
+  const items = e.clipboardData && e.clipboardData.items;
+  if (!items) return;
+
+  // 避免在文字輸入框或 textarea 貼上文字時誤觸
+  const activeEl = document.activeElement;
+  if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA') && activeEl.type !== 'file') {
+    return;
+  }
+
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].type.indexOf('image') !== -1) {
+      e.preventDefault();
+      const file = items[i].getAsFile();
+      if (!file) continue;
+
+      let targetIdx = activeHoverDropZone;
+      // 智慧分流：若使用者滑鼠未特別停留在特定附圖框上方，系統依序填補空的框
+      if (!targetIdx) {
+        if (!currentImgBase64_1) targetIdx = 1;
+        else if (!currentImgBase64_2) targetIdx = 2;
+        else if (!currentImgBase64_Learning) targetIdx = 'Learning';
+        else targetIdx = 1; // 若全滿則預設更新圖一
+      }
+
+      const prevId = targetIdx === 1 ? 'imgPreview1' : (targetIdx === 2 ? 'imgPreview2' : 'imgPreviewLearning');
+      const rmId = targetIdx === 1 ? 'imgRemove1' : (targetIdx === 2 ? 'imgRemove2' : 'imgRemoveLearning');
+      const prev = document.getElementById(prevId);
+      const rm = document.getElementById(rmId);
+
+      if (prev && rm) {
+        handleDualImageFile(file, targetIdx, prev, rm);
+        const targetName = targetIdx === 1 ? '圖一：大時框趨勢 (HTF)' : (targetIdx === 2 ? '圖二：進場執行 (LTF)' : '學習心得專屬筆記附圖');
+        showToast(`📋 已從剪貼簿 Ctrl+V 貼上截圖至【${targetName}】！`, 'success');
+      }
+      break;
+    }
+  }
+});
 
 function handleDualImageFile(file, idx, prevEl, rmEl) {
   if (!file.type.startsWith('image/')) { showToast('請上傳圖片格式檔案', 'error'); return; }
