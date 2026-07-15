@@ -1707,7 +1707,12 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
       </div>
       <!-- Ledger -->
       <div class="glass-panel ledger-panel">
-        <h3><i class="fas fa-scroll"></i> 歷史交易流水帳</h3>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+          <h3 style="margin:0;"><i class="fas fa-scroll"></i> 歷史交易流水帳</h3>
+          <button class="btn-submit" onclick="promptCleanOldTrades()" style="padding: 4px 12px; font-size: 0.75rem; background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.45); color: #fca5a5; box-shadow: none; border-radius: 6px; cursor: pointer;" title="清理三個月前的過期紀錄以釋放儲存空間">
+            <i class="fas fa-broom"></i> 清除3個月前舊單 (釋放空間)
+          </button>
+        </div>
         <div class="ledger-scroll" id="ledgerScroll"></div>
       </div>
     </div>
@@ -2134,6 +2139,50 @@ function updateStorageStatus() {
   badgeText.innerHTML = `${totalCount} 筆交易 / 估計 ${sizeStr} <span style="opacity:0.8;font-size:0.68rem;">(IndexedDB)</span>`;
 }
 
+function getThreeMonthsAgoDateStr() {
+  const d = new Date();
+  d.setMonth(d.getMonth() - 3);
+  return d.toISOString().split('T')[0];
+}
+
+function promptCleanOldTrades() {
+  const cutoffStr = getThreeMonthsAgoDateStr();
+  const expiredTrades = trades.filter(t => (t.date || '') < cutoffStr && (t.date || '') !== '');
+  if (expiredTrades.length === 0) {
+    showToast(`🎉 目前沒有早於 ${cutoffStr} (三個月前) 的過期交易紀錄，儲存空間非常乾淨充足！`, 'info');
+    return;
+  }
+  
+  if (confirm(`⚠️ 【儲存空間優化與清理確認】\n\n系統偵測到您有 ${expiredTrades.length} 筆超過三個月前（日期早於 ${cutoffStr}）的歷史交易紀錄與多媒體快取。\n\n確定要清理這 ${expiredTrades.length} 筆過期資料，以大幅釋放您的本地資料庫與多媒體截圖空間嗎？\n（建議：清理前可至「策略分析」頁面點擊「備份 JSON」下載檔案永久保存）`)) {
+    executeCleanOldTrades(cutoffStr);
+  }
+}
+
+async function executeCleanOldTrades(cutoffStr) {
+  const beforeCount = trades.length;
+  trades = trades.filter(t => !t.date || t.date >= cutoffStr);
+  const removedCount = beforeCount - trades.length;
+  await saveTrades();
+  renderAll();
+  showToast(`✨ 成功清除 ${removedCount} 筆三個月前的過期交易紀錄，儲存空間已大幅釋放！`, 'success');
+}
+
+function autoCheckAndNotifyCleanOldTrades() {
+  const cutoffStr = getThreeMonthsAgoDateStr();
+  const expiredTrades = trades.filter(t => (t.date || '') < cutoffStr && (t.date || '') !== '');
+  if (expiredTrades.length === 0) return;
+
+  // Ensure we don't spam the user repeatedly in the exact same browser session if they declined once today
+  if (sessionStorage.getItem('protrader_autoclean_notified_' + cutoffStr)) return;
+  sessionStorage.setItem('protrader_autoclean_notified_' + cutoffStr, 'true');
+
+  setTimeout(() => {
+    if (confirm(`🔔 【儲存空間自動優化提醒：發現超過 3 個月歷史單】\n\n系統自動檢查發現您的資料庫中，有 ${expiredTrades.length} 筆早於 ${cutoffStr} (三個月前) 的舊交易記錄與截圖。\n\n為了維持系統運作流暢度、並大幅釋放多媒體快取空間，請問是否「立即為您自動清除」這 ${expiredTrades.length} 筆過期紀錄？\n\n（點擊「確定」將立即為您釋放空間；點擊「取消」將暫時保留，稍後您也可隨時在「歷史交易流水帳」處手動清除或匯出 JSON 備份）`)) {
+      executeCleanOldTrades(cutoffStr);
+    }
+  }, 1500);
+}
+
 // JSON Backup & Restore Handlers
 document.getElementById('btnExportJSON').addEventListener('click', () => {
   if (trades.length === 0) { showToast('沒有交易記錄可匯出', 'error'); return; }
@@ -2210,7 +2259,10 @@ function switchTab(tabId) {
     const isActive = p.id === 'panel' + tabId.charAt(0).toUpperCase() + tabId.slice(1);
     p.classList.toggle('active', isActive);
   });
-  if (tabId === 'dashboard') renderDashboard();
+  if (tabId === 'dashboard') {
+    renderDashboard();
+    autoCheckAndNotifyCleanOldTrades();
+  }
   if (tabId === 'analytics') renderAnalytics();
 }
 
@@ -3275,6 +3327,7 @@ async function init() {
   updateStorageStatus();
   renderDashboard();
   renderAnalytics();
+  autoCheckAndNotifyCleanOldTrades();
 
   // Attach Mouse-Follow Spotlight coordinate tracker
   document.addEventListener('mousemove', e => {
