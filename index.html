@@ -830,9 +830,12 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
   cursor: pointer;
-  filter: invert(0.9) !important;
-  padding: 4px;
 }
 .form-control:hover {
   border-color: rgba(255, 255, 255, 0.88) !important;
@@ -2266,13 +2269,45 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
           <!-- Section 1: Market Basics -->
           <div class="form-section-title"><i class="fas fa-chart-candlestick"></i> 行情基礎</div>
           <div class="form-row market-basics-row" style="margin-bottom:22px;">
-            <div class="form-group">
+            <div class="form-group" style="position:relative;">
               <label>日期 <span class="required">*</span></label>
-              <input type="date" class="form-control" id="fDate" required style="cursor:pointer; font-family:var(--font-mono); font-size:0.88rem; font-weight:700; color:var(--text-primary); box-sizing:border-box; width:100%; max-width:100%;" onclick="safeOpenPicker(event, this)" title="點擊直接開啟日曆選擇日期">
+              <div style="position:relative; width:100%;">
+                <input type="date" class="form-control" id="fDate" required style="cursor:pointer; font-family:var(--font-mono); font-size:0.88rem; font-weight:700; color:var(--text-primary); box-sizing:border-box; width:100%; max-width:100%; padding-right:36px;" title="點擊直接開啟深黑色日曆選擇日期">
+                <i class="fas fa-calendar-alt" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--text-secondary); pointer-events:none; font-size:0.95rem;"></i>
+              </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="position:relative;">
               <label>交易時間 (HH:MM)</label>
-              <input type="time" class="form-control" id="fTradeTime" placeholder="e.g. 15:30" style="cursor:pointer; font-family:var(--font-mono); font-size:0.88rem; font-weight:700; color:var(--text-primary) !important; box-sizing:border-box; width:100%; max-width:100%;" onclick="safeOpenPicker(event, this)" title="點擊直接挑選任意時間 (下午/時/分)">
+              <div style="position:relative; width:100%;">
+                <input type="text" class="form-control" id="fTradeTime" placeholder="點擊展開黑色轉盤選擇時間" readonly style="cursor:pointer; font-family:var(--font-mono); font-size:0.88rem; font-weight:700; color:#ffffff !important; background:rgba(15, 23, 42, 0.65); box-sizing:border-box; width:100%; max-width:100%; padding-right:36px;" onclick="toggleCustomTimePopup(event)" title="點擊即刻展開深黑色時間選取選單">
+                <i class="fas fa-clock" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--gold); pointer-events:none; font-size:0.95rem;"></i>
+              </div>
+              <!-- Pitch-Black Custom Time Picker Popup Menu -->
+              <div id="customTimePopup" class="custom-time-popup" style="display:none; position:absolute; z-index:99999; background:#070a13 !important; border:1px solid var(--gold); border-radius:var(--radius-md); padding:16px; box-shadow:0 18px 50px rgba(0,0,0,0.98), 0 0 28px rgba(212,175,55,0.28); width:280px; top:100%; left:0; margin-top:6px; color:#ffffff !important; box-sizing:border-box;">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.12); padding-bottom:10px; margin-bottom:12px;">
+                  <span style="font-weight:700; color:var(--gold); font-size:0.9rem; display:flex; align-items:center; gap:6px;"><i class="fas fa-clock"></i> 選擇交易時間</span>
+                  <button type="button" onclick="applyQuickTimeNow(event)" class="btn-export" style="margin:0; padding:4px 10px; height:28px; font-size:0.78rem; background:rgba(56,189,248,0.18); border-color:#38bdf8; color:#38bdf8; border-radius:6px; display:inline-flex; align-items:center; gap:4px; cursor:pointer;"><i class="fas fa-bolt"></i> 現在</button>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
+                  <div>
+                    <div style="font-size:0.76rem; color:var(--text-secondary); margin-bottom:6px; font-weight:600; text-align:center;">時 (Hour)</div>
+                    <select id="customPickerHour" class="form-control" size="6" style="width:100%; height:130px; background:#0b0f19 !important; color:#ffffff !important; border:1px solid rgba(255,255,255,0.18); border-radius:8px; padding:4px; font-family:var(--font-mono); font-size:0.95rem; text-align:center; cursor:pointer; color-scheme:dark !important;">
+                      <!-- JS fills 00-23 -->
+                    </select>
+                  </div>
+                  <div>
+                    <div style="font-size:0.76rem; color:var(--text-secondary); margin-bottom:6px; font-weight:600; text-align:center;">分 (Minute)</div>
+                    <select id="customPickerMin" class="form-control" size="6" style="width:100%; height:130px; background:#0b0f19 !important; color:#ffffff !important; border:1px solid rgba(255,255,255,0.18); border-radius:8px; padding:4px; font-family:var(--font-mono); font-size:0.95rem; text-align:center; cursor:pointer; color-scheme:dark !important;">
+                      <!-- JS fills 00-59 -->
+                    </select>
+                  </div>
+                </div>
+                <div style="display:flex; justify-content:space-between; gap:8px;">
+                  <button type="button" onclick="clearCustomTime(event)" class="btn-export" style="flex:1; margin:0; padding:6px; height:36px; font-size:0.82rem; background:rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.45); color:#fca5a5; border-radius:8px; cursor:pointer;"><i class="fas fa-trash-alt"></i> 清除</button>
+                  <button type="button" onclick="closeCustomTimePopup(event)" class="btn-export" style="flex:1; margin:0; padding:6px; height:36px; font-size:0.82rem; background:rgba(148,163,184,0.15); border-color:rgba(148,163,184,0.45); color:#cbd5e1; border-radius:8px; cursor:pointer;">取消</button>
+                  <button type="button" onclick="confirmCustomTime(event)" class="btn-submit" style="flex:1.4; margin:0; padding:6px; height:36px; font-size:0.85rem; background:var(--gold); border-color:var(--gold); color:#000; font-weight:800; border-radius:8px; cursor:pointer; box-shadow:0 4px 12px rgba(212,175,55,0.3);"><i class="fas fa-check"></i> 確定</button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="form-row cols-2" style="gap:24px 28px; margin-bottom:12px;">
@@ -3420,18 +3455,132 @@ function openTimeInputPicker(event) {
     event.preventDefault();
     event.stopPropagation();
   }
-  const timeInput = document.getElementById('fTradeTime');
-  if (!timeInput) return;
-  try {
-    timeInput.focus();
-    if (typeof timeInput.showPicker === 'function') {
-      timeInput.showPicker();
-    } else {
-      timeInput.click();
-    }
-  } catch(e) {
-    timeInput.focus();
+  toggleCustomTimePopup(event);
+}
+
+let _customTimeInitialized = false;
+function initCustomTimePicker() {
+  if (_customTimeInitialized) return;
+  const hourSel = document.getElementById('customPickerHour');
+  const minSel = document.getElementById('customPickerMin');
+  if (!hourSel || !minSel) return;
+  
+  hourSel.innerHTML = '';
+  minSel.innerHTML = '';
+  
+  for (let i = 0; i < 24; i++) {
+    const val = String(i).padStart(2, '0');
+    hourSel.options.add(new Option(`${val} 時`, val));
   }
+  for (let i = 0; i < 60; i++) {
+    const val = String(i).padStart(2, '0');
+    minSel.options.add(new Option(`${val} 分`, val));
+  }
+  _customTimeInitialized = true;
+
+  hourSel.ondblclick = confirmCustomTime;
+  minSel.ondblclick = confirmCustomTime;
+
+  document.addEventListener('click', e => {
+    const popup = document.getElementById('customTimePopup');
+    const input = document.getElementById('fTradeTime');
+    if (popup && popup.style.display !== 'none') {
+      if (!popup.contains(e.target) && e.target !== input) {
+        popup.style.display = 'none';
+      }
+    }
+  });
+}
+
+function toggleCustomTimePopup(event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  initCustomTimePicker();
+  const popup = document.getElementById('customTimePopup');
+  const input = document.getElementById('fTradeTime');
+  if (!popup || !input) return;
+
+  if (popup.style.display === 'none' || !popup.style.display) {
+    const val = input.value || '';
+    const hourSel = document.getElementById('customPickerHour');
+    const minSel = document.getElementById('customPickerMin');
+    if (val.includes(':')) {
+      const parts = val.split(':');
+      if (hourSel) hourSel.value = parts[0];
+      if (minSel) minSel.value = parts[1];
+    } else {
+      const now = new Date();
+      if (hourSel) hourSel.value = String(now.getHours()).padStart(2, '0');
+      if (minSel) minSel.value = String(now.getMinutes()).padStart(2, '0');
+    }
+    popup.style.display = 'block';
+  } else {
+    popup.style.display = 'none';
+  }
+}
+
+function closeCustomTimePopup(event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  const popup = document.getElementById('customTimePopup');
+  if (popup) popup.style.display = 'none';
+}
+
+function applyQuickTimeNow(event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+  const input = document.getElementById('fTradeTime');
+  if (input) {
+    input.value = `${h}:${m}`;
+    input.dispatchEvent(new Event('input'));
+    input.dispatchEvent(new Event('change'));
+  }
+  const hourSel = document.getElementById('customPickerHour');
+  const minSel = document.getElementById('customPickerMin');
+  if (hourSel) hourSel.value = h;
+  if (minSel) minSel.value = m;
+  closeCustomTimePopup();
+}
+
+function confirmCustomTime(event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  const hourSel = document.getElementById('customPickerHour');
+  const minSel = document.getElementById('customPickerMin');
+  const input = document.getElementById('fTradeTime');
+  if (hourSel && minSel && input) {
+    const h = hourSel.value || '12';
+    const m = minSel.value || '00';
+    input.value = `${h}:${m}`;
+    input.dispatchEvent(new Event('input'));
+    input.dispatchEvent(new Event('change'));
+  }
+  closeCustomTimePopup();
+}
+
+function clearCustomTime(event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  const input = document.getElementById('fTradeTime');
+  if (input) {
+    input.value = '';
+    input.dispatchEvent(new Event('input'));
+    input.dispatchEvent(new Event('change'));
+  }
+  closeCustomTimePopup();
 }
 
 function isLegacyStrategy(name) {
