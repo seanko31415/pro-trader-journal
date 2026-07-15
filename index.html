@@ -2291,11 +2291,33 @@ function renderCalendar() {
         countBadge = `<span class="day-count-badge">${count}筆</span>`;
       }
     }
-    html += `<div class="${cls}" onclick="openDayDetailModal('${dateStr}')" title="點擊查看或新增 ${dateStr} 交易紀錄">
+    html += `<div class="${cls}" onclick="handleCalendarDayClick('${dateStr}', ${hasTrade})" title="點擊切換或新增 ${dateStr} 交易紀錄">
       <span class="day-number">${d}</span>${countBadge}${badge}
     </div>`;
   }
   grid.innerHTML = html;
+}
+
+function handleCalendarDayClick(dateStr, hasTrade) {
+  if (!hasTrade) {
+    // Directly jump to Tab 2 (journal recording form) with that exact date pre-filled!
+    switchTab('journal');
+    document.getElementById('fDate').value = dateStr;
+    const fTime = document.getElementById('fTradeTime');
+    if (fTime) fTime.focus();
+    showToast(`📅 已直接切換至「${dateStr}」補錄模式，可立刻填寫當日或以前的交易！`, 'success');
+  } else {
+    openDayDetailModal(dateStr);
+  }
+}
+
+function jumpToJournalForDate(dateStr) {
+  closeDayDetailModal();
+  switchTab('journal');
+  document.getElementById('fDate').value = dateStr;
+  const fTime = document.getElementById('fTradeTime');
+  if (fTime) fTime.focus();
+  showToast(`📅 已自動切換至「${dateStr}」補錄模式，請填寫交易紀錄！`, 'success');
 }
 
 function openDayDetailModal(dateStr) {
@@ -2308,7 +2330,7 @@ function openDayDetailModal(dateStr) {
 
   if (!modal || !title || !list) return;
 
-  title.innerHTML = `<i class="fas fa-calendar-day"></i> ${dateStr} 當日復盤與明細`;
+  title.innerHTML = `<i class="fas fa-calendar-day"></i> ${dateStr} 當日復盤明細 <button class="btn-submit" onclick="jumpToJournalForDate('${dateStr}')" style="margin-left:12px;padding:5px 12px;font-size:0.75rem;border-radius:6px;box-shadow:none;"><i class="fas fa-plus"></i> 直接補錄此日新單</button>`;
   
   const dayTrades = trades.filter(t => t.date === dateStr).sort((a,b) => (b.tradeTime || '').localeCompare(a.tradeTime || ''));
   
@@ -2364,13 +2386,10 @@ function openDayDetailModal(dateStr) {
     }).join('');
   }
 
-  addBtn.onclick = () => {
-    modal.classList.remove('open');
-    switchTab('journal');
-    document.getElementById('fDate').value = dateStr;
-    document.getElementById('fTradeTime').focus();
-    showToast(`已預設日期為 ${dateStr}，可直接開始填寫當日交易！`, 'success');
-  };
+  if (addBtn) {
+    addBtn.innerHTML = `<i class="fas fa-plus-circle"></i> 繼續為「${dateStr}」新增下一筆 / 補登交易紀錄`;
+    addBtn.onclick = () => jumpToJournalForDate(dateStr);
+  }
 
   modal.classList.add('open');
 }
