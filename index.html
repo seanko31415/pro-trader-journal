@@ -835,6 +835,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .form-control:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
 .time-quick-btn {
   background: rgba(30, 41, 59, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.16);
@@ -1660,7 +1661,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   justify-content: center;
   animation: fadeIn 0.3s ease;
 }
-.modal-overlay.show { display: flex; }
+.modal-overlay.show, .modal-overlay.open { display: flex; }
 .modal-content {
   background: var(--bg-card);
   backdrop-filter: blur(20px);
@@ -2001,21 +2002,6 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
       </div>
 
       <div>
-        <h4 style="color: var(--gold); margin-bottom: 10px; font-size: 0.9rem;"><i class="fas fa-key"></i> 方案一：免費 JSONBin / GitHub Gist 雲端 API 金鑰自動同步</h4>
-        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">輸入您的 JSONBin.io 或 GitHub Gist Token，系統將自動於所有登入此網址的瀏覽器間進行雲端雙向同步。</p>
-        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
-          <input type="text" id="cloudSyncTokenInput" class="form-control" placeholder="請貼上 JSONBin ID 或 Gist URL API Token..." style="flex:1;">
-          <button class="btn-submit" onclick="saveCloudSyncToken()" style="padding: 0 18px;"><i class="fas fa-save"></i> 儲存金鑰</button>
-        </div>
-        <div style="display: flex; gap: 10px;">
-          <button class="btn-export" onclick="pushToCloudSync()" style="flex:1; justify-content: center;"><i class="fas fa-cloud-upload-alt"></i> 將目前資料上傳雲端</button>
-          <button class="btn-export" onclick="pullFromCloudSync()" style="flex:1; justify-content: center;"><i class="fas fa-cloud-download-alt"></i> 從雲端拉取最新的資料</button>
-        </div>
-      </div>
-
-      <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 24px 0;">
-
-      <div>
         <h4 style="color: var(--gold); margin-bottom: 10px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
           <i class="fab fa-google" style="color: #4285f4; font-size: 1.1rem;"></i> 方案二 (強烈推薦)：Google 帳號與 Google Drive 15GB 雲端同步
           <span style="font-size: 0.68rem; background: rgba(66, 133, 244, 0.2); color: #60a5fa; padding: 2px 8px; border-radius: 12px; border: 1px solid rgba(66, 133, 244, 0.4);">最大空間 & 極致隱私</span>
@@ -2024,26 +2010,26 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
           使用 Google 官方授權登入，將全站交易紀錄與高清 K 線截圖直接同步到您個人專屬的 Google 雲端硬碟 (`pro_trader_journal_backup.json`)。獨享 15GB 大容量且資料完全不經過外部第三方伺服器！
         </p>
         
-        <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid var(--glass-border); padding: 14px; border-radius: var(--radius-md); margin-bottom: 14px;">
+        <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid var(--glass-border); padding: 14px; border-radius: var(--radius-md); margin-bottom: 14px; backdrop-filter: blur(14px);">
           <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
             <span><i class="fas fa-id-card" style="color: var(--gold); margin-right: 4px;"></i> 步驟 1：輸入並儲存您的 Google Client ID</span>
             <span id="googleAuthStatus" style="font-weight: 700; color: var(--amber);"><i class="fas fa-circle-exclamation"></i> 未登入授權</span>
           </div>
-          <div style="display: flex; gap: 10px;">
-            <input type="text" id="googleClientIdInput" class="form-control" placeholder="請貼上 OAuth 2.0 Client ID (例如: xxxxx.apps.googleusercontent.com)" style="flex:1; font-size: 0.8rem;">
-            <button class="btn-submit" onclick="saveGoogleClientId()" style="padding: 0 16px; background: rgba(96, 165, 250, 0.18); border-color: var(--blue); color: var(--blue);"><i class="fas fa-key"></i> 儲存 Client ID</button>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <input type="text" id="googleClientIdInput" class="form-control" placeholder="請貼上 OAuth 2.0 Client ID (例如: xxxxx.apps.googleusercontent.com)" style="flex:1; min-width: 260px; font-size: 0.8rem;">
+            <button class="btn-submit" onclick="saveGoogleClientId()" style="padding: 0 20px; min-height: 42px; margin-top: 0; background: rgba(96, 165, 250, 0.2) !important; border-color: rgba(96, 165, 250, 0.5) !important; color: #60a5fa !important;"><i class="fas fa-key"></i> 儲存 Client ID</button>
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: stretch;">
-          <button class="btn-export" onclick="loginToGoogleDrive()" style="padding: 12px 14px; margin-top: 0; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; justify-content: center; min-height: 46px; background: rgba(66, 133, 244, 0.18); border: 1px solid #4285f4; color: #60a5fa;">
-            <i class="fab fa-google"></i> 1. 登入 Google 雲端授權
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; align-items: stretch;">
+          <button class="btn-export" onclick="loginToGoogleDrive()" style="padding: 14px; margin-top: 0; font-size: 0.88rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; height: 100%; min-height: 52px; background: rgba(66, 133, 244, 0.22); backdrop-filter: blur(16px); border: 1px solid rgba(66, 133, 244, 0.55); color: #93c5fd; border-radius: var(--radius-md); box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+            <i class="fab fa-google" style="font-size:1.1rem;"></i> <span>1. 登入 Google 雲端授權</span>
           </button>
-          <button class="btn-export" onclick="pushToGoogleDrive()" style="padding: 12px 14px; margin-top: 0; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; justify-content: center; min-height: 46px; background: rgba(16, 185, 129, 0.15); border: 1px solid var(--green); color: var(--green);">
-            <i class="fas fa-cloud-upload-alt"></i> 2. 備份上傳至雲端硬碟
+          <button class="btn-export" onclick="pushToGoogleDrive()" style="padding: 14px; margin-top: 0; font-size: 0.88rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; height: 100%; min-height: 52px; background: rgba(16, 185, 129, 0.22); backdrop-filter: blur(16px); border: 1px solid rgba(16, 185, 129, 0.55); color: #6ee7b7; border-radius: var(--radius-md); box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+            <i class="fas fa-cloud-upload-alt" style="font-size:1.1rem;"></i> <span>2. 備份上傳至雲端硬碟</span>
           </button>
-          <button class="btn-export" onclick="pullFromGoogleDrive()" style="padding: 12px 14px; margin-top: 0; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; justify-content: center; min-height: 46px; background: rgba(245, 158, 11, 0.15); border: 1px solid var(--amber); color: var(--amber);">
-            <i class="fas fa-cloud-download-alt"></i> 3. 從雲端硬碟下載還原
+          <button class="btn-export" onclick="pullFromGoogleDrive()" style="padding: 14px; margin-top: 0; font-size: 0.88rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; height: 100%; min-height: 52px; background: rgba(245, 158, 11, 0.22); backdrop-filter: blur(16px); border: 1px solid rgba(245, 158, 11, 0.55); color: #fde68a; border-radius: var(--radius-md); box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+            <i class="fas fa-cloud-download-alt" style="font-size:1.1rem;"></i> <span>3. 從雲端硬碟下載還原</span>
           </button>
         </div>
       </div>
