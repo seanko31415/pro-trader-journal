@@ -123,22 +123,43 @@ body {
 /* ========================================================================
    4. GLASSMORPHISM PANEL
    ======================================================================== */
-.glass-panel {
-  background: var(--bg-card);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
+.glass-panel, .kpi-card, .ledger-card, .lb-card, .analytics-kpi-card, .pos-calc-card, .emotion-insight-item, .session-detect-display, .drop-zone, .modal-content, .tab-nav {
+  background: rgba(17, 24, 39, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: var(--radius-lg);
-  transition: transform var(--transition-smooth),
-              border-color var(--transition-smooth),
-              box-shadow var(--transition-smooth),
-              background var(--transition-smooth);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
-.glass-panel.hoverable:hover {
-  transform: translateY(-4px) scale(1.01);
-  border-color: var(--glass-border-hover);
-  box-shadow: var(--shadow-gold-hover);
-  background: var(--bg-card-hover);
+
+/* 2 & 3. Mouse Hover: Y-axis offset (-4px), border-color fade into gold, and drop-shadow-gold */
+.glass-panel:hover, .kpi-card:hover, .ledger-card:hover, .lb-card:hover, .analytics-kpi-card:hover, .pos-calc-card:hover, .emotion-insight-item:hover, .drop-zone:hover {
+  transform: translateY(-4px) !important;
+  border-color: #d4af37 !important;
+  box-shadow: 0 8px 40px rgba(212, 175, 55, 0.22) !important;
+  background: rgba(17, 24, 39, 0.72) !important;
+}
+
+/* All buttons cubic-bezier smooth transition */
+button, .btn-export, .tab-btn, .calendar-nav-btn, .btn-submit, .filter-btn, .img-badge, .drop-zone-remove, .modal-close, .storage-badge {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+button:hover, .btn-export:hover, .btn-submit:hover, .calendar-nav-btn:hover, .filter-btn:hover, .img-badge:hover, .modal-close:hover {
+  transform: translateY(-4px) !important;
+  border-color: #d4af37 !important;
+  box-shadow: 0 6px 30px rgba(212, 175, 55, 0.25) !important;
+}
+
+/* 4. Touch/Click active: instant transform scale-96 for physical button feedback */
+button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .btn-submit:active, .filter-btn:active, .img-badge:active, .drop-zone-remove:active, .modal-close:active,
+.glass-panel:active, .kpi-card:active, .ledger-card:active, .lb-card:active, .analytics-kpi-card:active, .pos-calc-card:active {
+  transform: scale(0.96) !important;
+  transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  filter: brightness(0.92);
 }
 
 /* ========================================================================
@@ -550,7 +571,7 @@ body {
 }
 .kpi-card.balance-card {
   animation: softPulse 4s ease-in-out infinite;
-  border-color: rgba(212,175,55,0.15);
+  border-color: rgba(212,175,55,0.25);
 }
 .kpi-card.balance-card .kpi-icon { background: var(--gold-glow); color: var(--gold); }
 .kpi-card.balance-card .kpi-value { color: var(--gold); }
@@ -561,8 +582,8 @@ body {
 .kpi-card.maxloss-card .kpi-value { color: var(--red); }
 
 @keyframes softPulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(212,175,55,0); }
-  50% { transform: scale(1.015); box-shadow: 0 0 35px rgba(212,175,55,0.1); }
+  0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(212,175,55,0.05); border-color: rgba(212,175,55,0.2); }
+  50% { transform: scale(1.015); box-shadow: 0 0 40px rgba(212,175,55,0.22); border-color: rgba(212,175,55,0.6); }
 }
 
 /* ========================================================================
