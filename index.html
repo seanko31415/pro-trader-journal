@@ -1910,9 +1910,11 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
           <div class="form-section-title" style="margin-top:22px;"><i class="fas fa-crosshairs"></i> 策略核心 (可下拉選擇或自由填寫)</div>
           <div class="form-row cols-2">
             <div class="form-group">
-              <label>交易策略 <span class="required">*</span> <span style="font-size:0.7rem;color:var(--gold);font-weight:700;">(支援自由填寫)</span></label>
-              <input type="text" class="form-control" id="fStrategy" list="strategyOptions" placeholder="點擊選擇經典策略或自由填寫自訂名稱..." required>
+              <label>交易策略 <span class="required">*</span> <span style="font-size:0.7rem;color:var(--gold);font-weight:700;">(可選「3+1 / 馬刺」或自由填寫，新寫策略會自動加入選擇塊)</span></label>
+              <input type="text" class="form-control" id="fStrategy" list="strategyOptions" placeholder="點擊選取 3+1、馬刺，或直接填寫自訂策略..." required>
               <datalist id="strategyOptions">
+                <option value="3+1">
+                <option value="馬刺">
                 <option value="ICT Order Block (訂單塊進場)">
                 <option value="SMC FVG (合理價值缺口)">
                 <option value="BOS / CHoCH (結構破壞與轉變)">
@@ -2929,6 +2931,63 @@ function handleDualImageFile(file, idx, prevEl, rmEl) {
   img.src = objectUrl;
 }
 
+/* ========================================================================
+   CUSTOM STRATEGY OPTIONS PERSISTENCE (Dynamically add custom inputs to datalist)
+   ======================================================================== */
+function addCustomStrategyToOptions(strategyName) {
+  if (!strategyName || typeof strategyName !== 'string') return;
+  const name = strategyName.trim();
+  if (!name) return;
+  const datalist = document.getElementById('strategyOptions');
+  if (!datalist) return;
+  
+  const exists = Array.from(datalist.options).some(opt => opt.value === name);
+  if (!exists) {
+    const opt = document.createElement('option');
+    opt.value = name;
+    datalist.appendChild(opt);
+  }
+  
+  try {
+    let customList = JSON.parse(localStorage.getItem('protrader_custom_strategies') || '[]');
+    if (!customList.includes(name)) {
+      customList.push(name);
+      localStorage.setItem('protrader_custom_strategies', JSON.stringify(customList));
+    }
+  } catch (err) {
+    console.warn('Could not save custom strategy list:', err);
+  }
+}
+
+function loadSavedStrategyOptions() {
+  const datalist = document.getElementById('strategyOptions');
+  if (!datalist) return;
+  let allKnown = new Set();
+  try {
+    const customList = JSON.parse(localStorage.getItem('protrader_custom_strategies') || '[]');
+    customList.forEach(name => allKnown.add(name));
+  } catch (e) {}
+  if (Array.isArray(trades)) {
+    trades.forEach(t => { if (t.strategy && t.strategy.trim()) allKnown.add(t.strategy.trim()); });
+  }
+  allKnown.forEach(name => {
+    if (name && !Array.from(datalist.options).some(opt => opt.value === name)) {
+      const opt = document.createElement('option');
+      opt.value = name;
+      datalist.appendChild(opt);
+    }
+  });
+}
+
+const fStrategyInput = document.getElementById('fStrategy');
+if (fStrategyInput) {
+  fStrategyInput.addEventListener('change', e => {
+    if (e.target.value && e.target.value.trim()) {
+      addCustomStrategyToOptions(e.target.value);
+    }
+  });
+}
+
 // ---- Form Submit ----
 tradeForm.addEventListener('submit', e => {
   e.preventDefault();
@@ -2960,6 +3019,7 @@ tradeForm.addEventListener('submit', e => {
   };
 
   trades.push(trade);
+  addCustomStrategyToOptions(trade.strategy);
   saveTrades();
 
   // Keep the date you just saved instead of jumping back to today, so you can smoothly record multiple trades for the exact same day!
@@ -3509,6 +3569,7 @@ async function init() {
   }
 
   updateStorageStatus();
+  loadSavedStrategyOptions();
   renderDashboard();
   renderAnalytics();
   autoCheckAndNotifyCleanOldTrades();
