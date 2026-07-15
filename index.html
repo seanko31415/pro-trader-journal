@@ -2173,14 +2173,34 @@ const dbHelper = {
 };
 
 async function saveTrades() {
-  // 1. Save complete data (with Base64 images) to IndexedDB (Unlimited capacity)
+  // 1. Save complete data (with Base64 images) to IndexedDB asynchronously (Unlimited capacity, 0 UI block)
   await dbHelper.saveAll(trades);
   
-  // 2. Save lightweight backup (without base64 images) to localStorage so it NEVER hits 5MB limit
-  const lightTrades = trades.map(({ img, ...rest }) => rest);
-  localStorage.setItem('protrader_trades', JSON.stringify(lightTrades));
+  // 2. Save lightweight backup (without ANY base64 images: img, img1, img2, imgLearning) to localStorage so it NEVER blocks UI thread or hits 5MB limit
+  try {
+    const lightTrades = trades.map(({ img, img1, img2, imgLearning, ...rest }) => rest);
+    localStorage.setItem('protrader_trades', JSON.stringify(lightTrades));
+  } catch (err) {
+    console.warn('localStorage backup skipped due to storage limit:', err);
+  }
 
   updateStorageStatus();
+}
+
+function safeRenderAfterMutation() {
+  const activeTabId = document.querySelector('.tab-panel.active')?.id;
+  if (activeTabId === 'panelDashboard') {
+    renderDashboard();
+    setTimeout(() => { try { renderAnalytics(); } catch(e){} }, 60);
+  } else if (activeTabId === 'panelAnalytics') {
+    renderAnalytics();
+    setTimeout(() => { try { renderDashboard(); } catch(e){} }, 60);
+  } else {
+    // If inside Tab 2 (Journal form), defer Chart.js and Dashboard re-renders to prevent hidden canvas zero-dimension layout distortion or scroll hitching!
+    setTimeout(() => {
+      try { renderDashboard(); renderAnalytics(); } catch(e){}
+    }, 60);
+  }
 }
 
 function updateStorageStatus() {
@@ -2539,8 +2559,7 @@ async function deleteTradeById(tradeId, event) {
     const modal = document.getElementById('dayDetailModal');
     if (modal && modal.classList.contains('open')) openDayDetailModal(currentSelectedDay);
   }
-  renderDashboard();
-  renderAnalytics();
+  safeRenderAfterMutation();
   showToast(`🗑️ 成功刪除「${dateInfo}」交易單與相關附圖！`, 'success');
 }
 
@@ -2930,8 +2949,7 @@ tradeForm.addEventListener('submit', e => {
   document.getElementById('posCalcDisplay').style.display = 'none';
   document.getElementById('sessionDetectDisplay').style.display = 'none';
 
-  renderDashboard();
-  renderAnalytics();
+  safeRenderAfterMutation();
   
   const sameDayCount = trades.filter(t => t.date === savedDate).length;
   showToast(`「${savedDate}」第 ${sameDayCount} 筆交易已成功儲存！可直接繼續填寫下一筆`, 'success');
@@ -3357,22 +3375,23 @@ document.getElementById('btnExportPDF').addEventListener('click', () => {
   if (trades.length === 0) { showToast('沒有交易記錄可匯出', 'error'); return; }
   showToast('⏳ 正在將「策略分析圖表與數據」排版轉換為高畫質 PDF，請稍候約 2~3 秒...', 'info');
 
+  const prevActiveTab = document.querySelector('.tab-btn.active')?.dataset.tab || 'dashboard';
   switchTab('analytics');
 
   setTimeout(() => {
     if (typeof html2pdf !== 'undefined') {
-      doPDFExport();
+      doPDFExport(prevActiveTab);
     } else {
       const s = document.createElement('script');
       s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js';
-      s.onload = () => setTimeout(doPDFExport, 300);
+      s.onload = () => setTimeout(() => doPDFExport(prevActiveTab), 300);
       s.onerror = () => showToast('❌ PDF 庫加載失敗', 'error');
       document.head.appendChild(s);
     }
   }, 500);
 });
 
-function doPDFExport() {
+function doPDFExport(prevActiveTab) {
   const target = document.getElementById('panelAnalytics');
   const opt = {
     margin: [10, 10, 10, 10],
@@ -3391,7 +3410,10 @@ function doPDFExport() {
     }
   };
   html2pdf().set(opt).from(target).save().then(() => {
-    showToast('PDF 報告匯出成功！', 'success');
+    if (prevActiveTab && prevActiveTab !== 'analytics') {
+      switchTab(prevActiveTab);
+    }
+    showToast('✅ 專業 PDF 交易績效分析報告已成功匯出！', 'success');
   });
 }
 
