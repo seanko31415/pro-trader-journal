@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300..800;1,300..800&family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
 /* ========================================================================
@@ -559,6 +560,11 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   border-color: rgba(212,175,55,0.3);
   background: rgba(212,175,55,0.04);
   cursor: pointer;
+  justify-content: flex-start;
+  padding: 8px 4px 6px 4px;
+}
+.calendar-day.has-trade .day-number {
+  margin-top: 2px;
 }
 .calendar-day.has-trade:hover {
   transform: translateY(-3px) scale(1.03);
@@ -568,11 +574,17 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
 .day-number { font-family: var(--font-mono); font-size: 0.85rem; line-height: 1; }
 .day-badge {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  padding: 1px 5px;
+  padding: 2px 6px;
   border-radius: 4px;
   line-height: 1.3;
+  margin-top: auto;
+  margin-bottom: 2px;
+  max-width: 96%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .day-badge.win { color: var(--green); background: var(--green-bg); }
 .day-badge.loss { color: var(--red); background: var(--red-bg); }
@@ -1950,6 +1962,41 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
         <div style="display: flex; gap: 10px;">
           <button class="btn-export" onclick="pushToCloudSync()" style="flex:1; justify-content: center;"><i class="fas fa-cloud-upload-alt"></i> 將目前資料上傳雲端</button>
           <button class="btn-export" onclick="pullFromCloudSync()" style="flex:1; justify-content: center;"><i class="fas fa-cloud-download-alt"></i> 從雲端拉取最新的資料</button>
+        </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 24px 0;">
+
+      <div>
+        <h4 style="color: var(--gold); margin-bottom: 10px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+          <i class="fab fa-google" style="color: #4285f4; font-size: 1.1rem;"></i> 方案三 (強烈推薦)：Google 帳號與 Google Drive 15GB 雲端同步
+          <span style="font-size: 0.68rem; background: rgba(66, 133, 244, 0.2); color: #60a5fa; padding: 2px 8px; border-radius: 12px; border: 1px solid rgba(66, 133, 244, 0.4);">最大空間 & 極致隱私</span>
+        </h4>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5;">
+          使用 Google 官方授權登入，將全站交易紀錄與高清 K 線截圖直接同步到您個人專屬的 Google 雲端硬碟 (`pro_trader_journal_backup.json`)。獨享 15GB 大容量且資料完全不經過外部第三方伺服器！
+        </p>
+        
+        <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid var(--glass-border); padding: 14px; border-radius: var(--radius-md); margin-bottom: 14px;">
+          <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <span><i class="fas fa-id-card" style="color: var(--gold); margin-right: 4px;"></i> 步驟 1：輸入並儲存您的 Google Client ID</span>
+            <span id="googleAuthStatus" style="font-weight: 700; color: var(--amber);"><i class="fas fa-circle-exclamation"></i> 未登入授權</span>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <input type="text" id="googleClientIdInput" class="form-control" placeholder="請貼上 OAuth 2.0 Client ID (例如: xxxxx.apps.googleusercontent.com)" style="flex:1; font-size: 0.8rem;">
+            <button class="btn-submit" onclick="saveGoogleClientId()" style="padding: 0 16px; background: rgba(96, 165, 250, 0.18); border-color: var(--blue); color: var(--blue);"><i class="fas fa-key"></i> 儲存 Client ID</button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+          <button class="btn-submit" onclick="loginToGoogleDrive()" style="background: rgba(66, 133, 244, 0.18); border-color: #4285f4; color: #60a5fa; justify-content: center; font-size: 0.82rem;">
+            <i class="fab fa-google"></i> 1. 登入 Google 雲端授權
+          </button>
+          <button class="btn-export" onclick="pushToGoogleDrive()" style="background: rgba(16, 185, 129, 0.15); border-color: var(--green); color: var(--green); justify-content: center; font-size: 0.82rem;">
+            <i class="fas fa-cloud-upload-alt"></i> 2. 備份上傳至雲端硬碟
+          </button>
+          <button class="btn-export" onclick="pullFromGoogleDrive()" style="background: rgba(245, 158, 11, 0.15); border-color: var(--amber); color: var(--amber); justify-content: center; font-size: 0.82rem;">
+            <i class="fas fa-cloud-download-alt"></i> 3. 從雲端硬碟下載還原
+          </button>
         </div>
       </div>
 
@@ -3718,6 +3765,7 @@ function openCloudSyncModal() {
   if (!modal) return;
   const tokenInput = document.getElementById('cloudSyncTokenInput');
   if (tokenInput) tokenInput.value = localStorage.getItem('protrader_cloud_token') || '';
+  if (typeof initGoogleIdentity === 'function') initGoogleIdentity();
   modal.classList.add('show');
 }
 
@@ -3817,6 +3865,224 @@ async function pullFromCloudSync() {
   } catch (err) {
     console.error('Cloud pull error:', err);
     showToast('❌ 從雲端拉取失敗，請確認 Token 或連線狀態', 'error');
+  }
+}
+
+/* ---- Google Drive 15GB Cloud Sync Engine (Client-side OAuth 2.0 & Drive API v3) ---- */
+let gapiTokenClient = null;
+let googleAccessToken = null;
+let googleUserInfo = null;
+
+function initGoogleIdentity() {
+  const gIdInput = document.getElementById('googleClientIdInput');
+  const savedId = localStorage.getItem('pt_google_client_id');
+  if (gIdInput && savedId) gIdInput.value = savedId;
+
+  updateGoogleAuthStatusUI();
+
+  if (typeof google === 'undefined' || !google.accounts || !google.accounts.oauth2) {
+    return;
+  }
+  if (!savedId) return;
+
+  try {
+    gapiTokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: savedId,
+      scope: 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+      callback: (tokenResponse) => {
+        if (tokenResponse && tokenResponse.access_token) {
+          googleAccessToken = tokenResponse.access_token;
+          showToast('🎉 Google 授權成功！已連線您的 Google 雲端硬碟 15GB 空間。', 'success');
+          fetchGoogleUserProfile();
+        } else {
+          showToast('❌ Google 登入授權遭取消或發生錯誤', 'error');
+        }
+      },
+    });
+  } catch (err) {
+    console.error('initGoogleIdentity error:', err);
+  }
+}
+
+async function fetchGoogleUserProfile() {
+  if (!googleAccessToken) return;
+  try {
+    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${googleAccessToken}` }
+    });
+    if (res.ok) {
+      googleUserInfo = await res.json();
+      updateGoogleAuthStatusUI();
+    }
+  } catch (e) {
+    console.error('fetch profile error:', e);
+  }
+}
+
+function updateGoogleAuthStatusUI() {
+  const statusEl = document.getElementById('googleAuthStatus');
+  if (!statusEl) return;
+  if (googleAccessToken && googleUserInfo) {
+    statusEl.innerHTML = `<span style="color:var(--green);"><i class="fas fa-circle-check"></i> 已登入授權 (${googleUserInfo.email || googleUserInfo.name})</span>`;
+  } else if (googleAccessToken) {
+    statusEl.innerHTML = `<span style="color:var(--green);"><i class="fas fa-circle-check"></i> 已登入授權 Google Drive</span>`;
+  } else {
+    statusEl.innerHTML = `<span style="color:var(--amber);"><i class="fas fa-circle-exclamation"></i> 未登入授權</span>`;
+  }
+}
+
+function saveGoogleClientId() {
+  const input = document.getElementById('googleClientIdInput');
+  if (!input) return;
+  const val = input.value.trim();
+  if (!val) {
+    showToast('請先貼上有效的 Google OAuth Client ID', 'error');
+    return;
+  }
+  localStorage.setItem('pt_google_client_id', val);
+  showToast('✅ Google Client ID 已成功保存！', 'success');
+  initGoogleIdentity();
+}
+
+function loginToGoogleDrive() {
+  const savedId = localStorage.getItem('pt_google_client_id');
+  if (!savedId) {
+    showToast('請先在步驟 1 填入並儲存您的 Google Client ID，才能喚起 Google 授權視窗！', 'error');
+    const inp = document.getElementById('googleClientIdInput');
+    if (inp) inp.focus();
+    return;
+  }
+  if (!gapiTokenClient) {
+    initGoogleIdentity();
+  }
+  if (gapiTokenClient) {
+    gapiTokenClient.requestAccessToken({ prompt: '' });
+  } else {
+    showToast('❌ Google 授權模組尚未準備就緒，請確認網路連線或 Client ID 是否正確', 'error');
+  }
+}
+
+async function pushToGoogleDrive() {
+  if (!googleAccessToken) {
+    showToast('請先點擊「登入 Google 雲端授權」登入並取得授權！', 'error');
+    loginToGoogleDrive();
+    return;
+  }
+  showToast('⏳ 正在打包全站單據與多媒體附圖，準備上傳 Google Drive...', 'info');
+  try {
+    const searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='pro_trader_journal_backup.json' and trashed=false&spaces=drive", {
+      headers: { Authorization: `Bearer ${googleAccessToken}` }
+    });
+    if (!searchRes.ok) {
+      if (searchRes.status === 401) {
+        googleAccessToken = null;
+        updateGoogleAuthStatusUI();
+        showToast('🔑 授權已過期，請重新登入 Google 雲端硬碟', 'error');
+      } else {
+        throw new Error('Drive API search error');
+      }
+      return;
+    }
+    const searchData = await searchRes.json();
+    const existingFileId = searchData.files && searchData.files.length > 0 ? searchData.files[0].id : null;
+
+    const exportPayload = {
+      trades: trades,
+      updatedAt: new Date().toISOString(),
+      appVersion: 'PRO_TRADER_v3.1_DRIVE'
+    };
+    const jsonStr = JSON.stringify(exportPayload, null, 2);
+
+    if (existingFileId) {
+      const patchRes = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existingFileId}?uploadType=media`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${googleAccessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: jsonStr
+      });
+      if (!patchRes.ok) throw new Error('Drive PATCH error');
+      showToast('✅ 成功覆蓋同步！最新交易紀錄與截圖已完整儲存於您的 Google Drive (`pro_trader_journal_backup.json`)！', 'success');
+    } else {
+      const metadata = {
+        name: 'pro_trader_journal_backup.json',
+        mimeType: 'application/json'
+      };
+      const boundary = '-------ProTraderJournalBoundary' + Math.random().toString(36).substring(2);
+      const multipartBody = 
+        `--${boundary}\r\n` +
+        `Content-Type: application/json; charset=UTF-8\r\n\r\n` +
+        JSON.stringify(metadata) + `\r\n` +
+        `--${boundary}\r\n` +
+        `Content-Type: application/json\r\n\r\n` +
+        jsonStr + `\r\n` +
+        `--${boundary}--`;
+
+      const postRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${googleAccessToken}`,
+          'Content-Type': `multipart/related; boundary=${boundary}`
+        },
+        body: multipartBody
+      });
+      if (!postRes.ok) throw new Error('Drive POST error');
+      showToast('🎉 成功在您的 Google 雲端硬碟建立 `pro_trader_journal_backup.json` 並完成首次備份！', 'success');
+    }
+  } catch (err) {
+    console.error('Google Drive push error:', err);
+    showToast('❌ 上傳 Google Drive 發生錯誤，請檢查網路連線或授權權限', 'error');
+  }
+}
+
+async function pullFromGoogleDrive() {
+  if (!googleAccessToken) {
+    showToast('請先點擊「登入 Google 雲端授權」登入並取得授權！', 'error');
+    loginToGoogleDrive();
+    return;
+  }
+  showToast('⏳ 正在去您的 Google Drive 尋找 `pro_trader_journal_backup.json` 下載中...', 'info');
+  try {
+    const searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='pro_trader_journal_backup.json' and trashed=false&spaces=drive", {
+      headers: { Authorization: `Bearer ${googleAccessToken}` }
+    });
+    if (!searchRes.ok) {
+      if (searchRes.status === 401) {
+        googleAccessToken = null;
+        updateGoogleAuthStatusUI();
+        showToast('🔑 授權已過期，請重新登入 Google 雲端硬碟', 'error');
+      } else {
+        throw new Error('Drive API search error');
+      }
+      return;
+    }
+    const searchData = await searchRes.json();
+    if (!searchData.files || searchData.files.length === 0) {
+      showToast('⚠️ 您的 Google 雲端硬碟中尚未找到備份檔案 `pro_trader_journal_backup.json`，請先在原裝置點擊備份上傳！', 'error');
+      return;
+    }
+    const fileId = searchData.files[0].id;
+    const downloadRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+      headers: { Authorization: `Bearer ${googleAccessToken}` }
+    });
+    if (!downloadRes.ok) throw new Error('Drive download error');
+    const json = await downloadRes.json();
+    const imported = json.trades || (json.record ? json.record.trades : json);
+    if (!Array.isArray(imported)) throw new Error('Drive file data format invalid');
+    const updatedAt = json.updatedAt ? new Date(json.updatedAt).toLocaleString() : '未知時間';
+
+    if (!confirm(`☁️ 【Google 雲端硬碟還原確認】\n\n自您的 Google Drive ('pro_trader_journal_backup.json') 成功下載到 ${imported.length} 筆交易單紀錄。\n最後備份時間：${updatedAt}\n\n確定要在本裝置匯入並覆蓋現有紀錄嗎？`)) return;
+
+    trades = imported;
+    await saveTrades();
+    renderDashboard();
+    renderAnalytics();
+    closeCloudSyncModal();
+    showToast(`🎉 成功從 Google Drive 還原 ${trades.length} 筆跨裝置紀錄！`, 'success');
+  } catch (err) {
+    console.error('Google Drive pull error:', err);
+    showToast('❌ 下載 Google Drive 備份時發生錯誤，請確認網路與授權權限', 'error');
   }
 }
 
