@@ -1195,6 +1195,165 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
 }
 
 /* ========================================================================
+   11b. DAY DETAIL MODAL (Daily Review & Quick Add)
+   ======================================================================== */
+.day-detail-content {
+  max-width: 720px !important;
+  width: 93% !important;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 28px !important;
+  background: rgba(15, 23, 42, 0.92) !important;
+  border: 1px solid rgba(212, 175, 55, 0.4) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.75), 0 0 45px rgba(212, 175, 55, 0.18) !important;
+}
+.day-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 18px;
+}
+.day-detail-title-group h3 {
+  font-size: 1.18rem;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+}
+.day-detail-summary {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  margin-top: 5px;
+  font-family: var(--font-mono);
+}
+.day-trades-list {
+  overflow-y: auto;
+  max-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 6px;
+  margin-bottom: 18px;
+}
+.day-trade-card {
+  padding: 15px 18px;
+  border-radius: var(--radius-md);
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.day-trade-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold);
+  background: rgba(30, 41, 59, 0.88);
+  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.16);
+}
+.dt-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.dt-time-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+.dt-info-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.dt-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.dt-pct {
+  font-family: var(--font-mono);
+  font-size: 1.18rem;
+  font-weight: 800;
+}
+.dt-pct.win { color: var(--green); }
+.dt-pct.loss { color: var(--red); }
+.dt-pct.op { color: var(--amber); }
+.dt-actions {
+  display: flex;
+  gap: 8px;
+}
+.dt-btn {
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.dt-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(212, 175, 55, 0.15);
+}
+.dt-btn.del:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: rgba(239, 68, 68, 0.18);
+}
+.day-detail-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.quick-add-date-btn {
+  width: 100%;
+  justify-content: center;
+  font-size: 0.98rem !important;
+  padding: 14px !important;
+  background: linear-gradient(135deg, var(--gold), #c49b2a) !important;
+  color: #000 !important;
+  font-weight: 800 !important;
+}
+.calendar-day {
+  cursor: pointer !important;
+  position: relative;
+}
+.calendar-day:hover {
+  transform: translateY(-4px) scale(1.03) !important;
+  border-color: var(--gold) !important;
+  background: rgba(30, 41, 59, 0.8) !important;
+  box-shadow: 0 8px 30px rgba(212, 175, 55, 0.25) !important;
+  z-index: 5;
+}
+.day-count-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 0.62rem;
+  font-family: var(--font-mono);
+  background: rgba(212, 175, 55, 0.2);
+  color: var(--gold);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+
+/* ========================================================================
    12. IMAGE MODAL (Lightbox)
    ======================================================================== */
 .modal-overlay {
@@ -1330,6 +1489,25 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   <div class="modal-content">
     <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
     <img id="modalImg" src="" alt="K線截圖">
+  </div>
+</div>
+
+<!-- ===== DAY DETAIL MODAL (Daily Review & Quick Add) ===== -->
+<div class="modal-overlay" id="dayDetailModal">
+  <div class="glass-panel modal-content day-detail-content" id="dayDetailBox">
+    <div class="day-detail-header">
+      <div class="day-detail-title-group">
+        <h3 id="dayDetailTitle"><i class="fas fa-calendar-day"></i> 2026-07-15 當日復盤</h3>
+        <div class="day-detail-summary" id="dayDetailSummary">總計: 0筆 | 盈虧: 0%</div>
+      </div>
+      <button class="modal-close" id="dayModalClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="day-trades-list" id="dayTradesList"></div>
+    <div class="day-detail-actions">
+      <button class="btn-submit quick-add-date-btn" id="btnQuickAddTrade">
+        <i class="fas fa-plus-circle"></i> 新增當日交易 (跳轉至錄入表單並預設此日期)
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1874,21 +2052,23 @@ function renderDashboard() {
   renderKPIs();
 }
 
-/* ---- 4a. CALENDAR ---- */
+/* ---- 4a. CALENDAR WITH MULTI-TRADE CLICKABLE DAYS ---- */
+let currentSelectedDay = null;
+
 function renderCalendar() {
   const title = document.getElementById('calTitle');
   const grid = document.getElementById('calendarGrid');
   const monthNames = ['01月','02月','03月','04月','05月','06月','07月','08月','09月','10月','11月','12月'];
   title.innerHTML = `<span>${calYear}</span> 年 ${monthNames[calMonth]}`;
 
-  const dateMap = {};
+  const dateTradesMap = {};
   trades.forEach(t => {
     const d = t.date;
     if (!d) return;
     const [y, m] = d.split('-').map(Number);
     if (y === calYear && m - 1 === calMonth) {
-      if (!dateMap[d]) dateMap[d] = 0;
-      dateMap[d] += parseFloat(t.pct) || 0;
+      if (!dateTradesMap[d]) dateTradesMap[d] = [];
+      dateTradesMap[d].push(t);
     }
   });
 
@@ -1900,27 +2080,127 @@ function renderCalendar() {
   let html = '';
   const weekdays = ['日','一','二','三','四','五','六'];
   weekdays.forEach(w => html += `<div class="calendar-weekday">${w}</div>`);
-  for (let i = 0; i < firstDay; i++) html += `<div class="calendar-day"></div>`;
+  for (let i = 0; i < firstDay; i++) html += `<div class="calendar-day" style="cursor:default!important;"></div>`;
 
   for (let d = 1; d <= daysInMonth; d++) {
     const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const pct = dateMap[dateStr];
-    const hasTrade = pct !== undefined;
+    const dayTrades = dateTradesMap[dateStr] || [];
+    const count = dayTrades.length;
+    const hasTrade = count > 0;
     const isToday = dateStr === todayStr;
     let cls = 'calendar-day';
     if (isToday) cls += ' today';
     if (hasTrade) cls += ' has-trade';
 
     let badge = '';
+    let countBadge = '';
     if (hasTrade) {
-      const rounded = pct.toFixed(2);
-      const sign = pct >= 0 ? '+' : '';
-      const badgeCls = pct >= 0 ? 'win' : 'loss';
+      const totalPct = dayTrades.reduce((sum, t) => sum + (parseFloat(t.pct) || 0), 0);
+      const rounded = totalPct.toFixed(2);
+      const sign = totalPct >= 0 ? '+' : '';
+      const badgeCls = totalPct >= 0 ? 'win' : 'loss';
       badge = `<span class="day-badge ${badgeCls}">${sign}${rounded}%</span>`;
+      if (count > 1) {
+        countBadge = `<span class="day-count-badge">${count}筆</span>`;
+      }
     }
-    html += `<div class="${cls}"><span class="day-number">${d}</span>${badge}</div>`;
+    html += `<div class="${cls}" onclick="openDayDetailModal('${dateStr}')" title="點擊查看或新增 ${dateStr} 交易紀錄">
+      <span class="day-number">${d}</span>${countBadge}${badge}
+    </div>`;
   }
   grid.innerHTML = html;
+}
+
+function openDayDetailModal(dateStr) {
+  currentSelectedDay = dateStr;
+  const modal = document.getElementById('dayDetailModal');
+  const title = document.getElementById('dayDetailTitle');
+  const summary = document.getElementById('dayDetailSummary');
+  const list = document.getElementById('dayTradesList');
+  const addBtn = document.getElementById('btnQuickAddTrade');
+
+  if (!modal || !title || !list) return;
+
+  title.innerHTML = `<i class="fas fa-calendar-day"></i> ${dateStr} 當日復盤與明細`;
+  
+  const dayTrades = trades.filter(t => t.date === dateStr).sort((a,b) => (b.tradeTime || '').localeCompare(a.tradeTime || ''));
+  
+  if (dayTrades.length === 0) {
+    summary.textContent = '總計: 0 筆交易 | 當日淨盈虧: 0.00%';
+    list.innerHTML = `<div class="empty-state" style="padding:45px 15px;">
+      <i class="fas fa-calendar-plus" style="font-size:2.8rem;color:var(--gold);opacity:0.6;margin-bottom:14px;"></i>
+      <p style="font-size:1rem;color:var(--text-primary);font-weight:700;">本日尚無交易紀錄</p>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-top:5px;">點擊下方按鈕即可快速為「${dateStr}」新增第一筆交易！</p>
+    </div>`;
+  } else {
+    const totalPct = dayTrades.reduce((acc, t) => acc + (parseFloat(t.pct) || 0), 0);
+    const sign = totalPct >= 0 ? '+' : '';
+    summary.innerHTML = `總計: <strong style="color:var(--text-primary);">${dayTrades.length}</strong> 筆 | 當日淨盈虧: <strong style="color:${totalPct >= 0 ? 'var(--green)' : 'var(--red)'};">${sign}${totalPct.toFixed(2)}%</strong>`;
+    
+    list.innerHTML = dayTrades.map((t, index) => {
+      const pctVal = parseFloat(t.pct) || 0;
+      const pctColorCls = t.status === 'Open' ? 'op' : (pctVal >= 0 ? 'win' : 'loss');
+      const pctSign = pctVal >= 0 ? '+' : '';
+      const dirCls = (t.direction || '').toLowerCase() === 'long' ? 'long' : 'short';
+      const dirLabel = dirCls === 'long' ? 'LONG' : 'SHORT';
+      const statusLabel = t.status === 'TP' ? '止盈' : (t.status === 'SL' ? '止損' : '進行中');
+      const statusCls = t.status === 'TP' ? 'tp' : (t.status === 'SL' ? 'sl' : 'op');
+      const session = t.session || detectSession(t.tradeTime);
+      const sessionCls = getSessionBadgeClass(session);
+      const emotionBadge = t.emotion ? `<span class="emotion-badge ${t.emotion.toLowerCase()}">${t.emotion}</span>` : '';
+
+      return `<div class="day-trade-card">
+        <div class="dt-left">
+          <div class="dt-time-row">
+            <span style="font-weight:700;color:var(--gold);"><i class="far fa-clock"></i> ${t.tradeTime || '盤外'}</span>
+            <span class="session-badge ${sessionCls}">${getSessionLabel(session)}</span>
+            <span class="ledger-dir ${dirCls}" style="padding:1px 5px;font-size:0.65rem;">${dirLabel}</span>
+            <span class="ledger-status-badge ${statusCls}" style="padding:1px 5px;font-size:0.65rem;">${statusLabel}</span>
+          </div>
+          <div class="dt-info-row">
+            <span>${t.timeframe || ''} ${t.strategy || '未知策略'}</span>
+            ${emotionBadge}
+          </div>
+          ${t.reason ? `<div style="font-size:0.78rem;color:var(--text-secondary);margin-top:3px;max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><i class="fas fa-quote-left" style="opacity:0.4;margin-right:4px;"></i>${t.reason}</div>` : ''}
+        </div>
+        <div class="dt-right">
+          <div style="text-align:right;">
+            <div class="dt-pct ${pctColorCls}">${pctSign}${pctVal.toFixed(2)}%</div>
+            <div style="font-size:0.7rem;color:var(--text-muted);">${t.status === 'Open' ? '進行中' : (pctVal >= 0 ? '獲利' : '虧損')}</div>
+          </div>
+          <div class="dt-actions">
+            ${t.img ? `<button class="dt-btn" onclick="openImageModal('${t.id}')" title="查看K線截圖"><i class="fas fa-image"></i></button>` : ''}
+            <button class="dt-btn del" onclick="deleteDayTrade('${t.id}')" title="刪除此筆記錄"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  addBtn.onclick = () => {
+    modal.classList.remove('open');
+    switchTab('journal');
+    document.getElementById('fDate').value = dateStr;
+    document.getElementById('fTradeTime').focus();
+    showToast(`已預設日期為 ${dateStr}，可直接開始填寫當日交易！`, 'success');
+  };
+
+  modal.classList.add('open');
+}
+
+function closeDayDetailModal() {
+  const modal = document.getElementById('dayDetailModal');
+  if (modal) modal.classList.remove('open');
+}
+
+async function deleteDayTrade(tradeId) {
+  if (!confirm('確定要刪除這筆當日交易紀錄嗎？')) return;
+  trades = trades.filter(t => String(t.id) !== String(tradeId));
+  await saveTrades();
+  if (currentSelectedDay) openDayDetailModal(currentSelectedDay);
+  renderDashboard();
+  renderAnalytics();
+  showToast('交易紀錄已成功刪除', 'success');
 }
 
 document.getElementById('calPrev').addEventListener('click', () => {
@@ -2255,9 +2535,10 @@ tradeForm.addEventListener('submit', e => {
   trades.push(trade);
   saveTrades();
 
-  // Reset form
+  // Keep the date you just saved instead of jumping back to today, so you can smoothly record multiple trades for the exact same day!
+  const savedDate = trade.date;
   tradeForm.reset();
-  document.getElementById('fDate').valueAsDate = new Date();
+  document.getElementById('fDate').value = savedDate || new Date().toISOString().slice(0,10);
   fPct.disabled = false;
   currentImgBase64 = null;
   imgPreview.style.display = 'none';
@@ -2268,7 +2549,9 @@ tradeForm.addEventListener('submit', e => {
 
   renderDashboard();
   renderAnalytics();
-  showToast('交易紀錄已成功儲存！', 'success');
+  
+  const sameDayCount = trades.filter(t => t.date === savedDate).length;
+  showToast(`「${savedDate}」第 ${sameDayCount} 筆交易已成功儲存！可直接繼續填寫下一筆`, 'success');
 });
 
 /* ========================================================================
@@ -2713,6 +2996,15 @@ async function init() {
       card.style.setProperty('--mouse-y', `${y}px`);
     });
   });
+  // Attach Day Detail Modal events
+  const dayModalCloseBtn = document.getElementById('dayModalClose');
+  if (dayModalCloseBtn) dayModalCloseBtn.addEventListener('click', closeDayDetailModal);
+  const dayDetailModalElem = document.getElementById('dayDetailModal');
+  if (dayDetailModalElem) {
+    dayDetailModalElem.addEventListener('click', e => {
+      if (e.target.id === 'dayDetailModal') closeDayDetailModal();
+    });
+  }
 }
 
 init();
