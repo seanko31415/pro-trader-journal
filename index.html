@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>PRO TRADER | 玻璃擬態交易日誌終端</title>
 <meta name="description" content="PRO TRADER - Glassmorphic Trading Journal Terminal for advanced independent traders. SMC, ICT, Price Action analysis.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,6 +18,7 @@
    0. CSS CUSTOM PROPERTIES (Design Tokens)
    ======================================================================== */
 :root {
+  color-scheme: dark !important;
   --bg-deepest: #070a13;
   --bg-deep: #151e33;
   --bg-card: rgba(17, 24, 39, 0.55);
@@ -193,7 +195,7 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(380px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(212, 175, 55, 0.22), rgba(56, 189, 248, 0.1), transparent 55%);
+  background: radial-gradient(380px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(212, 175, 55, 0.08), rgba(56, 189, 248, 0.04), transparent 60%);
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
@@ -203,19 +205,19 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   opacity: 1;
 }
 
-/* Localized Spotlight Border Ring - intensely luminous crystal reflection on hover */
+/* Localized Spotlight Border Ring - subtle and elegant crystal reflection on hover */
 .glass-panel::after, .kpi-card::after, .analytics-kpi-card::after, .pos-calc-card::after, .ledger-card::after, .lb-card::after, .btn-submit::after, .btn-export::after, .form-panel-box::after, .day-trade-card::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 2.4px !important;
+  padding: 1px !important;
   background: radial-gradient(
-    320px circle at var(--mouse-x, -100%) var(--mouse-y, -100%),
-    rgba(255, 255, 255, 1) 0%,
-    rgba(212, 175, 55, 1) 25%,
-    rgba(56, 189, 248, 0.85) 52%,
-    transparent 82%
+    300px circle at var(--mouse-x, -100%) var(--mouse-y, -100%),
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(212, 175, 55, 0.28) 30%,
+    rgba(56, 189, 248, 0.15) 60%,
+    transparent 85%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -226,7 +228,7 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   z-index: 10;
 }
 .glass-panel:hover::after, .kpi-card:hover::after, .analytics-kpi-card:hover::after, .pos-calc-card:hover::after, .ledger-card:hover::after, .lb-card:hover::after, .btn-submit:hover::after, .btn-export:hover::after, .form-panel-box:hover::after, .day-trade-card:hover::after {
-  opacity: 1;
+  opacity: 0.7;
 }
 
 .shimmer-wave {
@@ -2266,11 +2268,11 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
           <div class="form-row market-basics-row" style="margin-bottom:22px;">
             <div class="form-group">
               <label>日期 <span class="required">*</span></label>
-              <input type="date" class="form-control" id="fDate" required style="cursor:pointer; font-family:var(--font-mono); font-weight:700; color:var(--text-primary); box-sizing:border-box; width:100%; max-width:100%;" onclick="try{if(this.showPicker)this.showPicker();}catch(e){}" title="點擊直接開啟日曆選擇日期">
+              <input type="date" class="form-control" id="fDate" required style="cursor:pointer; font-family:var(--font-mono); font-size:0.88rem; font-weight:700; color:var(--text-primary); box-sizing:border-box; width:100%; max-width:100%;" onclick="safeOpenPicker(event, this)" title="點擊直接開啟日曆選擇日期">
             </div>
             <div class="form-group">
               <label>交易時間 (HH:MM)</label>
-              <input type="time" class="form-control" id="fTradeTime" placeholder="e.g. 15:30" style="cursor:pointer; font-family:var(--font-mono); font-size:1.05rem; font-weight:700; color:var(--text-primary) !important; box-sizing:border-box; width:100%; max-width:100%;" onclick="try{if(this.showPicker)this.showPicker();}catch(e){}" title="點擊直接挑選任意時間 (下午/時/分)">
+              <input type="time" class="form-control" id="fTradeTime" placeholder="e.g. 15:30" style="cursor:pointer; font-family:var(--font-mono); font-size:0.88rem; font-weight:700; color:var(--text-primary) !important; box-sizing:border-box; width:100%; max-width:100%;" onclick="safeOpenPicker(event, this)" title="點擊直接挑選任意時間 (下午/時/分)">
             </div>
           </div>
           <div class="form-row cols-2" style="gap:24px 28px; margin-bottom:12px;">
@@ -3396,6 +3398,21 @@ function setQuickTime(val) {
     timeInput.value = val;
   }
   timeInput.dispatchEvent(new Event('input'));
+}
+
+function safeOpenPicker(event, inputElem) {
+  try {
+    if (!inputElem || typeof inputElem.showPicker !== 'function') return;
+    const rect = inputElem.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    if (clickX > rect.width - 42) return;
+    if (!inputElem._lastOpened || Date.now() - inputElem._lastOpened > 800) {
+      inputElem._lastOpened = Date.now();
+      setTimeout(() => {
+        try { inputElem.showPicker(); } catch (e) {}
+      }, 15);
+    }
+  } catch (e) {}
 }
 
 function openTimeInputPicker(event) {
