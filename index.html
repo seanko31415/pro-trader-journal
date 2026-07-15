@@ -2303,9 +2303,6 @@ document.getElementById('fImportJSON').addEventListener('change', e => {
       e.target.value = '';
     }
   };
-      showToast('JSON 備份檔解析錯誤', 'error');
-    }
-  };
   reader.readAsText(file);
 });
 
