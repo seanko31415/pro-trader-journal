@@ -2924,10 +2924,24 @@ function handleDualImageFile(file, idx, prevEl, rmEl) {
 /* ========================================================================
    CUSTOM STRATEGY OPTIONS PERSISTENCE (Dynamically add custom inputs to datalist)
    ======================================================================== */
+function isLegacyStrategy(name) {
+  if (!name || typeof name !== 'string') return true;
+  const n = name.trim();
+  if (n === '3+1' || n === '馬刺') return false;
+  const legacyKeywords = [
+    'ICT Order Block', '訂單快進場', '訂單塊進場', 'SMC FVG', '合理價值缺口',
+    'BOS / CHoCH', '結構破壞', 'Liquidity Sweep', '流動性掠奪',
+    'Supply & Demand', '供需區間', 'Trend Following', '順勢交易',
+    'Breakout', '突破策略', 'Mean Reversion', '均值回歸',
+    'Fibonacci', '斐波那契', '亞洲盤假突破', '倫敦銀彈', '訂單快', '合理價值', '結構破壞與轉變'
+  ];
+  return legacyKeywords.some(kw => n.includes(kw) || kw.includes(n));
+}
+
 function addCustomStrategyToOptions(strategyName) {
   if (!strategyName || typeof strategyName !== 'string') return;
   const name = strategyName.trim();
-  if (!name) return;
+  if (!name || isLegacyStrategy(name)) return;
   const datalist = document.getElementById('strategyOptions');
   if (!datalist) return;
   
@@ -2940,6 +2954,7 @@ function addCustomStrategyToOptions(strategyName) {
   
   try {
     let customList = JSON.parse(localStorage.getItem('protrader_custom_strategies') || '[]');
+    customList = customList.filter(item => item && !isLegacyStrategy(item));
     if (!customList.includes(name)) {
       customList.push(name);
       localStorage.setItem('protrader_custom_strategies', JSON.stringify(customList));
@@ -2952,13 +2967,32 @@ function addCustomStrategyToOptions(strategyName) {
 function loadSavedStrategyOptions() {
   const datalist = document.getElementById('strategyOptions');
   if (!datalist) return;
-  let allKnown = new Set();
+  
+  // 1. Scrub any legacy options out of the datalist right away
+  Array.from(datalist.options).forEach(opt => {
+    if (opt.value !== '3+1' && opt.value !== '馬刺' && isLegacyStrategy(opt.value)) {
+      opt.remove();
+    }
+  });
+
+  // 2. Scrub protrader_custom_strategies in localStorage
+  let cleanCustomList = [];
   try {
     const customList = JSON.parse(localStorage.getItem('protrader_custom_strategies') || '[]');
-    customList.forEach(name => allKnown.add(name));
+    cleanCustomList = customList.filter(name => name && !isLegacyStrategy(name));
+    localStorage.setItem('protrader_custom_strategies', JSON.stringify(cleanCustomList));
   } catch (e) {}
+
+  let allKnown = new Set(cleanCustomList);
   if (Array.isArray(trades)) {
-    trades.forEach(t => { if (t.strategy && t.strategy.trim()) allKnown.add(t.strategy.trim()); });
+    trades.forEach(t => {
+      if (t.strategy && typeof t.strategy === 'string') {
+        const trimmed = t.strategy.trim();
+        if (trimmed && !isLegacyStrategy(trimmed) && trimmed !== '3+1' && trimmed !== '馬刺') {
+          allKnown.add(trimmed);
+        }
+      }
+    });
   }
   allKnown.forEach(name => {
     if (name && !Array.from(datalist.options).some(opt => opt.value === name)) {
