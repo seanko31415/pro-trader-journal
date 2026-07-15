@@ -1943,19 +1943,8 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
         </div>
       </div>
 
-      <div style="margin-bottom: 20px;">
-        <h4 style="color: var(--gold); margin-bottom: 10px; font-size: 0.9rem;"><i class="fas fa-mobile-screen-button"></i> 方案一：跨裝置秒速移轉碼 (任意手機、平板一鍵複製貼上同步)</h4>
-        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">如果您現在想在另一台裝置（如手機或平板）開啟 GitHub 網頁查看相同資料，只需點擊複製下方「同步移轉密鑰」，並在另一台裝置貼上即可瞬間還原！</p>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <button class="btn-submit" onclick="generateTransferToken()" style="background: var(--blue-bg); border-color: var(--blue); color: var(--blue);"><i class="fas fa-copy"></i> 1. 複製本機跨裝置移轉碼</button>
-          <button class="btn-submit" onclick="promptImportTransferToken()" style="background: var(--gold-glow); border-color: var(--gold); color: var(--gold);"><i class="fas fa-paste"></i> 2. 在手機/新裝置貼上同步碼還原</button>
-        </div>
-      </div>
-
-      <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 24px 0;">
-
       <div>
-        <h4 style="color: var(--gold); margin-bottom: 10px; font-size: 0.9rem;"><i class="fas fa-key"></i> 方案二：免費 JSONBin / GitHub Gist 雲端 API 金鑰自動同步</h4>
+        <h4 style="color: var(--gold); margin-bottom: 10px; font-size: 0.9rem;"><i class="fas fa-key"></i> 方案一：免費 JSONBin / GitHub Gist 雲端 API 金鑰自動同步</h4>
         <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">輸入您的 JSONBin.io 或 GitHub Gist Token，系統將自動於所有登入此網址的瀏覽器間進行雲端雙向同步。</p>
         <div style="display: flex; gap: 10px; margin-bottom: 12px;">
           <input type="text" id="cloudSyncTokenInput" class="form-control" placeholder="請貼上 JSONBin ID 或 Gist URL API Token..." style="flex:1;">
@@ -1971,7 +1960,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
 
       <div>
         <h4 style="color: var(--gold); margin-bottom: 10px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
-          <i class="fab fa-google" style="color: #4285f4; font-size: 1.1rem;"></i> 方案三 (強烈推薦)：Google 帳號與 Google Drive 15GB 雲端同步
+          <i class="fab fa-google" style="color: #4285f4; font-size: 1.1rem;"></i> 方案二 (強烈推薦)：Google 帳號與 Google Drive 15GB 雲端同步
           <span style="font-size: 0.68rem; background: rgba(66, 133, 244, 0.2); color: #60a5fa; padding: 2px 8px; border-radius: 12px; border: 1px solid rgba(66, 133, 244, 0.4);">最大空間 & 極致隱私</span>
         </h4>
         <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5;">
@@ -1989,24 +1978,17 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-          <button class="btn-submit" onclick="loginToGoogleDrive()" style="background: rgba(66, 133, 244, 0.18); border-color: #4285f4; color: #60a5fa; justify-content: center; font-size: 0.82rem;">
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: stretch;">
+          <button class="btn-export" onclick="loginToGoogleDrive()" style="padding: 12px 14px; margin-top: 0; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; justify-content: center; min-height: 46px; background: rgba(66, 133, 244, 0.18); border: 1px solid #4285f4; color: #60a5fa;">
             <i class="fab fa-google"></i> 1. 登入 Google 雲端授權
           </button>
-          <button class="btn-export" onclick="pushToGoogleDrive()" style="background: rgba(16, 185, 129, 0.15); border-color: var(--green); color: var(--green); justify-content: center; font-size: 0.82rem;">
+          <button class="btn-export" onclick="pushToGoogleDrive()" style="padding: 12px 14px; margin-top: 0; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; justify-content: center; min-height: 46px; background: rgba(16, 185, 129, 0.15); border: 1px solid var(--green); color: var(--green);">
             <i class="fas fa-cloud-upload-alt"></i> 2. 備份上傳至雲端硬碟
           </button>
-          <button class="btn-export" onclick="pullFromGoogleDrive()" style="background: rgba(245, 158, 11, 0.15); border-color: var(--amber); color: var(--amber); justify-content: center; font-size: 0.82rem;">
+          <button class="btn-export" onclick="pullFromGoogleDrive()" style="padding: 12px 14px; margin-top: 0; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; justify-content: center; min-height: 46px; background: rgba(245, 158, 11, 0.15); border: 1px solid var(--amber); color: var(--amber);">
             <i class="fas fa-cloud-download-alt"></i> 3. 從雲端硬碟下載還原
           </button>
         </div>
-      </div>
-
-      <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 24px 0;">
-      <div style="display:flex; justify-content:center; padding-top:4px; padding-bottom:12px;">
-        <button class="btn-submit" onclick="closeCloudSyncModal()" style="padding: 12px 36px; background: rgba(212,175,55,0.22); border: 1px solid var(--gold); color: var(--gold); font-size: 1rem; font-weight: 700; border-radius: 30px; box-shadow: 0 4px 20px rgba(212,175,55,0.2); cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s ease;">
-          <i class="fas fa-house"></i> 返回主網站 (關閉同步防護中心)
-        </button>
       </div>
     </div>
   </div>
