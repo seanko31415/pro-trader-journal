@@ -138,7 +138,7 @@ body {
 
 /* 2 & 3. Mouse Hover: Y-axis offset (-4px), border-color glass reflection, and ice-glass shine */
 /* 2 & 3. Mouse Hover: Y-axis offset (-4px), subtle base border, and localized spotlight border reflection */
-.glass-panel:hover, .kpi-card:hover, .ledger-card:hover, .lb-card:hover, .analytics-kpi-card:hover, .pos-calc-card:hover, .emotion-insight-item:hover, .drop-zone:hover {
+.glass-panel:hover, .kpi-card:hover, .ledger-card:hover, .lb-card:hover, .analytics-kpi-card:hover, .pos-calc-card:hover, .emotion-insight-item:hover {
   transform: translateY(-4px) !important;
   border-color: rgba(255, 255, 255, 0.14) !important;
   box-shadow: 0 12px 45px rgba(0, 0, 0, 0.65), inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
@@ -169,7 +169,7 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   position: relative;
   overflow: hidden;
 }
-.glass-panel::before, .kpi-card::before, .analytics-kpi-card::before, .pos-calc-card::before, .ledger-card::before, .lb-card::before, .drop-zone::before, .btn-submit::before, .btn-export::before, .form-panel-box::before, .day-trade-card::before {
+.glass-panel::before, .kpi-card::before, .analytics-kpi-card::before, .pos-calc-card::before, .ledger-card::before, .lb-card::before, .btn-submit::before, .btn-export::before, .form-panel-box::before, .day-trade-card::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -180,12 +180,12 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   pointer-events: none;
   z-index: 1;
 }
-.glass-panel:hover::before, .kpi-card:hover::before, .analytics-kpi-card:hover::before, .pos-calc-card:hover::before, .ledger-card:hover::before, .lb-card:hover::before, .drop-zone:hover::before, .btn-submit:hover::before, .btn-export:hover::before, .form-panel-box:hover::before, .day-trade-card:hover::before {
+.glass-panel:hover::before, .kpi-card:hover::before, .analytics-kpi-card:hover::before, .pos-calc-card:hover::before, .ledger-card:hover::before, .lb-card:hover::before, .btn-submit:hover::before, .btn-export:hover::before, .form-panel-box:hover::before, .day-trade-card:hover::before {
   opacity: 1;
 }
 
 /* Localized Spotlight Border Ring - intensely luminous crystal reflection on hover */
-.glass-panel::after, .kpi-card::after, .analytics-kpi-card::after, .pos-calc-card::after, .ledger-card::after, .lb-card::after, .drop-zone::after, .btn-submit::after, .btn-export::after, .form-panel-box::after, .day-trade-card::after {
+.glass-panel::after, .kpi-card::after, .analytics-kpi-card::after, .pos-calc-card::after, .ledger-card::after, .lb-card::after, .btn-submit::after, .btn-export::after, .form-panel-box::after, .day-trade-card::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -206,7 +206,7 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   pointer-events: none;
   z-index: 10;
 }
-.glass-panel:hover::after, .kpi-card:hover::after, .analytics-kpi-card:hover::after, .pos-calc-card:hover::after, .ledger-card:hover::after, .lb-card:hover::after, .drop-zone:hover::after, .btn-submit:hover::after, .btn-export:hover::after, .form-panel-box:hover::after, .day-trade-card:hover::after {
+.glass-panel:hover::after, .kpi-card:hover::after, .analytics-kpi-card:hover::after, .pos-calc-card:hover::after, .ledger-card:hover::after, .lb-card:hover::after, .btn-submit:hover::after, .btn-export:hover::after, .form-panel-box:hover::after, .day-trade-card:hover::after {
   opacity: 1;
 }
 
@@ -708,8 +708,7 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   color: var(--text-primary);
 }
 .kpi-card.balance-card {
-  animation: softPulse 4s ease-in-out infinite;
-  border-color: rgba(212,175,55,0.25);
+  border-color: var(--glass-border);
 }
 .kpi-card.balance-card .kpi-icon { background: var(--gold-glow); color: var(--gold); }
 .kpi-card.balance-card .kpi-value { color: var(--gold); }
@@ -887,10 +886,10 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
 }
 .drop-zone:hover, .drop-zone.drag-over {
-  border-color: #ffffff !important;
-  background: rgba(30, 45, 75, 0.75) !important;
-  box-shadow: 0 0 25px rgba(212, 175, 55, 0.55), 0 0 12px rgba(255, 255, 255, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.35) !important;
-  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  background: rgba(25, 36, 58, 0.55) !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), inset 0 0 10px rgba(255, 255, 255, 0.08) !important;
+  transform: translateY(-1px);
 }
 .drop-zone-icon { font-size: 2rem; color: var(--text-muted); margin-bottom: 8px; }
 .drop-zone-text { font-size: 0.78rem; color: var(--text-muted); }
@@ -915,16 +914,44 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
 }
 .drop-zone-remove {
   display: none;
-  margin-top: 8px;
-  padding: 4px 12px;
-  border: 1px solid var(--red-bg);
+  margin-top: 10px;
+  padding: 6px 16px;
+  border: 1px solid rgba(239, 68, 68, 0.55);
   border-radius: var(--radius-sm);
-  background: var(--red-bg);
-  color: var(--red);
-  font-size: 0.7rem;
+  background: rgba(239, 68, 68, 0.22);
+  color: #fca5a5;
+  font-size: 0.85rem;
   cursor: pointer;
   font-family: var(--font-ui);
-  font-weight: 600;
+  font-weight: 700;
+  transition: all var(--transition-smooth);
+  z-index: 10;
+}
+.drop-zone-remove:hover {
+  background: rgba(239, 68, 68, 0.4);
+  border-color: #ef4444;
+  color: #ffffff;
+  transform: scale(1.03);
+}
+.btn-delete-saved-img {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  border-radius: var(--radius-sm);
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  transition: all var(--transition-smooth);
+}
+.btn-delete-saved-img:hover {
+  background: rgba(239, 68, 68, 0.4);
+  border-color: #ef4444;
+  color: #ffffff;
 }
 
 /* Submit Button - Sleek Crystal Glass Reflective Button */
@@ -2004,7 +2031,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
                 </div>
                 <input type="file" id="fImageLearning" accept="image/*" style="display:none;">
                 <img class="drop-zone-preview" id="imgPreviewLearning" alt="心得附圖" style="max-height:130px;margin-top:10px;">
-                <button type="button" class="drop-zone-remove" id="imgRemoveLearning" title="移除心得附圖">&times;</button>
+                <button type="button" class="drop-zone-remove" id="imgRemoveLearning" title="移除心得附圖"><i class="fas fa-trash-can"></i> 刪除 / 重新選擇圖片</button>
               </div>
             </div>
 
@@ -2022,7 +2049,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
                   <div class="drop-zone-text" style="font-size:0.76rem;">拖放或 <span>點擊選擇</span></div>
                   <input type="file" id="fImage1" accept="image/*" style="display:none;">
                   <img class="drop-zone-preview" id="imgPreview1" alt="大時框截圖">
-                  <button type="button" class="drop-zone-remove" id="imgRemove1" title="移除圖一">&times;</button>
+                  <button type="button" class="drop-zone-remove" id="imgRemove1" title="移除圖一"><i class="fas fa-trash-can"></i> 刪除 / 重新選擇圖片</button>
                 </div>
               </div>
               <!-- Chart 2: Lower Timeframe / Execution -->
@@ -2034,7 +2061,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
                   <div class="drop-zone-text" style="font-size:0.76rem;">拖放或 <span>點擊選擇</span></div>
                   <input type="file" id="fImage2" accept="image/*" style="display:none;">
                   <img class="drop-zone-preview" id="imgPreview2" alt="進場截圖">
-                  <button type="button" class="drop-zone-remove" id="imgRemove2" title="移除圖二">&times;</button>
+                  <button type="button" class="drop-zone-remove" id="imgRemove2" title="移除圖二"><i class="fas fa-trash-can"></i> 刪除 / 重新選擇圖片</button>
                 </div>
               </div>
             </div>
@@ -2893,7 +2920,9 @@ function handleDualImageFile(file, idx, prevEl, rmEl) {
 
     prevEl.src = base64;
     prevEl.style.display = 'block';
-    rmEl.style.display = 'inline-block';
+    rmEl.style.display = 'inline-flex';
+    rmEl.style.alignItems = 'center';
+    rmEl.style.gap = '6px';
     const labelStr = idx === 1 ? '圖一 (大時框)' : (idx === 2 ? '圖二 (進場圖)' : '心得附圖');
     showToast(`${labelStr} 已自動高畫質壓縮優化`, 'success');
   };
@@ -3285,21 +3314,31 @@ function openImageModal(tradeId) {
     body.className = 'dual-modal-body two-charts';
     chartsHtml = `
       <div class="chart-panel-item">
-        <div class="chart-panel-label"><i class="fas fa-chart-line"></i> 圖一：大時框宏觀趨勢圖 (HTF)</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+          <div class="chart-panel-label"><i class="fas fa-chart-line"></i> 圖一：大時框宏觀趨勢圖 (HTF)</div>
+          <button class="btn-delete-saved-img" onclick="deleteSavedTradeImage('${t.id}', 'img1')"><i class="fas fa-trash-can"></i> 刪除此張圖一</button>
+        </div>
         <img src="${img1}" alt="大時框趨勢圖">
       </div>
       <div class="chart-panel-item">
-        <div class="chart-panel-label"><i class="fas fa-crosshairs"></i> 圖二：小時框進場執行圖 (LTF)</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+          <div class="chart-panel-label"><i class="fas fa-crosshairs"></i> 圖二：小時框進場執行圖 (LTF)</div>
+          <button class="btn-delete-saved-img" onclick="deleteSavedTradeImage('${t.id}', 'img2')"><i class="fas fa-trash-can"></i> 刪除此張圖二</button>
+        </div>
         <img src="${img2}" alt="進場執行圖">
       </div>
     `;
   } else if (img1 || img2) {
     body.className = 'dual-modal-body single-chart';
     const singleSrc = img1 || img2;
+    const singleKey = img1 ? 'img1' : 'img2';
     const labelText = img1 ? '圖一：大時框宏觀趨勢圖 (HTF)' : '圖二：小時框進場執行圖 (LTF)';
     chartsHtml = `
       <div class="chart-panel-item">
-        <div class="chart-panel-label"><i class="fas fa-image"></i> ${labelText}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+          <div class="chart-panel-label"><i class="fas fa-image"></i> ${labelText}</div>
+          <button class="btn-delete-saved-img" onclick="deleteSavedTradeImage('${t.id}', '${singleKey}')"><i class="fas fa-trash-can"></i> 刪除此張截圖</button>
+        </div>
         <img src="${singleSrc}" alt="K線圖">
       </div>
     `;
@@ -3309,7 +3348,10 @@ function openImageModal(tradeId) {
     if (!chartsHtml) body.className = 'dual-modal-body single-chart';
     chartsHtml += `
       <div class="chart-panel-item" style="grid-column: 1 / -1; margin-top: ${chartsHtml ? '8px' : '0'}; border-top: ${chartsHtml ? '1px solid rgba(255,255,255,0.1)' : 'none'}; padding-top: ${chartsHtml ? '14px' : '14px'};">
-        <div class="chart-panel-label" style="color: var(--blue);"><i class="fas fa-book-open-reader"></i> 學習心得專屬筆記附圖 (教材 / 思維導圖 / 檢討筆記)</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+          <div class="chart-panel-label" style="color: var(--blue);"><i class="fas fa-book-open-reader"></i> 學習心得專屬筆記附圖 (教材 / 思維導圖 / 檢討筆記)</div>
+          <button class="btn-delete-saved-img" onclick="deleteSavedTradeImage('${t.id}', 'imgLearning')"><i class="fas fa-trash-can"></i> 刪除心得附圖</button>
+        </div>
         <img src="${imgLearning}" alt="心得附圖" style="max-height: 520px; object-fit: contain;">
       </div>
     `;
@@ -3322,6 +3364,20 @@ function openImageModal(tradeId) {
   }
 
   modal.classList.add('show');
+}
+
+async function deleteSavedTradeImage(tradeId, imgKey) {
+  const t = trades.find(item => String(item.id) === String(tradeId));
+  if (!t) return;
+  const label = imgKey === 'img1' ? '圖一 (大時框圖)' : (imgKey === 'img2' ? '圖二 (進場圖)' : '心得專屬筆記附圖');
+  if (!confirm(`🗑️ 【刪除已儲存圖片確認】\n\n確定要刪除此單上的「${label}」嗎？\n\n⚠️ 注意：刪除後此圖片將從資料庫抹除，交易紀錄與文字欄位會完整保留！`)) return;
+  
+  t[imgKey] = null;
+  if (imgKey === 'img1') t.img = null;
+  await saveTrades();
+  safeRenderAfterMutation();
+  openImageModal(tradeId);
+  showToast(`🗑️ 成功刪除該單的「${label}」！`, 'success');
 }
 
 /* ========================================================================
