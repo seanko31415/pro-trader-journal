@@ -1360,20 +1360,25 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
    ======================================================================== */
 .journal-form-grid {
   display: grid;
-  grid-template-columns: 1.14fr 0.86fr;
+  grid-template-columns: 1fr 1fr;
   gap: 26px;
-  align-items: start;
+  align-items: stretch;
 }
 .journal-col-left, .journal-col-right {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  height: 100%;
 }
 .form-panel-box {
   padding: 26px 28px !important;
   background: rgba(17, 24, 39, 0.72) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .dual-dropzone-grid {
   display: grid;
@@ -1884,13 +1889,9 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
           <div class="form-group">
             <textarea class="form-control" id="fReason" rows="3" placeholder="詳述你的進場邏輯、共振訊號、資金流向與止損止盈規劃..." required></textarea>
           </div>
-        </div>
-      </div>
 
-      <!-- RIGHT COLUMN: Reflections, Learning Notes, and DUAL K-LINE CHARTS -->
-      <div class="journal-col-right">
-        <div class="glass-panel form-panel-box">
-          <div class="form-section-title"><i class="fas fa-lightbulb"></i> 檢討反思 & 導師反饋</div>
+          <!-- Section 5: Reflection & Mentor Feedback placed right below Opening Reason -->
+          <div class="form-section-title" style="margin-top:22px;"><i class="fas fa-lightbulb"></i> 檢討反思 & 導師反饋</div>
           <div class="form-row cols-2">
             <div class="form-group">
               <label>改進想法 / 盲點</label>
@@ -1901,62 +1902,70 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
               <textarea class="form-control" id="fAdvice" rows="3" placeholder="教練或群友針對此單的建議與點評..."></textarea>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="form-section-title" style="margin-top:20px;"><i class="fas fa-graduation-cap"></i> 今日學習心得</div>
-          <div class="form-group">
-            <textarea class="form-control" id="fLearning" rows="3" placeholder="今天從市場或此單中學到了最重要的教訓與精華是什麼..."></textarea>
-          </div>
-
-          <!-- Learning Notes Image Attachment (Separated from Dual K-Line Charts) -->
-          <div class="form-group" style="margin-top:10px;">
-            <div class="drop-zone learning-zone" id="dropZoneLearning" style="padding:14px 18px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.2);">
-              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-                <div style="text-align:left;">
-                  <div style="font-size:0.83rem;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:6px;"><i class="fas fa-book-open-reader" style="color:var(--blue);"></i> 學習心得專屬筆記附圖</div>
-                  <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">上傳與今日心得相關的教材、筆記或總結思維導圖 (獨立於 K 線圖)</div>
-                </div>
-                <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--blue);font-weight:600;">
-                  <i class="fas fa-paperclip"></i> <span style="text-decoration:underline;">點擊或拖放上傳</span>
-                </div>
-              </div>
-              <input type="file" id="fImageLearning" accept="image/*" style="display:none;">
-              <img class="drop-zone-preview" id="imgPreviewLearning" alt="心得附圖" style="max-height:130px;margin-top:10px;">
-              <button type="button" class="drop-zone-remove" id="imgRemoveLearning" title="移除心得附圖">&times;</button>
-            </div>
-          </div>
-
-          <!-- Section 5: DUAL K-LINE CHARTS right below learning notes -->
-          <div class="form-section-title" style="margin-top:22px;">
-            <i class="fas fa-images"></i> 雙 K 線多媒體截圖 (雙圖對照：大格局 vs 小時框)
-          </div>
-          <div class="dual-dropzone-grid">
-            <!-- Chart 1: Higher Timeframe / Macro -->
+      <!-- RIGHT COLUMN: Learning Notes, Dedicated Image, and DUAL K-LINE CHARTS -->
+      <div class="journal-col-right">
+        <div class="glass-panel form-panel-box">
+          <div>
+            <!-- Section 1 (Right): Today's Learning Notes -->
+            <div class="form-section-title"><i class="fas fa-graduation-cap"></i> 今日學習心得</div>
             <div class="form-group">
-              <div class="drop-zone dual-zone" id="dropZone1">
-                <div class="drop-zone-title"><i class="fas fa-chart-line"></i> 圖一：大時框趨勢 (HTF)</div>
-                <div class="drop-zone-desc">例如 H4 / D1 宏觀趨勢與關鍵支撐壓力</div>
-                <div class="drop-zone-icon" style="font-size:1.6rem;margin:5px 0;"><i class="fas fa-cloud-arrow-up"></i></div>
-                <div class="drop-zone-text" style="font-size:0.76rem;">拖放或 <span>點擊選擇</span></div>
-                <input type="file" id="fImage1" accept="image/*" style="display:none;">
-                <img class="drop-zone-preview" id="imgPreview1" alt="大時框截圖">
-                <button type="button" class="drop-zone-remove" id="imgRemove1" title="移除圖一">&times;</button>
+              <textarea class="form-control" id="fLearning" rows="3" placeholder="今天從市場或此單中學到了最重要的教訓與精華是什麼..."></textarea>
+            </div>
+
+            <!-- Learning Notes Image Attachment -->
+            <div class="form-group" style="margin-top:10px;">
+              <div class="drop-zone learning-zone" id="dropZoneLearning" style="padding:14px 18px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.2);">
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                  <div style="text-align:left;">
+                    <div style="font-size:0.83rem;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:6px;"><i class="fas fa-book-open-reader" style="color:var(--blue);"></i> 學習心得專屬筆記附圖</div>
+                    <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">上傳與今日心得相關的教材、筆記或總結思維導圖 (獨立於 K 線圖)</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--blue);font-weight:600;">
+                    <i class="fas fa-paperclip"></i> <span style="text-decoration:underline;">點擊或拖放上傳</span>
+                  </div>
+                </div>
+                <input type="file" id="fImageLearning" accept="image/*" style="display:none;">
+                <img class="drop-zone-preview" id="imgPreviewLearning" alt="心得附圖" style="max-height:130px;margin-top:10px;">
+                <button type="button" class="drop-zone-remove" id="imgRemoveLearning" title="移除心得附圖">&times;</button>
               </div>
             </div>
-            <!-- Chart 2: Lower Timeframe / Execution -->
-            <div class="form-group">
-              <div class="drop-zone dual-zone" id="dropZone2">
-                <div class="drop-zone-title"><i class="fas fa-crosshairs"></i> 圖二：進場執行 (LTF)</div>
-                <div class="drop-zone-desc">例如 M5 / M15 精確進場點與 K 線型態</div>
-                <div class="drop-zone-icon" style="font-size:1.6rem;margin:5px 0;"><i class="fas fa-cloud-arrow-up"></i></div>
-                <div class="drop-zone-text" style="font-size:0.76rem;">拖放或 <span>點擊選擇</span></div>
-                <input type="file" id="fImage2" accept="image/*" style="display:none;">
-                <img class="drop-zone-preview" id="imgPreview2" alt="進場截圖">
-                <button type="button" class="drop-zone-remove" id="imgRemove2" title="移除圖二">&times;</button>
+
+            <!-- Section 2 (Right): DUAL K-LINE CHARTS -->
+            <div class="form-section-title" style="margin-top:22px;">
+              <i class="fas fa-images"></i> 雙 K 線多媒體截圖 (雙圖對照：大格局 vs 小時框)
+            </div>
+            <div class="dual-dropzone-grid">
+              <!-- Chart 1: Higher Timeframe / Macro -->
+              <div class="form-group">
+                <div class="drop-zone dual-zone" id="dropZone1">
+                  <div class="drop-zone-title"><i class="fas fa-chart-line"></i> 圖一：大時框趨勢 (HTF)</div>
+                  <div class="drop-zone-desc">例如 H4 / D1 宏觀趨勢與關鍵支撐壓力</div>
+                  <div class="drop-zone-icon" style="font-size:1.6rem;margin:5px 0;"><i class="fas fa-cloud-arrow-up"></i></div>
+                  <div class="drop-zone-text" style="font-size:0.76rem;">拖放或 <span>點擊選擇</span></div>
+                  <input type="file" id="fImage1" accept="image/*" style="display:none;">
+                  <img class="drop-zone-preview" id="imgPreview1" alt="大時框截圖">
+                  <button type="button" class="drop-zone-remove" id="imgRemove1" title="移除圖一">&times;</button>
+                </div>
+              </div>
+              <!-- Chart 2: Lower Timeframe / Execution -->
+              <div class="form-group">
+                <div class="drop-zone dual-zone" id="dropZone2">
+                  <div class="drop-zone-title"><i class="fas fa-crosshairs"></i> 圖二：進場執行 (LTF)</div>
+                  <div class="drop-zone-desc">例如 M5 / M15 精確進場點與 K 線型態</div>
+                  <div class="drop-zone-icon" style="font-size:1.6rem;margin:5px 0;"><i class="fas fa-cloud-arrow-up"></i></div>
+                  <div class="drop-zone-text" style="font-size:0.76rem;">拖放或 <span>點擊選擇</span></div>
+                  <input type="file" id="fImage2" accept="image/*" style="display:none;">
+                  <img class="drop-zone-preview" id="imgPreview2" alt="進場截圖">
+                  <button type="button" class="drop-zone-remove" id="imgRemove2" title="移除圖二">&times;</button>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="form-actions" style="margin-top:24px;">
+          <div class="form-actions" style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);">
             <button type="submit" class="btn-submit" id="btnSubmitTrade" style="width:100%;justify-content:center;font-size:1rem;padding:15px;">
               <i class="fas fa-save"></i> 儲存交易紀錄至無限資料庫 (自動高畫質雙圖對照)
             </button>
