@@ -157,9 +157,7 @@ code, pre, .mono, .num, .day-number, .ledger-date, .stat-value, .calc-value, .dt
               background 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* 2 & 3. Mouse Hover: Y-axis offset (-4px), border-color glass reflection, and ice-glass shine */
-/* 2 & 3. Mouse Hover: Y-axis offset (-4px), subtle base border, and localized spotlight border reflection */
-/* 2 & 3. Mouse Hover: Y-axis offset (-4px), subtle base border, and localized spotlight border reflection */
+/* 2 & 3. Mouse Hover: Y-axis offset (-4px), subtle base border without lighting up entire border globally */
 .glass-panel:not(.form-panel-box):hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active, .drop-zone:hover, .drop-zone:active)),
 .kpi-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active)),
 .ledger-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active)),
@@ -168,8 +166,8 @@ code, pre, .mono, .num, .day-number, .ledger-date, .stat-value, .calc-value, .dt
 .pos-calc-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active)),
 .emotion-insight-item:hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active)) {
   transform: translateY(-4px) !important;
-  border-color: rgba(255, 255, 255, 0.45) !important;
-  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 235, 150, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.45) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
   background: rgba(23, 32, 51, 0.75) !important;
 }
 
@@ -212,12 +210,13 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   position: relative;
   overflow: hidden;
 }
+/* Localized Spotlight Inner Glow - ultra soft and delicate */
 .glass-panel::before, .kpi-card::before, .analytics-kpi-card::before, .pos-calc-card::before, .ledger-card::before, .lb-card::before, .btn-submit::before, .btn-export::before, .form-panel-box::before, .day-trade-card::before, .calendar-day::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(220px circle at var(--mouse-x, -100px) var(--mouse-y, -100px), rgba(212, 175, 55, 0.1), rgba(56, 189, 248, 0.04), transparent 70%);
+  background: radial-gradient(220px circle at var(--mouse-x, -100px) var(--mouse-y, -100px), rgba(212, 175, 55, 0.04), rgba(56, 189, 248, 0.02), transparent 70%);
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
@@ -227,7 +226,7 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   opacity: 1;
 }
 
-/* Localized Spotlight Border Ring - subtle and elegant crystal reflection on hover */
+/* Localized Spotlight Border Ring - strictly follows cursor without lighting up the entire border (柔和調小亮度，專注邊框追蹤) */
 .glass-panel::after, .kpi-card::after, .analytics-kpi-card::after, .pos-calc-card::after, .ledger-card::after, .lb-card::after, .btn-submit::after, .btn-export::after, .form-panel-box::after, .day-trade-card::after, .calendar-day::after {
   content: "";
   position: absolute;
@@ -236,10 +235,9 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   padding: 1.5px !important;
   background: radial-gradient(
     130px circle at var(--mouse-x, -100px) var(--mouse-y, -100px),
-    rgba(255, 235, 150, 0.7) 0%,
-    rgba(212, 175, 55, 0.4) 35%,
-    rgba(56, 189, 248, 0.15) 65%,
-    transparent 100%
+    rgba(212, 175, 55, 0.42) 0%,
+    rgba(56, 189, 248, 0.14) 45%,
+    transparent 85%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -565,17 +563,17 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   border-radius: var(--radius-sm);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 6px 4px;
-  gap: 6px;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 8px 10px;
+  gap: 4px;
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--text-secondary);
   border: 1px solid rgba(255, 255, 255, 0.08);
   transition: all var(--transition-smooth);
   cursor: pointer !important;
-  min-height: 72px;
+  min-height: 82px;
   position: relative;
   overflow: hidden;
 }
@@ -1037,46 +1035,63 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
   margin-top: 12px;
 }
-.drop-zone.has-image .drop-zone-title,
-.drop-zone.has-image .drop-zone-desc,
-.drop-zone.has-image .drop-zone-icon,
-.drop-zone.has-image .drop-zone-text {
+.drop-zone.has-image * {
   display: none !important;
 }
+.drop-zone.has-image,
+.drop-zone.has-image .drop-zone-preview,
+.drop-zone.has-image .drop-zone-remove,
+.drop-zone.has-image .drop-zone-remove * {
+  display: flex !important;
+}
+.drop-zone.has-image .drop-zone-preview {
+  display: block !important;
+}
 .drop-zone.has-image {
-  padding: 14px !important;
+  padding: 10px !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  background: rgba(15, 23, 42, 0.75) !important;
+  background: rgba(15, 23, 42, 0.85) !important;
   border-style: solid !important;
-  border-color: rgba(212, 175, 55, 0.45) !important;
+  border-color: rgba(212, 175, 55, 0.6) !important;
 }
 .drop-zone.has-image .drop-zone-preview {
   margin-top: 0 !important;
   max-width: 100% !important;
-  max-height: 280px !important;
+  max-height: 320px !important;
   object-fit: contain !important;
   border-radius: var(--radius-md) !important;
+  display: block !important;
 }
 .drop-zone.has-image .drop-zone-remove {
   position: absolute !important;
   top: 10px !important;
   right: 10px !important;
   margin-top: 0 !important;
-  padding: 5px 12px !important;
-  background: rgba(15, 23, 42, 0.9) !important;
-  border: 1px solid rgba(239, 68, 68, 0.8) !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  background: rgba(15, 23, 42, 0.92) !important;
+  border: 1.5px solid rgba(239, 68, 68, 0.9) !important;
   color: #fca5a5 !important;
-  font-size: 0.78rem !important;
-  border-radius: 6px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7) !important;
+  font-size: 0 !important;
+  border-radius: 50% !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.85) !important;
   z-index: 25 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.drop-zone.has-image .drop-zone-remove i {
+  font-size: 15px !important;
+  margin: 0 !important;
 }
 .drop-zone.has-image .drop-zone-remove:hover {
   background: #ef4444 !important;
   color: #ffffff !important;
+  transform: scale(1.1);
 }
 .drop-zone-remove {
   display: none;
@@ -1875,8 +1890,10 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   display: flex;
   flex-direction: column;
   gap: 10px;
+  pointer-events: none;
 }
 .toast {
+  pointer-events: auto;
   padding: 14px 22px;
   border-radius: var(--radius-md);
   background: rgba(17,24,39,0.9);
@@ -1984,10 +2001,14 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
    15. RESPONSIVE
    ======================================================================== */
 @media (max-width: 1180px) {
-  .dashboard-grid { grid-template-columns: 1fr; }
-  .analytics-top { grid-template-columns: 1fr; }
-  .analytics-kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dashboard-grid { grid-template-columns: 1fr !important; }
+  .analytics-top { grid-template-columns: 1fr !important; }
+  .analytics-kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .journal-form-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .dual-dropzone-grid { grid-template-columns: 1fr !important; gap: 18px !important; }
+  .sm-grid { grid-template-columns: 1fr !important; }
+  .table-scroll { width: 100% !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
   /* 平板下行情基礎與所有表單雙欄自動降為單垂直直列，100% 寬度不重疊不破框 */
   .market-basics-row { grid-template-columns: minmax(0, 1fr) !important; gap: 18px !important; }
   .form-row.cols-3, .form-row.cols-4 { grid-template-columns: minmax(0, 1fr) !important; gap: 18px !important; }
@@ -1996,8 +2017,9 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
 }
 @media (max-width: 820px) {
   .header { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .tab-nav { width: 100%; overflow-x: auto; flex-wrap: nowrap; }
+  .tab-nav { width: 100%; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
   .tab-btn { white-space: nowrap; flex-shrink: 0; }
+  .journal-form-grid, .dual-dropzone-grid { grid-template-columns: 1fr !important; }
   .market-basics-row, .form-row.cols-2, .form-row.cols-3, .form-row.cols-4 {
     grid-template-columns: minmax(0, 1fr) !important;
     gap: 16px !important;
@@ -2143,6 +2165,17 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   margin-top: auto;
 }
+.compact-matrix-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+.smc-compact-tile:hover {
+  background: rgba(30,41,59,0.8) !important;
+}
 .smc-btn-showcase:hover {
   background: rgba(212, 175, 55, 0.2);
   border-color: var(--gold);
@@ -2219,6 +2252,20 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
         <i class="fas fa-plus-circle"></i> 新增當日交易 (跳轉至錄入表單並預設此日期)
       </button>
     </div>
+  </div>
+</div>
+
+<!-- ===== TRADE DETAIL & REVIEW MODAL (單筆交易完整覆盤與細節視窗) ===== -->
+<div class="modal-overlay" id="tradeDetailModal">
+  <div class="glass-panel modal-content day-detail-content" style="max-width: 860px; max-height: 90vh; overflow-y: auto; padding: 26px;" id="tradeDetailBox">
+    <div class="day-detail-header" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px; margin-bottom: 18px;">
+      <div class="day-detail-title-group" id="tradeDetailTitleGroup">
+        <h3 id="tradeDetailTitle" style="display:flex;align-items:center;gap:10px;font-size:1.25rem;"><i class="fas fa-file-invoice-dollar" style="color:var(--gold);"></i> 交易單詳細覆盤與執行明細</h3>
+        <div class="day-detail-summary" id="tradeDetailSubtitle"></div>
+      </div>
+      <button class="modal-close" onclick="closeTradeDetailModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="tradeDetailBody"></div>
   </div>
 </div>
 
@@ -2375,14 +2422,14 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
         <div class="kpi-label">總勝率</div>
         <div class="kpi-value" id="kpiWinRate">— %</div>
       </div>
-      <div class="glass-panel kpi-card maxwin-card hoverable">
-        <div class="kpi-icon"><i class="fas fa-arrow-trend-up"></i></div>
-        <div class="kpi-label">最大單筆盈利</div>
+      <div class="glass-panel kpi-card maxwin-card hoverable" title="總盈利：歷史所有已平倉單據之累積總回報百分比">
+        <div class="kpi-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="kpi-label">總盈利 (累計回報)</div>
         <div class="kpi-value" id="kpiMaxWin">— %</div>
       </div>
-      <div class="glass-panel kpi-card maxloss-card hoverable">
-        <div class="kpi-icon"><i class="fas fa-arrow-trend-down"></i></div>
-        <div class="kpi-label">最大單筆回撤</div>
+      <div class="glass-panel kpi-card maxloss-card hoverable" title="總回撤率 (MDD)：自歷史淨淨利最高水點 (Peak) 下滑的最大累積幅度比例">
+        <div class="kpi-icon"><i class="fas fa-water-arrow-down"></i></div>
+        <div class="kpi-label">總回撤率 (最大累積回撤)</div>
         <div class="kpi-value" id="kpiMaxLoss">— %</div>
       </div>
     </div>
@@ -2599,21 +2646,41 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
               <textarea class="form-control" id="fLearning" rows="4" style="min-height: 135px !important; font-size: 0.95rem;" placeholder="今天從市場或此筆交易中，淬鍊與學到了最重要的教訓與核心思維是什麼..."></textarea>
             </div>
 
-            <!-- Learning Notes Image Attachment -->
-            <div class="form-group" style="margin-top:10px;">
-              <div class="drop-zone learning-zone" id="dropZoneLearning" tabindex="0" style="padding:14px 18px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.2);">
-                <div class="drop-zone-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;width:100%;">
-                  <div style="text-align:left;">
-                    <div style="font-size:0.83rem;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:6px;"><i class="fas fa-book-open-reader" style="color:var(--blue);"></i> 學習心得專屬筆記附圖</div>
-                    <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">支援 Ctrl+V 貼上、點擊或拖放上傳教材與筆記思維導圖 (獨立於 K 線圖)</div>
+            <!-- Learning Notes & Speed Ratio Image Attachments (Two Dedicated Zones) -->
+            <div class="dual-dropzone-grid" style="margin-top:12px; gap:14px;">
+              <!-- Zone A: Speed Ratio Calculation Screenshot -->
+              <div class="form-group" style="margin:0;">
+                <div class="drop-zone learning-zone" id="dropZoneSpeedRatio" tabindex="0" style="padding:14px 16px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.2);">
+                  <div class="drop-zone-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;width:100%;">
+                    <div style="text-align:left;">
+                      <div style="font-size:0.83rem;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:6px;"><i class="fas fa-gauge-high" style="color:var(--gold);"></i> 轉速比計算與覆盤對照圖</div>
+                      <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">支援 Ctrl+V 貼上或拖放 (貼圖後純留圖片)</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:4px;font-size:0.75rem;color:var(--gold);font-weight:600;">
+                      <i class="fas fa-paste"></i> <span>貼上/選擇</span>
+                    </div>
                   </div>
-                  <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--blue);font-weight:600;">
-                    <i class="fas fa-paste"></i> <span style="text-decoration:underline;">點擊 / 拖放 / Ctrl+V 貼上</span>
-                  </div>
+                  <input type="file" id="fImageSpeedRatio" accept="image/*" style="display:none;">
+                  <img class="drop-zone-preview" id="imgPreviewSpeedRatio" alt="轉速比計算附圖" style="max-height:220px;margin-top:0;">
+                  <button type="button" class="drop-zone-remove" id="imgRemoveSpeedRatio" onclick="try{if(event&&event.stopPropagation)event.stopPropagation();}catch(e){}" title="移除轉速比計算附圖"><i class="fas fa-trash-can"></i> 刪除 / 重新選擇圖片</button>
                 </div>
-                <input type="file" id="fImageLearning" accept="image/*" style="display:none;">
-                <img class="drop-zone-preview" id="imgPreviewLearning" alt="心得附圖" style="max-height:220px;margin-top:0;">
-                <button type="button" class="drop-zone-remove" id="imgRemoveLearning" title="移除心得附圖"><i class="fas fa-trash-can"></i> 刪除 / 重新選擇圖片</button>
+              </div>
+              <!-- Zone B: Learning Notes & Mindmap Screenshot -->
+              <div class="form-group" style="margin:0;">
+                <div class="drop-zone learning-zone" id="dropZoneLearning" tabindex="0" style="padding:14px 16px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.2);">
+                  <div class="drop-zone-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;width:100%;">
+                    <div style="text-align:left;">
+                      <div style="font-size:0.83rem;font-weight:700;color:var(--blue);display:flex;align-items:center;gap:6px;"><i class="fas fa-book-open-reader" style="color:var(--blue);"></i> 學習心得專屬筆記附圖</div>
+                      <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">支援 Ctrl+V 貼上或拖放 (貼圖後純留圖片)</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:4px;font-size:0.75rem;color:var(--blue);font-weight:600;">
+                      <i class="fas fa-paste"></i> <span>貼上/選擇</span>
+                    </div>
+                  </div>
+                  <input type="file" id="fImageLearning" accept="image/*" style="display:none;">
+                  <img class="drop-zone-preview" id="imgPreviewLearning" alt="學習心得專屬附圖" style="max-height:220px;margin-top:0;">
+                  <button type="button" class="drop-zone-remove" id="imgRemoveLearning" onclick="try{if(event&&event.stopPropagation)event.stopPropagation();}catch(e){}" title="移除學習心得附圖"><i class="fas fa-trash-can"></i> 刪除 / 重新選擇圖片</button>
+                </div>
               </div>
             </div>
 
@@ -2666,79 +2733,56 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   <section class="tab-panel" id="panelAnalytics">
 
     <!-- Session Filter Bar -->
-    <div class="analytics-filter-bar" id="sessionFilterBar">
-      <span class="filter-label"><i class="fas fa-filter" style="margin-right:4px;"></i> 交易時段:</span>
-      <button class="filter-btn active" data-session="All">全部</button>
-      <button class="filter-btn" data-session="Asia">🌏 亞洲開盤</button>
-      <button class="filter-btn" data-session="London Early">🇬🇧 倫敦早盤</button>
-      <button class="filter-btn" data-session="New York">🇺🇸 紐約盤</button>
-      <button class="filter-btn" data-session="London Late">🇬🇧 倫敦晚盤</button>
+    <div class="analytics-filter-bar" id="sessionFilterBar" style="margin-bottom:18px;">
+      <span class="filter-label"><i class="fas fa-filter" style="margin-right:4px;color:var(--gold);"></i> 交易時段過濾:</span>
+      <button class="filter-btn active" data-session="All">全部時段</button>
+      <button class="filter-btn" data-session="Asia">🌏 亞洲開盤 (08:00-12:00)</button>
+      <button class="filter-btn" data-session="London Early">🇬🇧 倫敦早盤 (14:00-17:05)</button>
+      <button class="filter-btn" data-session="New York">🇺🇸 紐約盤 (19:00-23:00)</button>
+      <button class="filter-btn" data-session="London Late">🇬🇧 倫敦晚盤 (23:00-00:05)</button>
       <button class="filter-btn" data-session="Off-Hours">🌙 盤外時段</button>
     </div>
 
-    <!-- R-Multiple & Expectancy KPI Row -->
-    <div class="analytics-kpi-row" id="analyticsKpiRow">
-      <div class="analytics-kpi-card">
-        <div class="akpi-icon" style="background:var(--gold-glow);color:var(--gold);"><i class="fas fa-scale-balanced"></i></div>
-        <div class="akpi-label">系統期望值 <span style="font-size:0.62rem;background:rgba(212,175,55,0.18);color:var(--gold);padding:1px 5px;border-radius:4px;margin-left:4px;vertical-align:middle;border:1px solid rgba(212,175,55,0.35);"><i class="fas fa-gem"></i> 期望指標</span></div>
-        <div class="akpi-value" id="akpiExpectancy" style="color:var(--gold);">—</div>
-      </div>
-      <div class="analytics-kpi-card">
-        <div class="akpi-icon" style="background:var(--green-bg);color:var(--green);"><i class="fas fa-arrow-trend-up"></i></div>
-        <div class="akpi-label">平均盈利 R <span style="font-size:0.62rem;background:rgba(16,185,129,0.18);color:var(--green);padding:1px 5px;border-radius:4px;margin-left:4px;vertical-align:middle;border:1px solid rgba(16,185,129,0.35);"><i class="fas fa-arrow-up"></i> 單筆均賺</span></div>
-        <div class="akpi-value" id="akpiAvgWinR" style="color:var(--green);">—</div>
-      </div>
-      <div class="analytics-kpi-card">
-        <div class="akpi-icon" style="background:var(--red-bg);color:var(--red);"><i class="fas fa-triangle-exclamation"></i></div>
-        <div class="akpi-label">平均虧損 R <span style="font-size:0.62rem;background:rgba(239,68,68,0.22);color:#fca5a5;padding:1px 5px;border-radius:4px;margin-left:4px;vertical-align:middle;border:1px solid rgba(239,68,68,0.4);"><i class="fas fa-shield-halved"></i> 風控均值</span></div>
-        <div class="akpi-value" id="akpiAvgLossR" style="color:var(--red);">—</div>
-      </div>
-      <div class="analytics-kpi-card">
-        <div class="akpi-icon" style="background:var(--blue-bg);color:var(--blue);"><i class="fas fa-chart-pie"></i></div>
-        <div class="akpi-label">盈虧比 (RRR) <span style="font-size:0.62rem;background:rgba(59,130,246,0.18);color:var(--blue);padding:1px 5px;border-radius:4px;margin-left:4px;vertical-align:middle;border:1px solid rgba(59,130,246,0.35);"><i class="fas fa-balance-scale"></i> 獲利賠比</span></div>
-        <div class="akpi-value" id="akpiRRR" style="color:var(--blue);">—</div>
-      </div>
-    </div>
-
-    <div class="analytics-top">
-      <!-- Chart -->
-      <div class="glass-panel chart-panel">
-        <h3><i class="fas fa-chart-bar"></i> 策略平均回報對比</h3>
-        <div class="chart-container">
-          <canvas id="strategyChart"></canvas>
+    <!-- 1. PRIMARY & HIGHEST PRIORITY FOCUS: Data Table & Comprehensive Review (完整覆盤與資料清單 - 策略分析最重要主視覺) -->
+    <div class="glass-panel datatable-panel" style="border: 2px solid rgba(212, 175, 55, 0.7); box-shadow: 0 16px 50px rgba(0,0,0,0.65), 0 0 36px rgba(212,175,55,0.22); margin-bottom: 32px; padding: 26px 28px; width:100%;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:16px;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:18px;">
+        <div>
+          <h3 style="margin:0;font-size:1.55rem;color:var(--gold);display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:0.5px;"><i class="fas fa-table-list" style="color:var(--gold);font-size:1.65rem;"></i> 完整覆盤與資料清單 (交易全景主資料庫)</h3>
+          <div style="font-size:0.86rem;color:var(--text-secondary);margin-top:6px;line-height:1.5;">這是策略分析與覆盤最為核心的主視覺資料庫。點擊任意交易單或右側「覆盤明細」按鈕，可立刻展開單筆執行邏輯、風控偏見、多時框 K 線圖與老師建議對照</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:0.85rem;color:var(--gold);background:rgba(212,175,55,0.15);padding:8px 16px;border-radius:24px;border:1px solid rgba(212,175,55,0.45);font-weight:700;"><i class="fas fa-search-dollar"></i> 點開看完整覆盤明細</span>
         </div>
       </div>
-      <!-- Leaderboard -->
-      <div class="glass-panel leaderboard-panel">
-        <h3><i class="fas fa-trophy"></i> 策略勝率排行榜</h3>
-        <div class="leaderboard-scroll" id="leaderboardScroll"></div>
-      </div>
-    </div>
 
-    <!-- Dynamic Strategy Matrix & Interactive Showcase Panel -->
-    <div class="glass-panel strategy-showcase-panel" style="margin-bottom:24px;padding:28px 26px;">
-      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;margin:0 auto 28px auto;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.08);max-width:850px;">
-        <h3 style="margin-bottom:6px;font-size:1.3rem;font-weight:800;letter-spacing:0.05em;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--text-primary);text-align:center;"><i class="fas fa-layer-group" style="color:var(--gold);font-size:1.35rem;"></i> 核心戰略與動態展演</h3>
-        <div style="display:flex;justify-content:center;align-items:center;width:100%;margin-top:4px;">
-          <span style="font-size:0.82rem;color:var(--text-secondary);background:rgba(212,175,55,0.12);padding:6px 20px;border-radius:24px;border:1px solid rgba(212,175,55,0.35);font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-align:center;box-shadow:0 4px 15px rgba(212,175,55,0.08);"><i class="fas fa-sparkles" style="color:var(--gold);"></i> 點擊卡牌立刻動態展示歷史 K 線與案例庫實錄</span>
+      <!-- Integrated Compact R-Multiple & Expectancy KPI Row Right Inside Data Table Panel -->
+      <div class="analytics-kpi-row" id="analyticsKpiRow" style="margin-bottom:20px;grid-template-columns:repeat(4,1fr);gap:14px;">
+        <div class="analytics-kpi-card" style="padding:14px 16px;">
+          <div class="akpi-icon" style="background:var(--gold-glow);color:var(--gold);"><i class="fas fa-scale-balanced"></i></div>
+          <div class="akpi-label">系統期望值 (均賺/賠 R比)</div>
+          <div class="akpi-value" id="akpiExpectancy" style="color:var(--gold);font-size:1.35rem;">—</div>
+        </div>
+        <div class="analytics-kpi-card" style="padding:14px 16px;">
+          <div class="akpi-icon" style="background:var(--green-bg);color:var(--green);"><i class="fas fa-arrow-trend-up"></i></div>
+          <div class="akpi-label">平均盈利 (單筆獲利均值)</div>
+          <div class="akpi-value" id="akpiAvgWinR" style="color:var(--green);font-size:1.35rem;">—</div>
+        </div>
+        <div class="analytics-kpi-card" style="padding:14px 16px;">
+          <div class="akpi-icon" style="background:var(--red-bg);color:var(--red);"><i class="fas fa-triangle-exclamation"></i></div>
+          <div class="akpi-label">平均虧損 (單筆止損均值)</div>
+          <div class="akpi-value" id="akpiAvgLossR" style="color:var(--red);font-size:1.35rem;">—</div>
+        </div>
+        <div class="analytics-kpi-card" style="padding:14px 16px;">
+          <div class="akpi-icon" style="background:var(--blue-bg);color:var(--blue);"><i class="fas fa-chart-pie"></i></div>
+          <div class="akpi-label">盈虧比 (賺賠期望比 RRR)</div>
+          <div class="akpi-value" id="akpiRRR" style="color:var(--blue);font-size:1.35rem;">—</div>
         </div>
       </div>
-      <div class="strategy-matrix-grid" id="strategyMatrixGrid"></div>
-    </div>
 
-    <!-- Emotion Correlation Insight -->
-    <div class="glass-panel emotion-insight-panel" id="emotionInsightPanel">
-      <h3><i class="fas fa-brain"></i> 情緒 × 績效關聯分析</h3>
-      <div class="emotion-insight-grid" id="emotionInsightGrid"></div>
-    </div>
-
-    <!-- Data Table -->
-    <div class="glass-panel datatable-panel">
-      <h3><i class="fas fa-table-list"></i> 完整覆盤數據清單</h3>
-      <div class="table-scroll" style="max-height:500px; overflow-y:auto;">
+      <div class="table-scroll" style="max-height:820px; overflow-y:auto; border:1px solid rgba(255,255,255,0.06); border-radius:10px;">
         <table class="data-table">
           <thead>
-            <tr>
+            <tr style="position:sticky;top:0;z-index:10;background:rgba(15,23,42,0.95);backdrop-filter:blur(8px);">
               <th>#</th><th>日期</th><th>時間</th><th>時段</th><th>時間級別</th><th>方向</th><th>策略</th>
               <th>市場偏見</th><th>狀態</th><th>情緒</th><th>收益率%</th><th>剩餘資金</th>
               <th>開倉理由</th><th>改進想法</th><th>老師建議</th><th>學習心得</th><th>附圖</th><th>操作</th>
@@ -2747,6 +2791,40 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
           <tbody id="dataTableBody"></tbody>
         </table>
       </div>
+    </div>
+
+    <!-- 2. Streamlined & Concise Core Strategy Matrix Showcase (核心戰略與動態展演 - 簡潔化緊湊版) -->
+    <div class="glass-panel strategy-showcase-panel compact-showcase-panel" style="margin-bottom:26px;padding:18px 22px;border-color:rgba(255,255,255,0.1);">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08);">
+        <div>
+          <h3 style="margin:0;font-size:1.15rem;font-weight:800;display:flex;align-items:center;gap:10px;color:var(--text-primary);"><i class="fas fa-layer-group" style="color:var(--gold);font-size:1.2rem;"></i> 核心戰略與動態展演 (策略大數據矩陣)</h3>
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">點擊任一策略按鈕即可查閱該策略所有的歷史復盤 K 線案例圖表</div>
+        </div>
+        <span style="font-size:0.75rem;color:var(--text-secondary);background:rgba(212,175,55,0.1);padding:4px 12px;border-radius:16px;border:1px solid rgba(212,175,55,0.25);"><i class="fas fa-sparkles" style="color:var(--gold);"></i> 緊湊簡潔檢視</span>
+      </div>
+      <div class="strategy-matrix-grid compact-matrix-grid" id="strategyMatrixGrid"></div>
+    </div>
+
+    <!-- 3. Concise Secondary Charts & Leaderboard (簡潔化圖表與排行榜) -->
+    <div class="analytics-top" style="grid-template-columns: 1.2fr 1fr; gap: 20px; margin-bottom: 24px;">
+      <!-- Chart -->
+      <div class="glass-panel chart-panel" style="padding:18px 20px;">
+        <h3 style="font-size:1.05rem;margin-bottom:12px;"><i class="fas fa-chart-bar" style="color:var(--gold);"></i> 策略平均回報對比 (%)</h3>
+        <div class="chart-container" style="height:230px;">
+          <canvas id="strategyChart"></canvas>
+        </div>
+      </div>
+      <!-- Leaderboard -->
+      <div class="glass-panel leaderboard-panel" style="padding:18px 20px;">
+        <h3 style="font-size:1.05rem;margin-bottom:12px;"><i class="fas fa-trophy" style="color:var(--gold);"></i> 策略勝率排行榜</h3>
+        <div class="leaderboard-scroll" id="leaderboardScroll" style="max-height:230px;"></div>
+      </div>
+    </div>
+
+    <!-- Emotion Correlation Insight -->
+    <div class="glass-panel emotion-insight-panel" id="emotionInsightPanel" style="padding:18px 20px;">
+      <h3 style="font-size:1.05rem;margin-bottom:12px;"><i class="fas fa-brain" style="color:var(--blue);"></i> 情緒 × 績效關聯分析</h3>
+      <div class="emotion-insight-grid" id="emotionInsightGrid"></div>
     </div>
   </section>
 
@@ -2813,9 +2891,9 @@ async function saveTrades() {
     console.error('IndexedDB saveAll error:', err);
   }
   
-  // 2. Save lightweight backup (without ANY base64 images: img, img1, img2, imgLearning) to localStorage so it NEVER blocks UI thread or hits 5MB limit
+  // 2. Save lightweight backup (without ANY base64 images: img, img1, img2, imgSpeedRatio, imgLearning) to localStorage so it NEVER blocks UI thread or hits 5MB limit
   try {
-    const lightTrades = trades.map(({ img, img1, img2, imgLearning, ...rest }) => rest);
+    const lightTrades = trades.map(({ img, img1, img2, imgSpeedRatio, imgLearning, ...rest }) => rest);
     localStorage.setItem('protrader_trades', JSON.stringify(lightTrades));
   } catch (err) {
     console.warn('localStorage backup skipped due to storage limit:', err);
@@ -2835,15 +2913,14 @@ function safeRenderAfterMutation() {
   const activeTabId = document.querySelector('.tab-panel.active')?.id;
   if (activeTabId === 'panelDashboard') {
     renderDashboard();
-    setTimeout(() => { try { renderAnalytics(); } catch(e){} }, 60);
+    window._analyticsDirty = true;
   } else if (activeTabId === 'panelAnalytics') {
     renderAnalytics();
-    setTimeout(() => { try { renderDashboard(); } catch(e){} }, 60);
+    window._dashboardDirty = true;
   } else {
-    // If inside Tab 2 (Journal form), defer Chart.js and Dashboard re-renders to prevent hidden canvas zero-dimension layout distortion or scroll hitching!
-    setTimeout(() => {
-      try { renderDashboard(); renderAnalytics(); } catch(e){}
-    }, 60);
+    // If inside Tab 2 (Journal form) or elsewhere, DO NOT block main UI thread by rendering hidden charts/tables!
+    window._dashboardDirty = true;
+    window._analyticsDirty = true;
   }
 }
 
@@ -2852,13 +2929,20 @@ function updateStorageStatus() {
   if (!badgeText) return;
   
   const totalCount = trades.length;
-  const jsonStr = JSON.stringify(trades);
-  const bytes = new Blob([jsonStr]).size;
-  let sizeStr = (bytes / 1024).toFixed(1) + ' KB';
-  if (bytes > 1024 * 1024) {
-    sizeStr = (bytes / (1024 * 1024)).toFixed(2) + ' MB';
-  }
-  badgeText.innerHTML = `${totalCount} 筆交易 / 估計 ${sizeStr} <span style="opacity:0.8;font-size:0.68rem;">(IndexedDB)</span>`;
+  // Calculate size asynchronously so JSON.stringify on base64 images NEVER freezes or delays the UI
+  setTimeout(() => {
+    try {
+      const jsonStr = JSON.stringify(trades);
+      const bytes = new Blob([jsonStr]).size;
+      let sizeStr = (bytes / 1024).toFixed(1) + ' KB';
+      if (bytes > 1024 * 1024) {
+        sizeStr = (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+      }
+      badgeText.innerHTML = `${totalCount} 筆交易 / 估計 ${sizeStr} <span style="opacity:0.8;font-size:0.68rem;">(IndexedDB)</span>`;
+    } catch(e) {
+      badgeText.innerHTML = `${totalCount} 筆交易 <span style="opacity:0.8;font-size:0.68rem;">(IndexedDB)</span>`;
+    }
+  }, 10);
 }
 
 function getThreeMonthsAgoDateStr() {
@@ -2975,6 +3059,7 @@ function detectSession(timeStr) {
 
   return 'Off-Hours';
 }
+const autoDetectSessionFromTime = detectSession;
 
 function getSessionLabel(session) {
   const map = {
@@ -3016,10 +3101,20 @@ function switchTab(tabId) {
     p.classList.toggle('active', isActive);
   });
   if (tabId === 'dashboard') {
-    renderDashboard();
+    if (window._dashboardDirty || !window._dashboardRenderedOnce) {
+      renderDashboard();
+      window._dashboardDirty = false;
+      window._dashboardRenderedOnce = true;
+    }
     autoCheckAndNotifyCleanOldTrades();
   }
-  if (tabId === 'analytics') renderAnalytics();
+  if (tabId === 'analytics') {
+    if (window._analyticsDirty || !window._analyticsRenderedOnce) {
+      renderAnalytics();
+      window._analyticsDirty = false;
+      window._analyticsRenderedOnce = true;
+    }
+  }
 }
 
 tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
@@ -3094,19 +3189,31 @@ function renderCalendar() {
       const rounded = totalPct.toFixed(2);
       const sign = totalPct >= 0 ? '+' : '';
       const badgeCls = totalPct >= 0 ? 'win' : 'loss';
-      badge = `<span class="day-badge ${badgeCls}">${sign}${rounded}%</span>`;
+      badge = `<div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; margin-top:4px; margin-bottom:2px;"><span class="day-badge ${badgeCls}" style="font-size:0.92rem; font-weight:800; padding:4px 8px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.3); letter-spacing:0.5px;">${sign}${rounded}%</span></div>`;
       if (count > 1) {
-        countBadge = `<span class="day-count-badge">${count}筆</span>`;
+        countBadge = `<span class="day-count-badge" style="font-size:0.68rem; background:rgba(212,175,55,0.22); color:var(--gold); padding:2px 6px; border-radius:10px; font-weight:700; border:1px solid rgba(212,175,55,0.4);">${count}筆</span>`;
+      } else {
+        countBadge = `<span style="font-size:0.68rem; color:var(--text-muted); font-weight:600;">1筆</span>`;
       }
+    } else {
+      badge = `<div style="flex:1;"></div>`;
     }
-    html += `<div class="${cls}" onclick="handleCalendarDayClick('${dateStr}', ${hasTrade})" title="點擊切換或新增 ${dateStr} 交易紀錄">
-      <span class="day-number">${d}</span>${countBadge}${badge}
+    html += `<div class="${cls}" onclick="handleCalendarDayClick('${dateStr}', ${hasTrade}, event)" title="點擊切換或新增 ${dateStr} 交易紀錄">
+      <div style="display:flex; justify-content:space-between; align-items:center; width:100%; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:4px;">
+        <span class="day-number" style="font-size:0.88rem; font-weight:700; opacity:0.9;">${d}</span>
+        ${countBadge}
+      </div>
+      ${badge}
     </div>`;
   }
   grid.innerHTML = html;
 }
 
-function handleCalendarDayClick(dateStr, hasTrade) {
+function handleCalendarDayClick(dateStr, hasTrade, event) {
+  const e = event || window.event;
+  if (e && e.target && e.target.closest && e.target.closest('button, .quick-add-date-btn')) {
+    return;
+  }
   if (!hasTrade) {
     // Directly jump to Tab 2 (journal recording form) with that exact date pre-filled!
     switchTab('journal');
@@ -3186,7 +3293,7 @@ function openDayDetailModal(dateStr) {
             <div style="font-size:0.7rem;color:var(--text-muted);">${t.status === 'Open' ? '進行中' : (pctVal >= 0 ? '獲利' : '虧損')}</div>
           </div>
           <div class="dt-actions">
-            ${(t.img || t.img1 || t.img2 || t.imgLearning) ? `<button class="dt-btn" onclick="openImageModal('${t.id}')" title="查看K線與心得截圖"><i class="fas fa-image"></i></button>` : ''}
+            ${(t.img || t.img1 || t.img2 || t.imgSpeedRatio || t.imgLearning) ? `<button class="dt-btn" onclick="openImageModal('${t.id}')" title="查看K線與心得截圖"><i class="fas fa-image"></i></button>` : ''}
             <button class="dt-btn del" onclick="deleteDayTrade('${t.id}')" title="刪除此筆記錄"><i class="fas fa-trash-alt"></i></button>
           </div>
         </div>
@@ -3236,8 +3343,16 @@ async function deleteTradeById(tradeId, event) {
   await saveTrades();
   if (typeof currentSelectedDay !== 'undefined' && currentSelectedDay) {
     const modal = document.getElementById('dayDetailModal');
-    if (modal && modal.classList.contains('open')) openDayDetailModal(currentSelectedDay);
+    if (modal && modal.classList.contains('open')) {
+      const dayTrades = trades.filter(item => item.date === currentSelectedDay);
+      if (dayTrades.length === 0) closeDayDetailModal();
+      else openDayDetailModal(currentSelectedDay);
+    }
   }
+  try {
+    const modalTrade = document.getElementById('tradeDetailModal');
+    if (modalTrade && modalTrade.classList.contains('open')) closeTradeDetailModal();
+  } catch(e) {}
   safeRenderAfterMutation();
   try {
     if (document.getElementById('ledgerScroll')) renderLedger();
@@ -3250,6 +3365,208 @@ async function deleteTradeById(tradeId, event) {
 async function deleteDayTrade(tradeId) {
   return deleteTradeById(tradeId);
 }
+
+window.openTradeDetailModal = function(tradeId, event) {
+  const e = event || window.event;
+  if (e && e.target && e.target.closest && e.target.closest('button, .dt-btn, .btn-submit, .btn-export, .modal-close, .quick-add-date-btn, .img-badge, .drop-zone-remove, input, select')) {
+    return;
+  }
+  const t = trades.find(item => String(item.id) === String(tradeId));
+  if (!t) return;
+  const modal = document.getElementById('tradeDetailModal');
+  const title = document.getElementById('tradeDetailTitle');
+  const subtitle = document.getElementById('tradeDetailSubtitle');
+  const body = document.getElementById('tradeDetailBody');
+  if (!modal || !body) return;
+
+  const pctVal = parseFloat(t.pct) || 0;
+  const pctColorCls = t.status === 'Open' ? 'op' : (pctVal >= 0 ? 'win' : 'loss');
+  const pctSign = pctVal >= 0 ? '+' : '';
+  const dirCls = (t.direction || '').toLowerCase() === 'long' ? 'long' : 'short';
+  const dirLabel = dirCls === 'long' ? 'LONG' : 'SHORT';
+  const statusLabel = t.status === 'TP' ? '止盈' : (t.status === 'SL' ? '止損' : '進行中');
+  const statusCls = t.status === 'TP' ? 'tp' : (t.status === 'SL' ? 'sl' : 'op');
+  const session = getEffectiveSession(t);
+  const sessionCls = getSessionBadgeClass(session);
+  const emotionBadge = t.emotion ? `<span class="emotion-badge ${t.emotion.toLowerCase()}">${t.emotion}</span>` : '<span style="color:var(--text-muted)">—</span>';
+
+  if (title) title.innerHTML = `<i class="fas fa-file-invoice-dollar" style="color:var(--gold);"></i> 「${t.date || '未知日期'}${t.tradeTime ? ' ' + t.tradeTime : ''}」 單筆交易覆盤明細`;
+  if (subtitle) subtitle.innerHTML = `策略: <strong style="color:var(--gold);">${t.strategy || '未知策略'}</strong> | 方向: <strong class="ledger-dir ${dirCls}" style="padding:2px 8px;border-radius:4px;">${dirLabel}</strong> | 狀態: <strong class="ledger-status-badge ${statusCls}" style="padding:2px 8px;border-radius:4px;">${statusLabel}</strong>`;
+
+  let imgsHtml = '';
+  if (t.img1 || t.img2 || t.imgSpeedRatio || t.imgLearning || t.img) {
+    imgsHtml = `<div style="margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.08);">
+      <h4 style="margin:0 0 12px 0;font-size:1rem;color:var(--gold);display:flex;align-items:center;gap:8px;"><i class="fas fa-images"></i> 關聯 K 線多媒體雙圖與心得對照</h4>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;">
+        ${t.img1 ? `<div style="background:rgba(0,0,0,0.3);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);text-align:center;"><div style="font-size:0.75rem;color:var(--blue);margin-bottom:6px;font-weight:700;"><i class="fas fa-chart-line"></i> 圖一 (大時框)</div><img src="${t.img1}" style="max-width:100%;max-height:180px;border-radius:6px;cursor:pointer;" onclick="openImageModal('${t.id}')" title="點擊放大全螢幕查看"></div>` : ''}
+        ${t.img2 ? `<div style="background:rgba(0,0,0,0.3);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);text-align:center;"><div style="font-size:0.75rem;color:var(--blue);margin-bottom:6px;font-weight:700;"><i class="fas fa-crosshairs"></i> 圖二 (進場圖)</div><img src="${t.img2}" style="max-width:100%;max-height:180px;border-radius:6px;cursor:pointer;" onclick="openImageModal('${t.id}')" title="點擊放大全螢幕查看"></div>` : ''}
+        ${t.imgSpeedRatio ? `<div style="background:rgba(0,0,0,0.3);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);text-align:center;"><div style="font-size:0.75rem;color:var(--gold);margin-bottom:6px;font-weight:700;"><i class="fas fa-gauge-high"></i> 轉速比計算與覆盤對照圖</div><img src="${t.imgSpeedRatio}" style="max-width:100%;max-height:180px;border-radius:6px;cursor:pointer;" onclick="openImageModal('${t.id}')" title="點擊放大全螢幕查看"></div>` : ''}
+        ${t.imgLearning ? `<div style="background:rgba(0,0,0,0.3);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);text-align:center;"><div style="font-size:0.75rem;color:var(--blue);margin-bottom:6px;font-weight:700;"><i class="fas fa-book-open-reader"></i> 心得專屬筆記附圖</div><img src="${t.imgLearning}" style="max-width:100%;max-height:180px;border-radius:6px;cursor:pointer;" onclick="openImageModal('${t.id}')" title="點擊放大全螢幕查看"></div>` : ''}
+      </div>
+      <div style="text-align:center;margin-top:12px;">
+        <button class="btn-submit" onclick="openImageModal('${t.id}')" style="padding:6px 16px;font-size:0.82rem;width:auto;display:inline-flex;"><i class="fas fa-expand"></i> 開啟高清大圖與雙圖對照視窗</button>
+      </div>
+    </div>`;
+  }
+
+  body.innerHTML = `
+    <div style="background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:4px;">單筆最終損益百分比</div>
+        <div class="dt-pct ${pctColorCls}" style="font-size:1.8rem;font-weight:800;">${pctSign}${pctVal.toFixed(2)}%</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+        <span class="session-badge ${sessionCls}" style="padding:6px 12px;font-size:0.8rem;">${getSessionLabel(session)}</span>
+        ${emotionBadge}
+        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--text-secondary);padding:6px 12px;border-radius:6px;font-size:0.8rem;"><i class="fas fa-clock"></i> ${t.timeframe || 'M15'}</span>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px;">
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);padding:12px 14px;border-radius:8px;">
+        <div style="font-size:0.75rem;color:var(--text-muted);">市場偏見 / 大局觀</div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--text-primary);margin-top:4px;">${t.bias || '—'}</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);padding:12px 14px;border-radius:8px;">
+        <div style="font-size:0.75rem;color:var(--text-muted);">手數 / 倉位大小</div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--text-primary);margin-top:4px;">${t.balance ? '$' + parseFloat(t.balance).toLocaleString() : '—'}</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);padding:12px 14px;border-radius:8px;">
+        <div style="font-size:0.75rem;color:var(--text-muted);">風控與止損設定</div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--gold);margin-top:4px;">${t.riskPct ? t.riskPct + '% 風險' : '—'} ${t.slPips ? ' | ' + t.slPips + ' Pips 止損' : ''}</div>
+      </div>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px;margin-bottom:16px;">
+      <h4 style="margin:0 0 8px 0;font-size:0.9rem;color:var(--gold);display:flex;align-items:center;gap:6px;"><i class="fas fa-crosshairs"></i> 開倉理由與技術面判定</h4>
+      <div style="font-size:0.9rem;color:var(--text-primary);line-height:1.6;white-space:pre-wrap;">${t.reason || '<span style="color:var(--text-muted)">（當時未填寫開倉理由）</span>'}</div>
+    </div>
+
+    <div style="background:rgba(212,175,55,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:10px;padding:16px;margin-bottom:16px;">
+      <h4 style="margin:0 0 8px 0;font-size:0.9rem;color:var(--gold);display:flex;align-items:center;gap:6px;"><i class="fas fa-book-open-reader"></i> 學習心得與淬鍊思維</h4>
+      <div style="font-size:0.9rem;color:var(--text-primary);line-height:1.6;white-space:pre-wrap;">${t.learning || '<span style="color:var(--text-muted)">（當時未填寫學習心得）</span>'}</div>
+    </div>
+
+    ${t.improve || t.advice ? `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:16px;">
+      ${t.improve ? `<div style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.25);border-radius:10px;padding:14px;"><h4 style="margin:0 0 6px 0;font-size:0.85rem;color:var(--blue);"><i class="fas fa-lightbulb"></i> 改進想法</h4><div style="font-size:0.88rem;color:var(--text-primary);white-space:pre-wrap;">${t.improve}</div></div>` : ''}
+      ${t.advice ? `<div style="background:rgba(168,85,247,0.06);border:1px solid rgba(168,85,247,0.25);border-radius:10px;padding:14px;"><h4 style="margin:0 0 6px 0;font-size:0.85rem;color:#c084fc;"><i class="fas fa-chalkboard-teacher"></i> 老師指導建議</h4><div style="font-size:0.88rem;color:var(--text-primary);white-space:pre-wrap;">${t.advice}</div></div>` : ''}
+    </div>` : ''}
+
+    ${imgsHtml}
+
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);">
+      <button class="btn-submit" onclick="editTradeDirectly('${t.id}')" style="background:rgba(212,175,55,0.22);border:1px solid var(--gold);color:var(--gold);padding:8px 18px;font-size:0.9rem;width:auto;"><i class="fas fa-edit"></i> 編輯 / 修改此筆單</button>
+      <button class="btn-export" onclick="deleteTradeAction('${t.id}', typeof event !== 'undefined' ? event : null)" style="background:rgba(239,68,68,0.22);border:1px solid var(--red);color:#fca5a5;padding:8px 18px;font-size:0.9rem;"><i class="fas fa-trash-alt"></i> 永久刪除此單</button>
+    </div>
+  `;
+
+  modal.classList.add('open');
+};
+
+window.closeTradeDetailModal = function() {
+  const modal = document.getElementById('tradeDetailModal');
+  if (modal) modal.classList.remove('open');
+};
+
+window.editTradeDirectly = function(tradeId) {
+  const t = trades.find(item => String(item.id) === String(tradeId));
+  if (!t) return;
+  closeTradeDetailModal();
+  closeDayDetailModal();
+  
+  trades = trades.filter(item => String(item.id) !== String(tradeId));
+  saveTrades();
+  safeRenderAfterMutation();
+  
+  switchTab('journal');
+  
+  const setVal = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined && val !== null) el.value = val; };
+  setVal('fDate', t.date || '');
+  setVal('fTradeTime', t.tradeTime || '');
+  setVal('fTimeframe', t.timeframe || 'M15');
+  setVal('fDirection', t.direction || 'LONG');
+  setVal('fStatus', t.status || 'TP');
+  setVal('fPct', t.pct || '');
+  if (document.getElementById('fStatus').value === 'Open') {
+    if (document.getElementById('fPct')) document.getElementById('fPct').disabled = true;
+  } else {
+    if (document.getElementById('fPct')) document.getElementById('fPct').disabled = false;
+  }
+  setVal('fBias', t.bias || '順勢 (Trend)');
+  setVal('fEmotion', t.emotion || '平靜自信 (Calm & Confident)');
+  
+  const fStrategyEl = document.getElementById('fStrategy');
+  if (fStrategyEl) {
+    let foundStrategy = false;
+    for (let i = 0; i < fStrategyEl.options.length; i++) {
+      if (fStrategyEl.options[i].value === t.strategy) {
+        foundStrategy = true;
+        break;
+      }
+    }
+    if (foundStrategy) {
+      fStrategyEl.value = t.strategy;
+      if (document.getElementById('fStrategyCustomInput')) document.getElementById('fStrategyCustomInput').style.display = 'none';
+    } else {
+      fStrategyEl.value = 'CUSTOM';
+      if (document.getElementById('fStrategyCustomInput')) {
+        document.getElementById('fStrategyCustomInput').style.display = 'block';
+        document.getElementById('fStrategyCustom').value = t.strategy || '';
+        document.getElementById('fStrategyCustom').required = true;
+      }
+    }
+  }
+  
+  setVal('fBalance', t.balance || '');
+  setVal('fRiskPct', t.riskPct || '');
+  setVal('fSlPips', t.slPips || '');
+  setVal('fReason', t.reason || '');
+  setVal('fImprove', t.improve || '');
+  setVal('fAdvice', t.advice || '');
+  setVal('fLearning', t.learning || '');
+  
+  if (t.img1) {
+    currentImgBase64_1 = t.img1;
+    const prev1 = document.getElementById('imgPreview1');
+    if (prev1) { prev1.src = t.img1; prev1.style.display = 'block'; }
+    const rm1 = document.getElementById('imgRemove1');
+    if (rm1) rm1.style.display = 'inline-flex';
+    const dz1 = document.getElementById('dropZone1');
+    if (dz1) dz1.classList.add('has-image');
+  }
+  if (t.img2) {
+    currentImgBase64_2 = t.img2;
+    const prev2 = document.getElementById('imgPreview2');
+    if (prev2) { prev2.src = t.img2; prev2.style.display = 'block'; }
+    const rm2 = document.getElementById('imgRemove2');
+    if (rm2) rm2.style.display = 'inline-flex';
+    const dz2 = document.getElementById('dropZone2');
+    if (dz2) dz2.classList.add('has-image');
+  }
+  if (t.imgSpeedRatio) {
+    currentImgBase64_SpeedRatio = t.imgSpeedRatio;
+    const prevSR = document.getElementById('imgPreviewSpeedRatio');
+    if (prevSR) { prevSR.src = t.imgSpeedRatio; prevSR.style.display = 'block'; }
+    const rmSR = document.getElementById('imgRemoveSpeedRatio');
+    if (rmSR) rmSR.style.display = 'inline-flex';
+    const dzSR = document.getElementById('dropZoneSpeedRatio');
+    if (dzSR) dzSR.classList.add('has-image');
+  }
+  if (t.imgLearning) {
+    currentImgBase64_Learning = t.imgLearning;
+    const prevL = document.getElementById('imgPreviewLearning');
+    if (prevL) { prevL.src = t.imgLearning; prevL.style.display = 'block'; }
+    const rmL = document.getElementById('imgRemoveLearning');
+    if (rmL) rmL.style.display = 'inline-flex';
+    const dzL = document.getElementById('dropZoneLearning');
+    if (dzL) dzL.classList.add('has-image');
+  }
+  
+  if (typeof updatePosCalc === 'function') updatePosCalc();
+  if (typeof detectSessionAndShow === 'function') detectSessionAndShow(t.tradeTime || '');
+  
+  showToast(`✏️ 已為您載入「${t.date} ${t.tradeTime || ''}」單據，修改或補充後請點擊儲存！`, 'success');
+};
 
 document.getElementById('calPrev').addEventListener('click', () => {
   calMonth--;
@@ -3282,7 +3599,7 @@ function renderLedger() {
     const sessionCls = getSessionBadgeClass(session);
     const emotionBadge = t.emotion ? `<span class="emotion-badge ${t.emotion.toLowerCase()}">${t.emotion}</span>` : '';
     return `
-      <div class="ledger-card">
+      <div class="ledger-card" onclick="openTradeDetailModal('${t.id}', event)" title="點擊展開單筆交易細節與完整覆盤" style="cursor: pointer;">
         <div class="ledger-card-top">
           <span class="ledger-date"><i class="far fa-calendar" style="margin-right:4px;"></i>${t.date || '—'}${t.tradeTime ? ' ' + t.tradeTime : ''}</span>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -3386,6 +3703,54 @@ function updateDashboardHealthMeter(closedTrades) {
   }
 }
 
+function calculatePortfolioStats(tradeList) {
+  const closed = tradeList.filter(t => t && t.status !== 'Open');
+  if (closed.length === 0) {
+    return {
+      totalReturnPct: 0,
+      maxDrawdownRate: 0,
+      winRate: 0,
+      totalCount: 0,
+      winCount: 0
+    };
+  }
+
+  // Sort chronologically from oldest to newest by date + tradeTime
+  const sorted = [...closed].sort((a, b) => {
+    const dA = (a.date || '') + ' ' + (a.tradeTime || '');
+    const dB = (b.date || '') + ' ' + (b.tradeTime || '');
+    return dA.localeCompare(dB);
+  });
+
+  let cumReturn = 0;
+  let peakReturn = 0;
+  let maxDrawdownRate = 0;
+  let winCount = 0;
+
+  for (const t of sorted) {
+    const p = parseFloat(t.pct) || 0;
+    cumReturn += p;
+    if (p > 0) winCount++;
+    
+    if (cumReturn > peakReturn) {
+      peakReturn = cumReturn;
+    }
+    const currentDrawdown = peakReturn - cumReturn;
+    if (currentDrawdown > maxDrawdownRate) {
+      maxDrawdownRate = currentDrawdown;
+    }
+  }
+
+  const winRate = (winCount / closed.length) * 100;
+  return {
+    totalReturnPct: cumReturn,
+    maxDrawdownRate: maxDrawdownRate,
+    winRate: winRate,
+    totalCount: closed.length,
+    winCount: winCount
+  };
+}
+
 function renderKPIs() {
   const closedTrades = trades.filter(t => t.status !== 'Open');
   const allTrades = trades;
@@ -3399,20 +3764,16 @@ function renderKPIs() {
   }
 
   if (closedTrades.length > 0) {
-    const wins = closedTrades.filter(t => parseFloat(t.pct) > 0).length;
-    const wrVal = (wins / closedTrades.length) * 100;
-    animateNumber(document.getElementById('kpiWinRate'), 0, wrVal, 1, '', '%');
+    const stats = calculatePortfolioStats(closedTrades);
+    animateNumber(document.getElementById('kpiWinRate'), 0, stats.winRate, 1, '', '%');
+    
+    const signTotal = stats.totalReturnPct >= 0 ? '+' : '';
+    animateNumber(document.getElementById('kpiMaxWin'), 0, stats.totalReturnPct, 2, signTotal, '%');
+    
+    const signDrawdown = stats.maxDrawdownRate > 0 ? '-' : '';
+    animateNumber(document.getElementById('kpiMaxLoss'), 0, stats.maxDrawdownRate, 2, signDrawdown, '%');
   } else {
     document.getElementById('kpiWinRate').textContent = '— %';
-  }
-
-  if (closedTrades.length > 0) {
-    const pcts = closedTrades.map(t => parseFloat(t.pct) || 0);
-    const maxW = Math.max(...pcts);
-    const maxL = Math.min(...pcts);
-    animateNumber(document.getElementById('kpiMaxWin'), 0, maxW, 2, '+', '%');
-    animateNumber(document.getElementById('kpiMaxLoss'), 0, maxL, 2, '', '%');
-  } else {
     document.getElementById('kpiMaxWin').textContent = '— %';
     document.getElementById('kpiMaxLoss').textContent = '— %';
   }
@@ -3494,6 +3855,7 @@ fSlPips.addEventListener('input', updatePosCalc);
 // ---- Dual Drop Zones (Chart 1: HTF, Chart 2: LTF) + Learning Notes Attachment ----
 let currentImgBase64_1 = null;
 let currentImgBase64_2 = null;
+let currentImgBase64_SpeedRatio = null;
 let currentImgBase64_Learning = null;
 let activeHoverDropZone = null;
 
@@ -3521,6 +3883,7 @@ function setupDropZone(dzId, inputId, previewId, removeId, idx) {
     e.stopPropagation();
     if (idx === 1) currentImgBase64_1 = null;
     else if (idx === 2) currentImgBase64_2 = null;
+    else if (idx === 'SpeedRatio') currentImgBase64_SpeedRatio = null;
     else currentImgBase64_Learning = null;
     prev.style.display = 'none';
     rm.style.display = 'none';
@@ -3533,6 +3896,7 @@ function setupDropZone(dzId, inputId, previewId, removeId, idx) {
 
 setupDropZone('dropZone1', 'fImage1', 'imgPreview1', 'imgRemove1', 1);
 setupDropZone('dropZone2', 'fImage2', 'imgPreview2', 'imgRemove2', 2);
+setupDropZone('dropZoneSpeedRatio', 'fImageSpeedRatio', 'imgPreviewSpeedRatio', 'imgRemoveSpeedRatio', 'SpeedRatio');
 setupDropZone('dropZoneLearning', 'fImageLearning', 'imgPreviewLearning', 'imgRemoveLearning', 'Learning');
 
 // ---- Global Ctrl+V Screenshot Paste Handler (秒速貼上截圖功能) ----
@@ -3557,18 +3921,19 @@ window.addEventListener('paste', e => {
       if (!targetIdx) {
         if (!currentImgBase64_1) targetIdx = 1;
         else if (!currentImgBase64_2) targetIdx = 2;
+        else if (!currentImgBase64_SpeedRatio) targetIdx = 'SpeedRatio';
         else if (!currentImgBase64_Learning) targetIdx = 'Learning';
         else targetIdx = 1; // 若全滿則預設更新圖一
       }
 
-      const prevId = targetIdx === 1 ? 'imgPreview1' : (targetIdx === 2 ? 'imgPreview2' : 'imgPreviewLearning');
-      const rmId = targetIdx === 1 ? 'imgRemove1' : (targetIdx === 2 ? 'imgRemove2' : 'imgRemoveLearning');
+      const prevId = targetIdx === 1 ? 'imgPreview1' : (targetIdx === 2 ? 'imgPreview2' : (targetIdx === 'SpeedRatio' ? 'imgPreviewSpeedRatio' : 'imgPreviewLearning'));
+      const rmId = targetIdx === 1 ? 'imgRemove1' : (targetIdx === 2 ? 'imgRemove2' : (targetIdx === 'SpeedRatio' ? 'imgRemoveSpeedRatio' : 'imgRemoveLearning'));
       const prev = document.getElementById(prevId);
       const rm = document.getElementById(rmId);
 
       if (prev && rm) {
         handleDualImageFile(file, targetIdx, prev, rm);
-        const targetName = targetIdx === 1 ? '圖一：大時框趨勢 (HTF)' : (targetIdx === 2 ? '圖二：進場執行 (LTF)' : '學習心得專屬筆記附圖');
+        const targetName = targetIdx === 1 ? '圖一：大時框趨勢 (HTF)' : (targetIdx === 2 ? '圖二：進場執行 (LTF)' : (targetIdx === 'SpeedRatio' ? '轉速比計算附圖' : '學習心得專屬筆記附圖'));
         showToast(`📋 已從剪貼簿 Ctrl+V 貼上截圖至【${targetName}】！`, 'success');
       }
       break;
@@ -3608,6 +3973,7 @@ function handleDualImageFile(file, idx, prevEl, rmEl) {
     const base64 = canvas.toDataURL('image/jpeg', 0.82);
     if (idx === 1) currentImgBase64_1 = base64;
     else if (idx === 2) currentImgBase64_2 = base64;
+    else if (idx === 'SpeedRatio') currentImgBase64_SpeedRatio = base64;
     else currentImgBase64_Learning = base64;
 
     prevEl.src = base64;
@@ -3617,7 +3983,7 @@ function handleDualImageFile(file, idx, prevEl, rmEl) {
     rmEl.style.gap = '6px';
     const dzEl = prevEl.closest('.drop-zone');
     if (dzEl) dzEl.classList.add('has-image');
-    const labelStr = idx === 1 ? '圖一 (大時框)' : (idx === 2 ? '圖二 (進場圖)' : '心得附圖');
+    const labelStr = idx === 1 ? '圖一 (大時框)' : (idx === 2 ? '圖二 (進場圖)' : (idx === 'SpeedRatio' ? '轉速比計算圖' : '心得附圖'));
     showToast(`${labelStr} 已自動高畫質壓縮優化`, 'success');
   };
   img.src = objectUrl;
@@ -3782,8 +4148,12 @@ function confirmCustomTime(event) {
   quickUpdateCustomTime();
   closeCustomTimePopup();
   const input = document.getElementById('fTradeTime');
-  if (input && input.value) {
-    showToast(`✅ 交易時間已確定設定為：${input.value}`, 'success');
+  if (input) {
+    input.dispatchEvent(new Event('input'));
+    input.dispatchEvent(new Event('change'));
+    if (input.value) {
+      showToast(`✅ 交易時間已確定設定為：${input.value}`, 'success');
+    }
   }
 }
 
@@ -3949,8 +4319,9 @@ tradeForm.addEventListener('submit', e => {
     learning: document.getElementById('fLearning').value || '',
     img1: currentImgBase64_1 || null,
     img2: currentImgBase64_2 || null,
+    imgSpeedRatio: currentImgBase64_SpeedRatio || null,
     imgLearning: currentImgBase64_Learning || null,
-    img: currentImgBase64_1 || currentImgBase64_2 || currentImgBase64_Learning || null
+    img: currentImgBase64_1 || currentImgBase64_2 || currentImgBase64_SpeedRatio || currentImgBase64_Learning || null
   };
 
   trades.push(trade);
@@ -3969,17 +4340,22 @@ tradeForm.addEventListener('submit', e => {
   
   currentImgBase64_1 = null;
   currentImgBase64_2 = null;
+  currentImgBase64_SpeedRatio = null;
   currentImgBase64_Learning = null;
   const prev1 = document.getElementById('imgPreview1');
   const rm1 = document.getElementById('imgRemove1');
   const prev2 = document.getElementById('imgPreview2');
   const rm2 = document.getElementById('imgRemove2');
+  const prevSR = document.getElementById('imgPreviewSpeedRatio');
+  const rmSR = document.getElementById('imgRemoveSpeedRatio');
   const prevL = document.getElementById('imgPreviewLearning');
   const rmL = document.getElementById('imgRemoveLearning');
   if (prev1) { prev1.style.display = 'none'; prev1.src = ''; }
   if (rm1) rm1.style.display = 'none';
   if (prev2) { prev2.style.display = 'none'; prev2.src = ''; }
   if (rm2) rm2.style.display = 'none';
+  if (prevSR) { prevSR.style.display = 'none'; prevSR.src = ''; }
+  if (rmSR) rmSR.style.display = 'none';
   if (prevL) { prevL.style.display = 'none'; prevL.src = ''; }
   if (rmL) rmL.style.display = 'none';
   document.querySelectorAll('.drop-zone').forEach(dz => dz.classList.remove('has-image'));
@@ -4071,6 +4447,7 @@ function renderRMultipleKPIs() {
 
 /* ---- 6a. Strategy Chart ---- */
 function renderStrategyChart() {
+  if (typeof Chart === 'undefined' || !document.getElementById('strategyChart')) return;
   const filtered = getFilteredTrades();
   const closed = filtered.filter(t => t.status !== 'Open');
   const groups = {};
@@ -4148,30 +4525,31 @@ function renderLeaderboard() {
     return;
   }
 
-  const groups = {};
+  const strategyMap = {};
   closed.forEach(t => {
     const s = t.strategy || 'Unknown';
-    if (!groups[s]) groups[s] = [];
-    groups[s].push(parseFloat(t.pct) || 0);
+    if (!strategyMap[s]) strategyMap[s] = [];
+    strategyMap[s].push(t);
   });
 
-  const stats = Object.entries(groups).map(([name, pcts]) => {
-    const wins = pcts.filter(p => p > 0).length;
-    const total = pcts.length;
+  const stats = Object.entries(strategyMap).map(([name, sTrades]) => {
+    const wins = sTrades.filter(t => parseFloat(t.pct) > 0).length;
+    const total = sTrades.length;
     const winRate = ((wins / total) * 100).toFixed(1);
-    const cumReturn = pcts.reduce((a, b) => a + b, 0).toFixed(2);
-    return { name, total, winRate: parseFloat(winRate), cumReturn: parseFloat(cumReturn) };
+    const pStats = typeof calculatePortfolioStats === 'function' ? calculatePortfolioStats(sTrades) : { cumReturn: 0, maxDrawdown: 0 };
+    return { name, total, winRate: parseFloat(winRate), cumReturn: pStats.cumReturn, maxDrawdown: pStats.maxDrawdown };
   }).sort((a, b) => b.winRate - a.winRate);
 
   el.innerHTML = stats.map((s, i) => {
     const crCls = s.cumReturn >= 0 ? 'color:var(--green)' : 'color:var(--red)';
     const crSign = s.cumReturn >= 0 ? '+' : '';
+    const mddColor = s.maxDrawdown > 0 ? 'color:var(--red)' : 'color:var(--text-muted)';
     return `
-      <div class="lb-card">
-        <div class="lb-card-name">
+      <div class="lb-card" style="padding:12px 14px;border:1px solid rgba(255,255,255,0.06);">
+        <div class="lb-card-name" style="font-size:0.95rem;">
           <span class="rank-badge">#${i + 1}</span> ${s.name}
         </div>
-        <div class="lb-stats">
+        <div class="lb-stats" style="grid-template-columns:repeat(4,1fr);gap:8px;">
           <div class="lb-stat">
             <div class="lb-stat-label">交易次數</div>
             <div class="lb-stat-value">${s.total}</div>
@@ -4181,8 +4559,12 @@ function renderLeaderboard() {
             <div class="lb-stat-value" style="color:var(--gold)">${s.winRate}%</div>
           </div>
           <div class="lb-stat">
-            <div class="lb-stat-label">累計回報</div>
+            <div class="lb-stat-label">總盈利</div>
             <div class="lb-stat-value" style="${crCls}">${crSign}${s.cumReturn}%</div>
+          </div>
+          <div class="lb-stat">
+            <div class="lb-stat-label">總回撤率</div>
+            <div class="lb-stat-value" style="${mddColor}">${s.maxDrawdown > 0 ? '-' + s.maxDrawdown + '%' : '0%'}</div>
           </div>
         </div>
       </div>`;
@@ -4202,18 +4584,20 @@ function renderStrategyMatrix() {
   
   if (closed.length === 0) {
     grid.innerHTML = Array.from(strategies).map(s => `
-      <div class="strategy-matrix-card">
-        <div class="smc-top">
-          <div class="smc-name"><i class="fas fa-layer-group" style="color:var(--gold);"></i> ${s}</div>
-          <span class="smc-badge" style="background:rgba(212,175,55,0.15);color:var(--gold);">尚未實測</span>
+      <div class="smc-compact-tile" style="display:flex;align-items:center;justify-content:space-between;background:rgba(15,23,42,0.65);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 18px;gap:14px;flex-wrap:wrap;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(212,175,55,0.4)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'">
+        <div style="display:flex;align-items:center;gap:10px;min-width:160px;">
+          <i class="fas fa-layer-group" style="color:var(--gold);font-size:1.1rem;"></i>
+          <span style="font-size:1.02rem;font-weight:800;color:var(--text-primary);">${s}</span>
+          <span style="font-size:0.75rem;padding:2px 8px;border-radius:12px;background:rgba(212,175,55,0.12);color:var(--gold);border:1px solid rgba(212,175,55,0.3);">尚未開倉</span>
         </div>
-        <div class="smc-stats-grid">
-          <div><div class="smc-stat-label">交易次數</div><div class="smc-stat-val">0</div></div>
-          <div><div class="smc-stat-label">勝率</div><div class="smc-stat-val" style="color:var(--text-muted)">0.0%</div></div>
-          <div><div class="smc-stat-label">總盈虧</div><div class="smc-stat-val" style="color:var(--text-muted)">0.00%</div></div>
+        <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;font-size:0.86rem;">
+          <div>勝率: <strong style="color:var(--text-muted);font-family:var(--font-mono);">0.0%</strong></div>
+          <div>總盈利: <strong style="color:var(--text-muted);font-family:var(--font-mono);">0.00%</strong></div>
+          <div>總回撤率 MDD: <strong style="color:var(--text-muted);font-family:var(--font-mono);">0.00%</strong></div>
         </div>
-        <div class="smc-advice-box">💡 點擊「記錄交易」填寫此策略之 K 線與進場理由，此處將自動為您統計勝率與多空決策大數據！</div>
-        <button class="smc-btn-showcase" onclick="openStrategyShowcase('${s}')"><i class="fas fa-images" style="color:var(--gold);"></i> 查看策略經典復盤案例庫 (0 筆圖表實錄)</button>
+        <div>
+          <button class="smc-btn-compact" onclick="openStrategyShowcase('${s}')" style="padding:6px 14px;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.35);color:var(--gold);border-radius:6px;font-size:0.82rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.background='rgba(212,175,55,0.25)'" onmouseout="this.style.background='rgba(212,175,55,0.12)'"><i class="fas fa-images"></i> 案例庫 (0)</button>
+        </div>
       </div>
     `).join('');
     return;
@@ -4221,40 +4605,33 @@ function renderStrategyMatrix() {
 
   const cardsHtml = Array.from(strategies).map(s => {
     const sTrades = closed.filter(t => (t.strategy || '').trim() === s);
-    const count = sTrades.length;
-    const wins = sTrades.filter(t => parseFloat(t.pct) > 0);
-    const winRate = count > 0 ? ((wins.length / count) * 100).toFixed(1) : '0.0';
-    const totalReturn = sTrades.reduce((acc, t) => acc + (parseFloat(t.pct) || 0), 0);
+    const sStats = calculatePortfolioStats(sTrades);
+    const count = sStats.totalCount;
+    const winRate = sStats.winRate.toFixed(1);
+    const totalReturn = sStats.totalReturnPct;
     const returnSign = totalReturn >= 0 ? '+' : '';
     const returnColor = totalReturn >= 0 ? 'var(--green)' : 'var(--red)';
+    const strategyMDD = sStats.maxDrawdownRate;
+    const mddSign = strategyMDD > 0 ? '-' : '';
     
-    const imgTrades = sTrades.filter(t => t.img || t.img1 || t.img2 || t.imgLearning);
+    const imgTrades = sTrades.filter(t => t.img || t.img1 || t.img2 || t.imgSpeedRatio || t.imgLearning);
     const imgCount = imgTrades.length;
 
-    let adviceText = '🎯 該策略處於起步階段，建議嚴格遵循進場訂單塊與盈虧比原則，累積更多樣本數。';
-    if (count >= 3) {
-      if (parseFloat(winRate) >= 60 && totalReturn > 0) {
-        adviceText = `🔥 戰力爆發力優異！該策略勝率高達 ${winRate}% 且淨利 ${returnSign}${totalReturn.toFixed(2)}%，建議可適度提升風控額度！`;
-      } else if (parseFloat(winRate) < 40) {
-        adviceText = `⚠️ 目前勝率 ${winRate}% 略低，建議點選下方進入動態復盤案例庫，複查進場理由是否存在假突破。`;
-      } else {
-        adviceText = `⚖️ 表現穩健維持中。當前賺賠 ${returnSign}${totalReturn.toFixed(2)}%，請持續落實高盈虧比紀律。`;
-      }
-    }
-
     return `
-      <div class="strategy-matrix-card">
-        <div class="smc-top">
-          <div class="smc-name"><i class="fas fa-layer-group" style="color:var(--gold);"></i> ${s}</div>
-          <span class="smc-badge" style="background:${parseFloat(winRate) >= 50 ? 'rgba(16,185,129,0.18)' : 'rgba(239,68,68,0.18)'};color:${parseFloat(winRate) >= 50 ? 'var(--green)' : 'var(--red)'};border:1px solid ${parseFloat(winRate) >= 50 ? 'rgba(16,185,129,0.4)' : 'rgba(239,68,68,0.4)'};">${count > 0 ? `實戰 ${count} 單` : '尚未開倉'}</span>
+      <div class="smc-compact-tile" style="display:flex;align-items:center;justify-content:space-between;background:rgba(15,23,42,0.65);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 18px;gap:14px;flex-wrap:wrap;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(212,175,55,0.4)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'">
+        <div style="display:flex;align-items:center;gap:10px;min-width:160px;">
+          <i class="fas fa-layer-group" style="color:var(--gold);font-size:1.1rem;"></i>
+          <span style="font-size:1.05rem;font-weight:800;color:var(--text-primary);">${s}</span>
+          <span style="font-size:0.75rem;padding:2px 8px;border-radius:12px;background:${parseFloat(winRate) >= 50 ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'};color:${parseFloat(winRate) >= 50 ? 'var(--green)' : 'var(--red)'};border:1px solid ${parseFloat(winRate) >= 50 ? 'rgba(16,185,129,0.35)' : 'rgba(239,68,68,0.35)'};">實戰 ${count} 單</span>
         </div>
-        <div class="smc-stats-grid">
-          <div><div class="smc-stat-label">交易筆數</div><div class="smc-stat-val" style="color:var(--text-primary)">${count}</div></div>
-          <div><div class="smc-stat-label">策略勝率</div><div class="smc-stat-val" style="color:${parseFloat(winRate) >= 50 ? 'var(--green)' : 'var(--amber)'}">${winRate}%</div></div>
-          <div><div class="smc-stat-label">累計盈虧</div><div class="smc-stat-val" style="color:${returnColor}">${returnSign}${totalReturn.toFixed(2)}%</div></div>
+        <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;font-size:0.88rem;">
+          <div>策略勝率: <strong style="font-family:var(--font-mono);color:${parseFloat(winRate) >= 50 ? 'var(--green)' : 'var(--amber)'};font-size:0.98rem;">${winRate}%</strong></div>
+          <div>總盈利: <strong style="font-family:var(--font-mono);color:${returnColor};font-size:0.98rem;">${returnSign}${totalReturn.toFixed(2)}%</strong></div>
+          <div title="自該策略歷史最高權益峰值下滑的最大累積比例">總回撤率 MDD: <strong style="font-family:var(--font-mono);color:${strategyMDD > 10 ? 'var(--red)' : (strategyMDD > 0 ? 'var(--amber)' : 'var(--text-muted)')};font-size:0.98rem;">${mddSign}${strategyMDD.toFixed(2)}%</strong></div>
         </div>
-        <div class="smc-advice-box">${adviceText}</div>
-        <button class="smc-btn-showcase" onclick="openStrategyShowcase('${s}')"><i class="fas fa-images" style="color:var(--gold);"></i> 查看策略經典復盤案例庫 (${imgCount} 筆圖表實錄)</button>
+        <div>
+          <button class="smc-btn-compact" onclick="openStrategyShowcase('${s}')" style="padding:6px 14px;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);color:var(--gold);border-radius:6px;font-size:0.82rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.background='rgba(212,175,55,0.28)'" onmouseout="this.style.background='rgba(212,175,55,0.15)'"><i class="fas fa-images"></i> 復盤案例庫 (${imgCount})</button>
+        </div>
       </div>
     `;
   }).join('');
@@ -4268,10 +4645,22 @@ function openStrategyShowcase(strategyName) {
   const body = document.getElementById('showcaseStrategyBody');
   if (!modal || !title || !body) return;
 
-  title.innerHTML = `<i class="fas fa-layer-group" style="color:var(--gold);"></i> 「${strategyName}」 戰略精進動態展演與歷史案例庫`;
-
   const sTrades = trades.filter(t => (t.strategy || '').trim() === strategyName).sort((a,b) => (b.date || '').localeCompare(a.date || ''));
-  const imgTrades = sTrades.filter(t => t.img || t.img1 || t.img2 || t.imgLearning);
+  const sStats = calculatePortfolioStats(sTrades);
+  const mddSign = sStats.maxDrawdownRate > 0 ? '-' : '';
+  const returnSign = sStats.totalReturnPct >= 0 ? '+' : '';
+
+  title.innerHTML = `
+    <div><i class="fas fa-layer-group" style="color:var(--gold);"></i> 「${strategyName}」 戰略精進動態展演與歷史案例庫</div>
+    <div style="font-size:0.8rem;color:var(--text-secondary);font-weight:600;margin-top:6px;display:flex;flex-wrap:wrap;gap:12px;">
+      <span>實戰次數：<strong style="color:var(--gold)">${sStats.totalCount}</strong></span>
+      <span>策略勝率：<strong style="color:${sStats.winRate >= 50 ? 'var(--green)' : 'var(--amber)'}">${sStats.winRate.toFixed(1)}%</strong></span>
+      <span>總盈利：<strong style="color:${sStats.totalReturnPct >= 0 ? 'var(--green)' : 'var(--red)'}">${returnSign}${sStats.totalReturnPct.toFixed(2)}%</strong></span>
+      <span>總回撤率 (MDD)：<strong style="color:${sStats.maxDrawdownRate > 10 ? 'var(--red)' : 'var(--amber)'}">${mddSign}${sStats.maxDrawdownRate.toFixed(2)}%</strong></span>
+    </div>
+  `;
+
+  const imgTrades = sTrades.filter(t => t.img || t.img1 || t.img2 || t.imgSpeedRatio || t.imgLearning);
 
   if (imgTrades.length === 0) {
     body.innerHTML = `
@@ -4300,6 +4689,9 @@ function openStrategyShowcase(strategyName) {
       imgsHtml += `</div>`;
     } else if (t.img) {
       imgsHtml += `<div class="showcase-img-box"><div style="font-size:0.75rem;font-weight:700;color:var(--gold);"><i class="fas fa-image"></i> 實盤進出 K 線圖</div><img src="${t.img}" alt="K-line"></div>`;
+    }
+    if (t.imgSpeedRatio) {
+      imgsHtml += `<div class="showcase-img-box" style="margin-top:14px;"><div style="font-size:0.75rem;font-weight:700;color:var(--gold);"><i class="fas fa-gauge-high"></i> 轉速比計算與覆盤對照圖</div><img src="${t.imgSpeedRatio}" alt="SpeedRatio"></div>`;
     }
     if (t.imgLearning) {
       imgsHtml += `<div class="showcase-img-box" style="margin-top:14px;"><div style="font-size:0.75rem;font-weight:700;color:var(--blue);"><i class="fas fa-book-open-reader"></i> 學習心得專屬筆記與思維導圖</div><img src="${t.imgLearning}" alt="Learning"></div>`;
@@ -4713,11 +5105,16 @@ function renderDataTable() {
   const filtered = getFilteredTrades();
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="17" style="text-align:center;padding:30px;color:var(--text-muted);">尚無交易記錄</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="18" style="text-align:center;padding:36px;color:var(--text-muted);font-size:0.95rem;"><i class="fas fa-inbox" style="font-size:1.5rem;display:block;margin-bottom:8px;opacity:0.5;"></i>尚無符合條件的交易記錄</td></tr>`;
     return;
   }
 
-  const sorted = [...filtered].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const sorted = [...filtered].sort((a, b) => {
+    const dA = (a.date || '') + ' ' + (a.tradeTime || '');
+    const dB = (b.date || '') + ' ' + (b.tradeTime || '');
+    return dB.localeCompare(dA);
+  });
+
   tbody.innerHTML = sorted.map((t, i) => {
     const pctVal = parseFloat(t.pct) || 0;
     const pctColor = t.status === 'Open' ? 'var(--amber)' : (pctVal >= 0 ? 'var(--green)' : 'var(--red)');
@@ -4725,33 +5122,36 @@ function renderDataTable() {
     const statusLabel = t.status === 'TP' ? '止盈' : (t.status === 'SL' ? '止損' : '進行中');
     const statusCls = t.status === 'TP' ? 'tp' : (t.status === 'SL' ? 'sl' : 'op');
     const dirLabel = t.direction === 'Long' ? '多' : '空';
-    const session = getEffectiveSession(t);
-    const sessionCls = getSessionBadgeClass(session);
+    const session = typeof getEffectiveSession === 'function' ? getEffectiveSession(t) : (t.session || '—');
+    const sessionCls = typeof getSessionBadgeClass === 'function' ? getSessionBadgeClass(session) : '';
     const emotionCls = t.emotion ? t.emotion.toLowerCase() : '';
-    const imgCell = (t.img || t.img1 || t.img2 || t.imgLearning)
-      ? `<span class="img-badge" onclick="openImageModal('${t.id}')"><i class="fas fa-paperclip"></i> 附圖</span>`
+    const imgCell = (t.img || t.img1 || t.img2 || t.imgSpeedRatio || t.imgLearning)
+      ? `<span class="img-badge" onclick="try{if(event&&event.stopPropagation)event.stopPropagation();}catch(e){}openImageModal('${t.id}')"><i class="fas fa-paperclip"></i> 附圖</span>`
       : '<span style="color:var(--text-muted);font-size:0.7rem;">—</span>';
 
-    return `<tr>
+    const balFormatted = !isNaN(parseFloat(t.balance)) ? '$' + parseFloat(t.balance).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '$0.00';
+
+    return `<tr onclick="openTradeDetailModal('${t.id}', event)" style="cursor: pointer;" title="點擊展開單筆完整詳細覆盤">
       <td style="font-family:var(--font-mono);color:var(--text-muted);">${i + 1}</td>
       <td style="font-family:var(--font-mono);">${t.date || '—'}</td>
       <td style="font-family:var(--font-mono);">${t.tradeTime || '—'}</td>
-      <td><span class="session-badge ${sessionCls}" style="font-size:0.58rem;">${getSessionLabel(session)}</span></td>
+      <td><span class="session-badge ${sessionCls}" style="font-size:0.6rem;">${typeof getSessionLabel === 'function' ? getSessionLabel(session) : session}</span></td>
       <td>${t.timeframe || '—'}</td>
       <td><span class="ledger-dir ${t.direction === 'Long' ? 'long' : 'short'}" style="font-size:0.65rem;">${dirLabel}</span></td>
-      <td style="font-weight:600;">${t.strategy || '—'}</td>
+      <td style="font-weight:600;color:var(--gold);">${t.strategy || '—'}</td>
       <td class="wrap-cell">${t.bias || '—'}</td>
-      <td><span class="ledger-status-badge ${statusCls}" style="font-size:0.6rem;">${statusLabel}</span></td>
+      <td><span class="ledger-status-badge ${statusCls}" style="font-size:0.62rem;">${statusLabel}</span></td>
       <td>${t.emotion ? '<span class="emotion-badge ' + emotionCls + '">' + t.emotion + '</span>' : '—'}</td>
-      <td style="font-family:var(--font-mono);font-weight:700;color:${pctColor};">${pctSign}${pctVal.toFixed(2)}%</td>
-      <td style="font-family:var(--font-mono);">$${parseFloat(t.balance || 0).toLocaleString()}</td>
+      <td style="font-family:var(--font-mono);font-weight:700;color:${pctColor};font-size:0.95rem;">${pctSign}${pctVal.toFixed(2)}%</td>
+      <td style="font-family:var(--font-mono);font-weight:600;">${balFormatted}</td>
       <td class="wrap-cell">${t.reason || '—'}</td>
       <td class="wrap-cell">${t.improve || '—'}</td>
       <td class="wrap-cell">${t.advice || '—'}</td>
       <td class="wrap-cell">${t.learning || '—'}</td>
       <td>${imgCell}</td>
-      <td style="text-align:center;">
-        <button class="dt-btn del" onclick="deleteTradeAction('${t.id}', typeof event !== 'undefined' ? event : null)" title="永久刪除此筆記錄" style="position:relative;z-index:35;padding:4px 8px;border-radius:4px;background:var(--red-bg);border:1px solid var(--red);color:var(--red);cursor:pointer;pointer-events:auto;"><i class="fas fa-trash-alt"></i></button>
+      <td style="text-align:center; white-space:nowrap;">
+        <button class="dt-btn" onclick="try{if(event&&event.stopPropagation)event.stopPropagation();}catch(e){}openTradeDetailModal('${t.id}')" title="點開查看單筆完整詳細覆盤" style="padding:5px 12px;border-radius:4px;background:rgba(212,175,55,0.18);border:1px solid var(--gold);color:var(--gold);cursor:pointer;margin-right:6px;font-weight:600;"><i class="fas fa-eye"></i> 覆盤明細</button>
+        <button class="dt-btn del" onclick="deleteTradeAction('${t.id}', typeof event !== 'undefined' ? event : null)" title="永久刪除此筆記錄" style="position:relative;z-index:35;padding:5px 9px;border-radius:4px;background:var(--red-bg);border:1px solid var(--red);color:var(--red);cursor:pointer;pointer-events:auto;"><i class="fas fa-trash-alt"></i></button>
       </td>
     </tr>`;
   }).join('');
@@ -4815,6 +5215,21 @@ function openImageModal(tradeId) {
     `;
   }
 
+  const imgSpeedRatio = t.imgSpeedRatio || null;
+
+  if (imgSpeedRatio) {
+    if (!chartsHtml) body.className = 'dual-modal-body single-chart';
+    chartsHtml += `
+      <div class="chart-panel-item" style="grid-column: 1 / -1; margin-top: ${chartsHtml ? '8px' : '0'}; border-top: ${chartsHtml ? '1px solid rgba(255,255,255,0.1)' : 'none'}; padding-top: ${chartsHtml ? '14px' : '14px'};">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+          <div class="chart-panel-label" style="color: var(--gold);"><i class="fas fa-gauge-high"></i> 轉速比計算與覆盤對照圖</div>
+          <button class="btn-delete-saved-img" onclick="deleteSavedTradeImage('${t.id}', 'imgSpeedRatio')"><i class="fas fa-trash-can"></i> 刪除轉速比附圖</button>
+        </div>
+        <img src="${imgSpeedRatio}" alt="轉速比計算附圖" style="max-height: 520px; object-fit: contain;">
+      </div>
+    `;
+  }
+
   if (imgLearning) {
     if (!chartsHtml) body.className = 'dual-modal-body single-chart';
     chartsHtml += `
@@ -4840,7 +5255,7 @@ function openImageModal(tradeId) {
 async function deleteSavedTradeImage(tradeId, imgKey) {
   const t = trades.find(item => String(item.id) === String(tradeId));
   if (!t) return;
-  const label = imgKey === 'img1' ? '圖一 (大時框圖)' : (imgKey === 'img2' ? '圖二 (進場圖)' : '心得專屬筆記附圖');
+  const label = imgKey === 'img1' ? '圖一 (大時框圖)' : (imgKey === 'img2' ? '圖二 (進場圖)' : (imgKey === 'imgSpeedRatio' ? '轉速比計算圖' : '心得專屬筆記附圖'));
   if (!confirm(`🗑️ 【刪除已儲存圖片確認】\n\n確定要刪除此單上的「${label}」嗎？\n\n⚠️ 注意：刪除後此圖片將從資料庫抹除，交易紀錄與文字欄位會完整保留！`)) return;
   
   t[imgKey] = null;
@@ -4990,6 +5405,8 @@ async function init() {
   loadSavedStrategyOptions();
   renderDashboard();
   renderAnalytics();
+  window._dashboardRenderedOnce = true;
+  window._analyticsRenderedOnce = true;
   autoCheckAndNotifyCleanOldTrades();
 
   // Attach Mouse-Follow & Touch-Follow Spotlight coordinate tracker (Throttled with requestAnimationFrame for 0 delay/lag)
@@ -5021,6 +5438,7 @@ async function init() {
       if (e.target.id === 'dayDetailModal') closeDayDetailModal();
     });
   }
+
 }
 
 init();
