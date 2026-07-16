@@ -2743,39 +2743,39 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
       <button class="filter-btn" data-session="Off-Hours">🌙 盤外時段</button>
     </div>
 
+    <!-- Integrated Compact R-Multiple & Expectancy KPI Row ABOVE Data Table Panel -->
+    <div class="analytics-kpi-row" id="analyticsKpiRow" style="margin-bottom:24px;grid-template-columns:repeat(4,1fr);gap:16px;">
+      <div class="analytics-kpi-card" style="padding:16px 18px;border:1px solid rgba(212,175,55,0.3);box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+        <div class="akpi-icon" style="background:var(--gold-glow);color:var(--gold);"><i class="fas fa-scale-balanced"></i></div>
+        <div class="akpi-label">系統期望值 (均賺/賠 R比)</div>
+        <div class="akpi-value" id="akpiExpectancy" style="color:var(--gold);font-size:1.4rem;font-weight:900;">—</div>
+      </div>
+      <div class="analytics-kpi-card" style="padding:16px 18px;border:1px solid rgba(16,185,129,0.3);box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+        <div class="akpi-icon" style="background:var(--green-bg);color:var(--green);"><i class="fas fa-arrow-trend-up"></i></div>
+        <div class="akpi-label">平均盈利 (單筆獲利均值)</div>
+        <div class="akpi-value" id="akpiAvgWinR" style="color:var(--green);font-size:1.4rem;font-weight:900;">—</div>
+      </div>
+      <div class="analytics-kpi-card" style="padding:16px 18px;border:1px solid rgba(239,68,68,0.3);box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+        <div class="akpi-icon" style="background:var(--red-bg);color:var(--red);"><i class="fas fa-triangle-exclamation"></i></div>
+        <div class="akpi-label">平均虧損 (單筆止損均值)</div>
+        <div class="akpi-value" id="akpiAvgLossR" style="color:var(--red);font-size:1.4rem;font-weight:900;">—</div>
+      </div>
+      <div class="analytics-kpi-card" style="padding:16px 18px;border:1px solid rgba(59,130,246,0.3);box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+        <div class="akpi-icon" style="background:var(--blue-bg);color:var(--blue);"><i class="fas fa-chart-pie"></i></div>
+        <div class="akpi-label">盈虧比 (賺賠期望比 RRR)</div>
+        <div class="akpi-value" id="akpiRRR" style="color:var(--blue);font-size:1.4rem;font-weight:900;">—</div>
+      </div>
+    </div>
+
     <!-- 1. PRIMARY & HIGHEST PRIORITY FOCUS: Data Table & Comprehensive Review (完整覆盤與資料清單 - 策略分析最重要主視覺) -->
     <div class="glass-panel datatable-panel" style="border: 2px solid rgba(212, 175, 55, 0.7); box-shadow: 0 16px 50px rgba(0,0,0,0.65), 0 0 36px rgba(212,175,55,0.22); margin-bottom: 32px; padding: 26px 28px; width:100%;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:16px;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:18px;">
         <div>
-          <h3 style="margin:0;font-size:1.55rem;color:var(--gold);display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:0.5px;"><i class="fas fa-table-list" style="color:var(--gold);font-size:1.65rem;"></i> 完整覆盤與資料清單 (交易全景主資料庫)</h3>
+          <h3 style="margin:0;font-size:1.55rem;color:#ffffff;display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:0.5px;"><i class="fas fa-table-list" style="color:var(--gold);font-size:1.65rem;"></i> 完整覆盤與資料清單 (交易全景主資料庫)</h3>
           <div style="font-size:0.86rem;color:var(--text-secondary);margin-top:6px;line-height:1.5;">這是策略分析與覆盤最為核心的主視覺資料庫。點擊任意交易單或右側「覆盤明細」按鈕，可立刻展開單筆執行邏輯、風控偏見、多時框 K 線圖與老師建議對照</div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:0.85rem;color:var(--gold);background:rgba(212,175,55,0.15);padding:8px 16px;border-radius:24px;border:1px solid rgba(212,175,55,0.45);font-weight:700;"><i class="fas fa-search-dollar"></i> 點開看完整覆盤明細</span>
-        </div>
-      </div>
-
-      <!-- Integrated Compact R-Multiple & Expectancy KPI Row Right Inside Data Table Panel -->
-      <div class="analytics-kpi-row" id="analyticsKpiRow" style="margin-bottom:20px;grid-template-columns:repeat(4,1fr);gap:14px;">
-        <div class="analytics-kpi-card" style="padding:14px 16px;">
-          <div class="akpi-icon" style="background:var(--gold-glow);color:var(--gold);"><i class="fas fa-scale-balanced"></i></div>
-          <div class="akpi-label">系統期望值 (均賺/賠 R比)</div>
-          <div class="akpi-value" id="akpiExpectancy" style="color:var(--gold);font-size:1.35rem;">—</div>
-        </div>
-        <div class="analytics-kpi-card" style="padding:14px 16px;">
-          <div class="akpi-icon" style="background:var(--green-bg);color:var(--green);"><i class="fas fa-arrow-trend-up"></i></div>
-          <div class="akpi-label">平均盈利 (單筆獲利均值)</div>
-          <div class="akpi-value" id="akpiAvgWinR" style="color:var(--green);font-size:1.35rem;">—</div>
-        </div>
-        <div class="analytics-kpi-card" style="padding:14px 16px;">
-          <div class="akpi-icon" style="background:var(--red-bg);color:var(--red);"><i class="fas fa-triangle-exclamation"></i></div>
-          <div class="akpi-label">平均虧損 (單筆止損均值)</div>
-          <div class="akpi-value" id="akpiAvgLossR" style="color:var(--red);font-size:1.35rem;">—</div>
-        </div>
-        <div class="analytics-kpi-card" style="padding:14px 16px;">
-          <div class="akpi-icon" style="background:var(--blue-bg);color:var(--blue);"><i class="fas fa-chart-pie"></i></div>
-          <div class="akpi-label">盈虧比 (賺賠期望比 RRR)</div>
-          <div class="akpi-value" id="akpiRRR" style="color:var(--blue);font-size:1.35rem;">—</div>
+          <button class="btn-submit" onclick="openFullReviewHubModal()" style="font-size:0.88rem;background:rgba(212,175,55,0.22);color:var(--gold);padding:10px 20px;border-radius:24px;border:1px solid var(--gold);font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 15px rgba(212,175,55,0.25);transition:all 0.25s;" onmouseover="this.style.background='rgba(212,175,55,0.35)'" onmouseout="this.style.background='rgba(212,175,55,0.22)'"><i class="fas fa-search-dollar"></i> 點開看完整覆盤明細</button>
         </div>
       </div>
 
@@ -2803,6 +2803,64 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
         <span style="font-size:0.75rem;color:var(--text-secondary);background:rgba(212,175,55,0.1);padding:4px 12px;border-radius:16px;border:1px solid rgba(212,175,55,0.25);"><i class="fas fa-sparkles" style="color:var(--gold);"></i> 緊湊簡潔檢視</span>
       </div>
       <div class="strategy-matrix-grid compact-matrix-grid" id="strategyMatrixGrid"></div>
+    </div>
+
+    <!-- 2-A. DYNAMIC INTERACTIVE SIMULATOR: Dynamic Trade Playback & Equity Curve Simulator (動態逐筆回測與權益走勢模擬展演) -->
+    <div class="glass-panel dynamic-simulator-panel" style="margin-bottom:26px;padding:20px 24px;border:1px solid rgba(212,175,55,0.35);box-shadow:0 10px 35px rgba(0,0,0,0.5);">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.1);">
+        <div>
+          <h3 style="margin:0;font-size:1.2rem;font-weight:900;color:var(--gold);display:flex;align-items:center;gap:10px;"><i class="fas fa-play-circle" style="color:var(--gold);font-size:1.35rem;"></i> 動態逐筆覆盤與權益走勢模擬展演儀表板</h3>
+          <div style="font-size:0.82rem;color:var(--text-secondary);margin-top:4px;">點擊「播放動態展演」或拉動時間軸切換器，可即時動態推演每一筆交易發生當下的資產餘額、累積勝率與多空進場決策！</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button id="btnPlaySimulator" onclick="toggleTradeSimulatorPlayback()" class="btn-submit" style="padding:8px 18px;font-size:0.88rem;background:var(--gold-glow);color:var(--gold);border:1px solid var(--gold);width:auto;font-weight:800;"><i class="fas fa-play" id="simPlayIcon"></i> 開始動態逐筆播放</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px;">
+        <div style="background:rgba(15,23,42,0.7);padding:12px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);text-align:center;">
+          <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:4px;">當前模擬單號 / 總單數</div>
+          <div id="simCurrentStep" style="font-family:var(--font-mono);font-size:1.25rem;font-weight:800;color:var(--gold);">0 / 0</div>
+        </div>
+        <div style="background:rgba(15,23,42,0.7);padding:12px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);text-align:center;">
+          <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:4px;">動態累積帳戶資金</div>
+          <div id="simBalance" style="font-family:var(--font-mono);font-size:1.25rem;font-weight:800;color:var(--green);">$0.00</div>
+        </div>
+        <div style="background:rgba(15,23,42,0.7);padding:12px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);text-align:center;">
+          <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:4px;">動態當下累積勝率</div>
+          <div id="simWinRate" style="font-family:var(--font-mono);font-size:1.25rem;font-weight:800;color:var(--blue);">0.0%</div>
+        </div>
+        <div style="background:rgba(15,23,42,0.7);padding:12px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);text-align:center;">
+          <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:4px;">當下單筆損益 / 狀態</div>
+          <div id="simTradeResult" style="font-family:var(--font-mono);font-size:1.25rem;font-weight:800;color:var(--text-primary);">—</div>
+        </div>
+      </div>
+
+      <!-- Timeline Scrubber -->
+      <div style="margin-bottom:16px;padding:12px 16px;background:rgba(7,10,19,0.6);border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text-muted);margin-bottom:8px;">
+          <span>起點：第 1 筆交易</span>
+          <span id="simScrubberLabel" style="color:var(--gold);font-weight:700;">請拖動滑桿或點擊上方播放</span>
+          <span>終點：最新交易</span>
+        </div>
+        <input type="range" id="simRangeSlider" min="1" max="1" value="1" step="1" oninput="onSimulatorSliderChange(this.value)" style="width:100%;cursor:pointer;accent-color:var(--gold);">
+      </div>
+
+      <!-- Live Card Displaying the specific Trade at this step -->
+      <div id="simLiveTradeCard" style="background:rgba(15,23,42,0.85);border:1px solid rgba(212,175,55,0.4);border-radius:10px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;min-height:70px;">
+        <div style="color:var(--text-muted);font-size:0.9rem;">⏳ 尚無開倉交易資料可供動態模擬</div>
+      </div>
+    </div>
+
+    <!-- 2-B. DYNAMIC INTERACTIVE STRATEGY & SESSION RADAR: (多維度動態時段 × 策略績效熱區互動矩陣) -->
+    <div class="glass-panel dynamic-radar-panel" style="margin-bottom:26px;padding:20px 24px;border-color:rgba(255,255,255,0.1);">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.08);">
+        <div>
+          <h3 style="margin:0;font-size:1.15rem;font-weight:800;color:var(--text-primary);display:flex;align-items:center;gap:10px;"><i class="fas fa-satellite-dish" style="color:var(--blue);font-size:1.25rem;"></i> 多維度時段 × 策略戰力動態分析儀 (Interactive Session & Strategy Radar)</h3>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">即時多時段橫向交叉分析各時段開倉集中度與對應平均盈虧期望比</div>
+        </div>
+      </div>
+      <div id="dynamicRadarGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;"></div>
     </div>
 
     <!-- 3. Concise Secondary Charts & Leaderboard (簡潔化圖表與排行榜) -->
@@ -3368,9 +3426,14 @@ async function deleteDayTrade(tradeId) {
 
 window.openTradeDetailModal = function(tradeId, event) {
   const e = event || window.event;
-  if (e && e.target && e.target.closest && e.target.closest('button, .dt-btn, .btn-submit, .btn-export, .modal-close, .quick-add-date-btn, .img-badge, .drop-zone-remove, input, select')) {
+  if (e && e.target && e.target.closest && e.target.closest('.del, .drop-zone-remove, input, select')) {
     return;
   }
+  const sortedList = [...getFilteredTrades()].sort((a,b) => ((b.date||'')+' '+(b.tradeTime||'')).localeCompare((a.date||'')+' '+(a.tradeTime||'')));
+  const currentIndex = sortedList.findIndex(item => String(item.id) === String(tradeId));
+  const prevTrade = currentIndex > 0 ? sortedList[currentIndex - 1] : null;
+  const nextTrade = currentIndex >= 0 && currentIndex < sortedList.length - 1 ? sortedList[currentIndex + 1] : null;
+
   const t = trades.find(item => String(item.id) === String(tradeId));
   if (!t) return;
   const modal = document.getElementById('tradeDetailModal');
@@ -3410,6 +3473,12 @@ window.openTradeDetailModal = function(tradeId, event) {
   }
 
   body.innerHTML = `
+    ${currentIndex >= 0 ? `<div style="background:rgba(0,0,0,0.45);border:1px solid rgba(212,175,55,0.35);border-radius:10px;padding:12px 16px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <button onclick="openTradeDetailModal('${prevTrade ? prevTrade.id : ''}')" ${!prevTrade ? 'disabled' : ''} style="padding:6px 14px;border-radius:6px;background:${prevTrade ? 'rgba(212,175,55,0.22)' : 'rgba(255,255,255,0.05)'};border:1px solid ${prevTrade ? 'var(--gold)' : 'rgba(255,255,255,0.1)'};color:${prevTrade ? 'var(--gold)' : 'var(--text-muted)'};cursor:${prevTrade ? 'pointer' : 'not-allowed'};font-weight:700;transition:all 0.2s;"><i class="fas fa-arrow-left"></i> 上一筆覆盤 (${prevTrade ? prevTrade.date : '無'})</button>
+      <div style="font-size:0.9rem;color:var(--gold);font-weight:800;letter-spacing:0.5px;"><i class="fas fa-layer-group"></i> 交易全景覆盤明細 (${currentIndex + 1} / ${sortedList.length})</div>
+      <button onclick="openTradeDetailModal('${nextTrade ? nextTrade.id : ''}')" ${!nextTrade ? 'disabled' : ''} style="padding:6px 14px;border-radius:6px;background:${nextTrade ? 'rgba(212,175,55,0.22)' : 'rgba(255,255,255,0.05)'};border:1px solid ${nextTrade ? 'var(--gold)' : 'rgba(255,255,255,0.1)'};color:${nextTrade ? 'var(--gold)' : 'var(--text-muted)'};cursor:${nextTrade ? 'pointer' : 'not-allowed'};font-weight:700;transition:all 0.2s;">下一筆覆盤 (${nextTrade ? nextTrade.date : '無'}) <i class="fas fa-arrow-right"></i></button>
+    </div>` : ''}
+
     <div style="background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
       <div>
         <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:4px;">單筆最終損益百分比</div>
@@ -3461,6 +3530,15 @@ window.openTradeDetailModal = function(tradeId, event) {
   `;
 
   modal.classList.add('open');
+};
+
+window.openFullReviewHubModal = function() {
+  const sortedList = [...getFilteredTrades()].sort((a,b) => ((b.date||'')+' '+(b.tradeTime||'')).localeCompare((a.date||'')+' '+(a.tradeTime||'')));
+  if (sortedList.length === 0) {
+    alert('目前沒有交易資料可供展開覆盤！');
+    return;
+  }
+  openTradeDetailModal(sortedList[0].id);
 };
 
 window.closeTradeDetailModal = function() {
@@ -4401,6 +4479,8 @@ function renderAnalytics() {
   renderStrategyMatrix();
   renderEmotionInsight();
   renderDataTable();
+  if (typeof renderDynamicSimulator === 'function') renderDynamicSimulator();
+  if (typeof renderDynamicRadar === 'function') renderDynamicRadar();
 }
 
 /* ---- 6-pre. R-Multiple & Expectancy KPIs ---- */
@@ -5154,6 +5234,206 @@ function renderDataTable() {
         <button class="dt-btn del" onclick="deleteTradeAction('${t.id}', typeof event !== 'undefined' ? event : null)" title="永久刪除此筆記錄" style="position:relative;z-index:35;padding:5px 9px;border-radius:4px;background:var(--red-bg);border:1px solid var(--red);color:var(--red);cursor:pointer;pointer-events:auto;"><i class="fas fa-trash-alt"></i></button>
       </td>
     </tr>`;
+  }).join('');
+}
+
+/* ---- 6e. Dynamic Interactive Trade Playback Simulator & Equity Curve ---- */
+let simulatorInterval = null;
+let currentSimulatorIndex = 0;
+
+function renderDynamicSimulator() {
+  const filtered = getFilteredTrades();
+  const closed = filtered.filter(t => t.status !== 'Open');
+  const slider = document.getElementById('simRangeSlider');
+  if (!slider) return;
+
+  if (closed.length === 0) {
+    slider.min = 1;
+    slider.max = 1;
+    slider.value = 1;
+    slider.disabled = true;
+    const elStep = document.getElementById('simCurrentStep');
+    const elBal = document.getElementById('simBalance');
+    const elWinR = document.getElementById('simWinRate');
+    const elResult = document.getElementById('simTradeResult');
+    const elScrubber = document.getElementById('simScrubberLabel');
+    const elCard = document.getElementById('simLiveTradeCard');
+    if (elStep) elStep.textContent = '0 / 0';
+    if (elBal) elBal.textContent = '$0.00';
+    if (elWinR) elWinR.textContent = '0.0%';
+    if (elResult) elResult.textContent = '—';
+    if (elScrubber) elScrubber.textContent = '尚無已平倉資料';
+    if (elCard) elCard.innerHTML = `<div style="color:var(--text-muted);font-size:0.9rem;">⏳ 尚無開倉交易資料可供動態模擬</div>`;
+    return;
+  }
+
+  const sortedAsc = [...closed].sort((a, b) => {
+    const dA = (a.date || '') + ' ' + (a.tradeTime || '');
+    const dB = (b.date || '') + ' ' + (b.tradeTime || '');
+    return dA.localeCompare(dB);
+  });
+
+  slider.disabled = false;
+  slider.min = 1;
+  slider.max = sortedAsc.length;
+  if (!slider.value || parseInt(slider.value) > sortedAsc.length) {
+    slider.value = sortedAsc.length;
+  }
+  onSimulatorSliderChange(slider.value);
+}
+
+window.onSimulatorSliderChange = function(val) {
+  const filtered = getFilteredTrades();
+  const closed = filtered.filter(t => t.status !== 'Open');
+  if (closed.length === 0) return;
+
+  const sortedAsc = [...closed].sort((a, b) => {
+    const dA = (a.date || '') + ' ' + (a.tradeTime || '');
+    const dB = (b.date || '') + ' ' + (b.tradeTime || '');
+    return dA.localeCompare(dB);
+  });
+
+  const idx = Math.min(Math.max(0, parseInt(val) - 1), sortedAsc.length - 1);
+  currentSimulatorIndex = idx;
+  const t = sortedAsc[idx];
+
+  const sliced = sortedAsc.slice(0, idx + 1);
+  const wins = sliced.filter(item => parseFloat(item.pct) > 0).length;
+  const winRate = ((wins / sliced.length) * 100).toFixed(1);
+  const pctVal = parseFloat(t.pct) || 0;
+  const pctColor = pctVal >= 0 ? 'var(--green)' : 'var(--red)';
+  const pctSign = pctVal >= 0 ? '+' : '';
+
+  const elStep = document.getElementById('simCurrentStep');
+  const elBal = document.getElementById('simBalance');
+  const elWinR = document.getElementById('simWinRate');
+  const elResult = document.getElementById('simTradeResult');
+  const elScrubber = document.getElementById('simScrubberLabel');
+  const elCard = document.getElementById('simLiveTradeCard');
+
+  if (elStep) elStep.textContent = `${idx + 1} / ${sortedAsc.length}`;
+  if (elBal) elBal.textContent = t.balance ? '$' + parseFloat(t.balance).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '—';
+  if (elWinR) elWinR.textContent = `${winRate}% (${wins}/${sliced.length})`;
+  if (elResult) elResult.innerHTML = `<span style="color:${pctColor};font-weight:900;">${pctSign}${pctVal.toFixed(2)}%</span> <span style="font-size:0.75rem;color:var(--text-muted);">(${t.status})</span>`;
+  if (elScrubber) elScrubber.textContent = `動態推演至：${t.date || ''} ${t.tradeTime || ''} (${t.strategy || '未知策略'})`;
+
+  if (elCard) {
+    const dirCls = t.direction === 'Long' ? 'long' : 'short';
+    const dirLabel = t.direction === 'Long' ? '做多 LONG' : '做空 SHORT';
+    elCard.innerHTML = `
+      <div style="flex:1;min-width:260px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span style="font-family:var(--font-mono);background:rgba(255,255,255,0.06);padding:4px 10px;border-radius:6px;font-size:0.8rem;color:var(--gold);font-weight:700;"><i class="fas fa-calendar-alt"></i> ${t.date || ''} ${t.tradeTime || ''}</span>
+          <span class="ledger-dir ${dirCls}" style="font-size:0.75rem;padding:3px 8px;border-radius:4px;">${dirLabel}</span>
+          <span style="font-size:0.8rem;font-weight:800;color:var(--text-primary);">${t.strategy || '未知策略'}</span>
+        </div>
+        <div style="font-size:0.88rem;color:var(--text-secondary);line-height:1.5;max-height:46px;overflow:hidden;text-overflow:ellipsis;">
+          <strong style="color:var(--gold);">進場理由：</strong> ${t.reason || '當時未填寫說明'}
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="text-align:right;">
+          <div style="font-size:0.72rem;color:var(--text-muted);">該單盈虧</div>
+          <div style="font-size:1.35rem;font-weight:900;color:${pctColor};font-family:var(--font-mono);">${pctSign}${pctVal.toFixed(2)}%</div>
+        </div>
+        <button onclick="openTradeDetailModal('${t.id}')" style="background:var(--gold-glow);border:1px solid var(--gold);color:var(--gold);padding:10px 18px;border-radius:8px;font-weight:800;cursor:pointer;white-space:nowrap;transition:all 0.2s;"><i class="fas fa-search-plus"></i> 展開多圖完整詳細覆盤</button>
+      </div>
+    `;
+  }
+};
+
+window.toggleTradeSimulatorPlayback = function() {
+  const btn = document.getElementById('btnPlaySimulator');
+  const slider = document.getElementById('simRangeSlider');
+  if (!slider || slider.disabled) return;
+
+  if (simulatorInterval) {
+    clearInterval(simulatorInterval);
+    simulatorInterval = null;
+    if (btn) btn.innerHTML = `<i class="fas fa-play" id="simPlayIcon"></i> 開始動態逐筆播放`;
+    if (btn) btn.style.background = 'var(--gold-glow)';
+    return;
+  }
+
+  if (btn) btn.innerHTML = `<i class="fas fa-pause" id="simPlayIcon"></i> 暫停推演`;
+  if (btn) btn.style.background = 'rgba(239,68,68,0.25)';
+  
+  if (parseInt(slider.value) >= parseInt(slider.max)) {
+    slider.value = 1;
+    onSimulatorSliderChange(1);
+  }
+
+  simulatorInterval = setInterval(() => {
+    let nextVal = parseInt(slider.value) + 1;
+    if (nextVal > parseInt(slider.max)) {
+      clearInterval(simulatorInterval);
+      simulatorInterval = null;
+      if (btn) btn.innerHTML = `<i class="fas fa-play" id="simPlayIcon"></i> 開始動態逐筆播放`;
+      if (btn) btn.style.background = 'var(--gold-glow)';
+      return;
+    }
+    slider.value = nextVal;
+    onSimulatorSliderChange(nextVal);
+  }, 1200);
+};
+
+/* ---- 6f. Dynamic Strategy x Session Radar Matrix ---- */
+function renderDynamicRadar() {
+  const grid = document.getElementById('dynamicRadarGrid');
+  if (!grid) return;
+  const filtered = getFilteredTrades();
+  const closed = filtered.filter(t => t.status !== 'Open');
+
+  const sessions = [
+    { key: 'Asia', label: '🌏 亞洲開盤 (08:00-12:00)', color: '#3b82f6' },
+    { key: 'London Early', label: '🇬🇧 倫敦早盤 (14:00-17:05)', color: '#10b981' },
+    { key: 'New York', label: '🇺🇸 紐約盤 (19:00-23:00)', color: '#d4af37' },
+    { key: 'London Late', label: '🇬🇧 倫敦晚盤 (23:00-00:05)', color: '#a855f7' }
+  ];
+
+  grid.innerHTML = sessions.map(sess => {
+    const sTrades = closed.filter(t => (typeof getEffectiveSession === 'function' ? getEffectiveSession(t) : t.session) === sess.key);
+    const count = sTrades.length;
+    const wins = sTrades.filter(t => parseFloat(t.pct) > 0).length;
+    const winRate = count > 0 ? ((wins / count) * 100).toFixed(1) : '0.0';
+    const totalReturn = sTrades.reduce((sum, t) => sum + (parseFloat(t.pct) || 0), 0);
+    const returnColor = totalReturn >= 0 ? 'var(--green)' : 'var(--red)';
+    const returnSign = totalReturn >= 0 ? '+' : '';
+
+    const stratMap = {};
+    sTrades.forEach(t => {
+      const s = t.strategy || '未知';
+      stratMap[s] = (stratMap[s] || 0) + 1;
+    });
+    let topStrat = '無';
+    let maxStratCount = 0;
+    Object.entries(stratMap).forEach(([name, c]) => {
+      if (c > maxStratCount) { maxStratCount = c; topStrat = name; }
+    });
+
+    return `
+      <div style="background:rgba(15,23,42,0.75);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,0.35);transition:transform 0.25s,border-color 0.25s;" onmouseover="this.style.borderColor='${sess.color}'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'">
+        <div style="position:absolute;top:0;left:0;right:0;height:4px;background:${sess.color};"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-size:0.92rem;font-weight:800;color:var(--text-primary);">${sess.label}</div>
+          <span style="font-size:0.75rem;background:rgba(255,255,255,0.06);padding:3px 10px;border-radius:12px;color:${sess.color};font-weight:700;">${count} 單</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+          <div>
+            <div style="font-size:0.72rem;color:var(--text-muted);">時段勝率</div>
+            <div style="font-size:1.25rem;font-weight:900;color:var(--gold);font-family:var(--font-mono);">${winRate}%</div>
+          </div>
+          <div>
+            <div style="font-size:0.72rem;color:var(--text-muted);">累積報酬</div>
+            <div style="font-size:1.25rem;font-weight:900;color:${returnColor};font-family:var(--font-mono);">${returnSign}${totalReturn.toFixed(2)}%</div>
+          </div>
+        </div>
+        <div style="background:rgba(0,0,0,0.35);padding:8px 12px;border-radius:6px;font-size:0.78rem;color:var(--text-secondary);display:flex;justify-content:space-between;align-items:center;">
+          <span>👑 時段熱門策略:</span>
+          <strong style="color:var(--text-primary);">${topStrat} (${maxStratCount} 次)</strong>
+        </div>
+      </div>
+    `;
   }).join('');
 }
 
