@@ -4915,9 +4915,18 @@ let gapiTokenClient = null;
 let googleAccessToken = null;
 let googleUserInfo = null;
 
+const DEFAULT_GOOGLE_CLIENT_ID = '246719222938-ev0rq3chhdlpjpteo1vfuboccqo1ftu8.apps.googleusercontent.com';
+
 function initGoogleIdentity() {
   const gIdInput = document.getElementById('googleClientIdInput');
-  const savedId = localStorage.getItem('pt_google_client_id');
+  let savedId = localStorage.getItem('pt_google_client_id');
+
+  // Auto-save the default Client ID if none is saved yet
+  if (!savedId && DEFAULT_GOOGLE_CLIENT_ID) {
+    savedId = DEFAULT_GOOGLE_CLIENT_ID;
+    localStorage.setItem('pt_google_client_id', savedId);
+  }
+
   if (gIdInput && savedId) gIdInput.value = savedId;
 
   updateGoogleAuthStatusUI();
