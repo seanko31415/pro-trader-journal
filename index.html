@@ -563,14 +563,19 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
 .calendar-day {
   aspect-ratio: 1;
   border-radius: var(--radius-sm);
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 4px;
+  gap: 6px;
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--text-secondary);
   border: 1px solid rgba(255, 255, 255, 0.08);
   transition: all var(--transition-smooth);
   cursor: pointer !important;
-  min-height: 64px;
+  min-height: 72px;
   position: relative;
   overflow: hidden;
 }
@@ -590,37 +595,31 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.75), 0 8px 30px rgba(212, 175, 55, 0.45);
 }
 .day-number {
-  position: absolute;
-  top: 10px;
-  left: 0;
-  right: 0;
+  position: relative;
   text-align: center;
   font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  line-height: 18px;
-  height: 18px;
+  line-height: 1;
   margin: 0;
   pointer-events: none;
   z-index: 2;
 }
 .day-badge {
-  position: absolute;
-  top: 36px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
   font-family: var(--font-mono);
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   font-weight: 700;
   padding: 3px 8px;
   border-radius: 5px;
-  line-height: 1.25;
-  max-width: 92%;
+  line-height: 1.2;
+  max-width: 95%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   z-index: 2;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  margin: 0;
 }
 .day-badge.win { color: var(--green); background: var(--green-bg); }
 .day-badge.loss { color: var(--red); background: var(--red-bg); }
@@ -2023,9 +2022,9 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   .form-row.cols-3, .form-row.cols-2, .form-row.cols-4 { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .journal-form { padding: 20px 16px; }
   .calendar-grid { gap: 3px; }
-  .calendar-day { min-height: 52px; }
-  .day-number { top: 6px; font-size: 0.8rem; height: 16px; line-height: 16px; }
-  .day-badge { top: 25px; font-size: 0.62rem; padding: 2px 4px; }
+  .calendar-day { min-height: 56px; padding: 4px 2px; gap: 4px; }
+  .day-number { font-size: 0.82rem; line-height: 1; }
+  .day-badge { font-size: 0.65rem; padding: 2px 5px; }
   .day-count-badge { top: 2px; right: 2px; font-size: 0.55rem; padding: 1px 3px; }
   .pos-calc-display { grid-template-columns: 1fr; }
 }
