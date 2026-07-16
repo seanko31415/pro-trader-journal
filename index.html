@@ -166,9 +166,9 @@ code, pre, .mono, .num, .day-number, .ledger-date, .stat-value, .calc-value, .dt
 .pos-calc-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active)),
 .emotion-insight-item:hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active)) {
   transform: translateY(-4px) !important;
-  border-color: rgba(255, 255, 255, 0.18) !important;
-  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
-  background: rgba(23, 32, 51, 0.75) !important;
+  border-color: rgba(255, 235, 150, 0.45) !important;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75), 0 0 30px rgba(212, 175, 55, 0.22), inset 0 1px 2px rgba(255, 255, 255, 0.3) !important;
+  background: rgba(23, 32, 51, 0.8) !important;
 }
 
 /* All buttons cubic-bezier smooth transition */
@@ -205,18 +205,18 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   transform: none !important;
 }
 
-/* 5. Mouse-Follow Spotlight Border Ring & Inner Glass Glow (Only illuminates right under the mouse!) */
+/* 5. Mouse-Follow Spotlight Border Ring & Inner Glass Glow (Illuminates vividly right under the mouse!) */
 .glass-panel, .kpi-card, .analytics-kpi-card, .pos-calc-card, .ledger-card, .lb-card, .btn-submit, .calendar-day {
   position: relative;
   overflow: hidden;
 }
-/* Localized Spotlight Inner Glow - ultra soft and delicate */
+/* Localized Spotlight Inner Glow */
 .glass-panel::before, .kpi-card::before, .analytics-kpi-card::before, .pos-calc-card::before, .ledger-card::before, .lb-card::before, .btn-submit::before, .btn-export::before, .form-panel-box::before, .day-trade-card::before, .calendar-day::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(220px circle at var(--mouse-x, -100px) var(--mouse-y, -100px), rgba(212, 175, 55, 0.04), rgba(56, 189, 248, 0.02), transparent 70%);
+  background: radial-gradient(350px circle at var(--mouse-x, -100px) var(--mouse-y, -100px), rgba(212, 175, 55, 0.16), rgba(56, 189, 248, 0.08), transparent 70%);
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
@@ -226,18 +226,18 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   opacity: 1;
 }
 
-/* Localized Spotlight Border Ring - strictly follows cursor without lighting up the entire border (柔和調小亮度，專注邊框追蹤) */
+/* Localized Spotlight Border Ring - strictly follows cursor with bright golden/cyan neon illumination */
 .glass-panel::after, .kpi-card::after, .analytics-kpi-card::after, .pos-calc-card::after, .ledger-card::after, .lb-card::after, .btn-submit::after, .btn-export::after, .form-panel-box::after, .day-trade-card::after, .calendar-day::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1.5px !important;
+  padding: 2px !important;
   background: radial-gradient(
-    130px circle at var(--mouse-x, -100px) var(--mouse-y, -100px),
-    rgba(212, 175, 55, 0.42) 0%,
-    rgba(56, 189, 248, 0.14) 45%,
-    transparent 85%
+    220px circle at var(--mouse-x, -100px) var(--mouse-y, -100px),
+    rgba(255, 220, 100, 1) 0%,
+    rgba(56, 189, 248, 0.8) 45%,
+    transparent 80%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -2768,7 +2768,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
     </div>
 
     <!-- 1. PRIMARY & HIGHEST PRIORITY FOCUS: Data Table & Comprehensive Review (完整覆盤與資料清單 - 策略分析最重要主視覺) -->
-    <div class="glass-panel datatable-panel" style="border: 2px solid rgba(212, 175, 55, 0.7); box-shadow: 0 16px 50px rgba(0,0,0,0.65), 0 0 36px rgba(212,175,55,0.22); margin-bottom: 32px; padding: 26px 28px; width:100%;">
+    <div class="glass-panel datatable-panel" style="margin-bottom: 32px; padding: 26px 28px; width:100%;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:16px;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:18px;">
         <div>
           <h3 style="margin:0;font-size:1.55rem;color:#ffffff;display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:0.5px;"><i class="fas fa-table-list" style="color:var(--gold);font-size:1.65rem;"></i> 完整覆盤與資料清單 (交易全景主資料庫)</h3>
@@ -2794,7 +2794,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
     </div>
 
     <!-- 2. Streamlined & Concise Core Strategy Matrix Showcase (核心戰略與動態展演 - 簡潔化緊湊版) -->
-    <div class="glass-panel strategy-showcase-panel compact-showcase-panel" style="margin-bottom:26px;padding:18px 22px;border-color:rgba(255,255,255,0.1);">
+    <div class="glass-panel strategy-showcase-panel compact-showcase-panel" style="margin-bottom:26px;padding:18px 22px;">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08);">
         <div>
           <h3 style="margin:0;font-size:1.15rem;font-weight:800;display:flex;align-items:center;gap:10px;color:var(--text-primary);"><i class="fas fa-layer-group" style="color:var(--gold);font-size:1.2rem;"></i> 核心戰略與動態展演 (策略大數據矩陣)</h3>
@@ -2806,7 +2806,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
     </div>
 
     <!-- 2-A. DYNAMIC INTERACTIVE SIMULATOR: Dynamic Trade Playback & Equity Curve Simulator (動態逐筆回測與權益走勢模擬展演) -->
-    <div class="glass-panel dynamic-simulator-panel" style="margin-bottom:28px;padding:24px 28px;border:1px solid rgba(255,255,255,0.35);box-shadow:0 14px 45px rgba(0,0,0,0.65), 0 0 30px rgba(255,255,255,0.08);border-radius:14px;background:rgba(15,23,42,0.85);">
+    <div class="glass-panel dynamic-simulator-panel" style="margin-bottom:28px;padding:24px 28px;">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.15);">
         <div>
           <h3 style="margin:0;font-size:1.35rem;font-weight:900;color:#FFFFFF;display:flex;align-items:center;gap:12px;letter-spacing:0.5px;"><i class="fas fa-play-circle" style="color:var(--gold);font-size:1.5rem;"></i> 動態逐筆覆盤與權益走勢模擬展演儀表板</h3>
@@ -2853,7 +2853,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
     </div>
 
     <!-- 2-B. DYNAMIC INTERACTIVE STRATEGY & SESSION RADAR: (極簡化多維度時段 × 策略戰力分析儀) -->
-    <div class="glass-panel dynamic-radar-panel" style="margin-bottom:28px;padding:24px 28px;border:1px solid rgba(255,255,255,0.2);box-shadow:0 12px 35px rgba(0,0,0,0.6);border-radius:14px;">
+    <div class="glass-panel dynamic-radar-panel" style="margin-bottom:28px;padding:24px 28px;">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.12);">
         <div>
           <h3 style="margin:0;font-size:1.3rem;font-weight:900;color:#FFFFFF;display:flex;align-items:center;gap:12px;letter-spacing:0.5px;"><i class="fas fa-satellite-dish" style="color:var(--blue);font-size:1.4rem;"></i> 多維度時段 × 策略戰力極簡動態分析儀</h3>
