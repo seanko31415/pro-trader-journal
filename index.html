@@ -159,7 +159,14 @@ code, pre, .mono, .num, .day-number, .ledger-date, .stat-value, .calc-value, .dt
 
 /* 2 & 3. Mouse Hover: Y-axis offset (-4px), border-color glass reflection, and ice-glass shine */
 /* 2 & 3. Mouse Hover: Y-axis offset (-4px), subtle base border, and localized spotlight border reflection */
-.glass-panel:hover, .kpi-card:hover, .ledger-card:hover, .lb-card:hover, .analytics-kpi-card:hover, .pos-calc-card:hover, .emotion-insight-item:hover {
+/* 2 & 3. Mouse Hover: Y-axis offset (-4px), subtle base border, and localized spotlight border reflection */
+.glass-panel:not(.form-panel-box):hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active, .drop-zone:hover, .drop-zone:active)),
+.kpi-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active)),
+.ledger-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active)),
+.lb-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active)),
+.analytics-kpi-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active)),
+.pos-calc-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active)),
+.emotion-insight-item:hover:not(:has(button:hover, button:active, input:focus, select:focus, input:active, select:active, a:hover, a:active)) {
   transform: translateY(-4px) !important;
   border-color: rgba(255, 255, 255, 0.45) !important;
   box-shadow: 0 12px 45px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 235, 150, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.45) !important;
@@ -168,21 +175,36 @@ code, pre, .mono, .num, .day-number, .ledger-date, .stat-value, .calc-value, .dt
 
 /* All buttons cubic-bezier smooth transition */
 button, .btn-export, .tab-btn, .calendar-nav-btn, .btn-submit, .filter-btn, .img-badge, .drop-zone-remove, .modal-close, .storage-badge {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 button:hover, .btn-export:hover, .btn-submit:hover, .calendar-nav-btn:hover, .filter-btn:hover, .img-badge:hover, .modal-close:hover {
-  transform: translateY(-4px) !important;
+  transform: translateY(-3px) !important;
   border-color: rgba(255, 255, 255, 0.75) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 18px rgba(255, 235, 150, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 235, 150, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
 }
 
-/* 4. Touch/Click active: instant transform scale-96 for physical button feedback */
-button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .btn-submit:active, .filter-btn:active, .img-badge:active, .drop-zone-remove:active, .modal-close:active,
-.glass-panel:active, .kpi-card:active, .ledger-card:active, .lb-card:active, .analytics-kpi-card:active, .pos-calc-card:active {
+/* 4. Touch/Click active: instant transform scale-96 for physical button feedback ONLY on buttons or on cards when not interacting with buttons inside them! */
+button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .btn-submit:active, .filter-btn:active, .img-badge:active, .drop-zone-remove:active, .modal-close:active {
   transform: scale(0.96) !important;
-  transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: transform 0.08s cubic-bezier(0.16, 1, 0.3, 1) !important;
   filter: brightness(0.92);
+}
+
+.glass-panel:not(.form-panel-box):active:not(:has(button:active, input:active, select:active, textarea:active, a:active, .drop-zone:active)),
+.kpi-card:active:not(:has(button:active, input:active, select:active, textarea:active, a:active)),
+.ledger-card:active:not(:has(button:active, input:active, select:active, textarea:active, a:active)),
+.lb-card:active:not(:has(button:active, input:active, select:active, textarea:active, a:active)),
+.analytics-kpi-card:active:not(:has(button:active, input:active, select:active, textarea:active, a:active)),
+.pos-calc-card:active:not(:has(button:active, input:active, select:active, textarea:active, a:active)) {
+  transform: scale(0.975) !important;
+  transition: transform 0.08s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+}
+
+/* Ensure form panels and containers never jump or bounce when typing or clicking inside them */
+.glass-panel.form-panel-box:hover, .glass-panel.form-panel-box:active {
+  transform: none !important;
 }
 
 /* 5. Mouse-Follow Spotlight Border Ring & Inner Glass Glow (Only illuminates right under the mouse!) */
@@ -562,7 +584,7 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   background: rgba(212,175,55,0.06);
   cursor: pointer;
 }
-.calendar-day.has-trade:hover {
+.calendar-day.has-trade:hover:not(:has(button:hover, button:active, input:focus, select:focus, a:hover, a:active)) {
   transform: translateY(-4px) scale(1.03);
   border-color: #ffd700;
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.75), 0 8px 30px rgba(212, 175, 55, 0.45);
@@ -634,7 +656,7 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   flex-direction: column;
   gap: 6px;
 }
-.ledger-card:hover {
+.ledger-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, a:hover, a:active)) {
   transform: translateY(-3px) scale(1.01);
   border-color: var(--glass-border-hover);
   box-shadow: var(--shadow-gold);
@@ -1197,7 +1219,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   border: 1px solid var(--glass-border);
   transition: all var(--transition-smooth);
 }
-.analytics-kpi-card:hover {
+.analytics-kpi-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, a:hover, a:active)) {
   transform: translateY(-3px);
   border-color: var(--glass-border-hover);
   box-shadow: var(--shadow-gold);
@@ -1269,7 +1291,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   border: 1px solid var(--glass-border);
   transition: all var(--transition-smooth);
 }
-.lb-card:hover {
+.lb-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, a:hover, a:active)) {
   transform: translateY(-2px);
   border-color: var(--glass-border-hover);
   box-shadow: var(--shadow-gold);
@@ -1492,7 +1514,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   gap: 14px;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.day-trade-card:hover {
+.day-trade-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, a:hover, a:active)) {
   transform: translateY(-3px);
   border-color: var(--gold);
   background: rgba(30, 41, 59, 0.88);
@@ -1599,7 +1621,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   position: relative;
   overflow: hidden;
 }
-.calendar-day:hover {
+.calendar-day:hover:not(:has(button:hover, button:active, input:focus, select:focus, a:hover, a:active)) {
   transform: translateY(-4px) scale(1.03) !important;
   border-color: #ffd700 !important;
   background: rgba(30, 41, 59, 0.88) !important;
@@ -2040,7 +2062,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   text-align: left;
 }
-.strategy-matrix-card:hover {
+.strategy-matrix-card:hover:not(:has(button:hover, button:active, input:focus, select:focus, a:hover, a:active)) {
   transform: translateY(-6px);
   border-color: rgba(212, 175, 55, 0.5);
   box-shadow: 0 16px 45px rgba(212, 175, 55, 0.18), inset 0 0 20px rgba(212, 175, 55, 0.05);
