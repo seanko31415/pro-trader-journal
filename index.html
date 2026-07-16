@@ -2603,7 +2603,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
             <!-- Learning Notes Image Attachment -->
             <div class="form-group" style="margin-top:10px;">
               <div class="drop-zone learning-zone" id="dropZoneLearning" tabindex="0" style="padding:14px 18px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.2);">
-                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                <div class="drop-zone-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;width:100%;">
                   <div style="text-align:left;">
                     <div style="font-size:0.83rem;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:6px;"><i class="fas fa-book-open-reader" style="color:var(--blue);"></i> 學習心得專屬筆記附圖</div>
                     <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">支援 Ctrl+V 貼上、點擊或拖放上傳教材與筆記思維導圖 (獨立於 K 線圖)</div>
@@ -2613,7 +2613,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
                   </div>
                 </div>
                 <input type="file" id="fImageLearning" accept="image/*" style="display:none;">
-                <img class="drop-zone-preview" id="imgPreviewLearning" alt="心得附圖" style="max-height:130px;margin-top:10px;">
+                <img class="drop-zone-preview" id="imgPreviewLearning" alt="心得附圖" style="max-height:220px;margin-top:0;">
                 <button type="button" class="drop-zone-remove" id="imgRemoveLearning" title="移除心得附圖"><i class="fas fa-trash-can"></i> 刪除 / 重新選擇圖片</button>
               </div>
             </div>
