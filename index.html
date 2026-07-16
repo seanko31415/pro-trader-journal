@@ -195,7 +195,7 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(380px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(212, 175, 55, 0.15), rgba(56, 189, 248, 0.08), transparent 60%);
+  background: radial-gradient(220px circle at var(--mouse-x, -100px) var(--mouse-y, -100px), rgba(212, 175, 55, 0.1), rgba(56, 189, 248, 0.04), transparent 70%);
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
@@ -213,12 +213,11 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   border-radius: inherit;
   padding: 1.5px !important;
   background: radial-gradient(
-    320px circle at var(--mouse-x, -100%) var(--mouse-y, -100%),
-    rgba(255, 255, 255, 1.0) 0%,
-    rgba(255, 230, 130, 0.95) 25%,
-    rgba(212, 175, 55, 0.7) 50%,
-    rgba(56, 189, 248, 0.35) 75%,
-    transparent 90%
+    130px circle at var(--mouse-x, -100px) var(--mouse-y, -100px),
+    rgba(255, 235, 150, 0.7) 0%,
+    rgba(212, 175, 55, 0.4) 35%,
+    rgba(56, 189, 248, 0.15) 65%,
+    transparent 100%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -227,7 +226,6 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   transition: opacity 0.2s ease-out;
   pointer-events: none;
   z-index: 10;
-  filter: drop-shadow(0 0 8px rgba(255, 230, 130, 0.65));
 }
 .glass-panel:hover::after, .kpi-card:hover::after, .analytics-kpi-card:hover::after, .pos-calc-card:hover::after, .ledger-card:hover::after, .lb-card:hover::after, .btn-submit:hover::after, .btn-export:hover::after, .form-panel-box:hover::after, .day-trade-card:hover::after, .calendar-day:hover::after {
   opacity: 1;
@@ -1017,6 +1015,47 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   border-radius: var(--radius-md);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
   margin-top: 12px;
+}
+.drop-zone.has-image .drop-zone-title,
+.drop-zone.has-image .drop-zone-desc,
+.drop-zone.has-image .drop-zone-icon,
+.drop-zone.has-image .drop-zone-text {
+  display: none !important;
+}
+.drop-zone.has-image {
+  padding: 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(15, 23, 42, 0.75) !important;
+  border-style: solid !important;
+  border-color: rgba(212, 175, 55, 0.45) !important;
+}
+.drop-zone.has-image .drop-zone-preview {
+  margin-top: 0 !important;
+  max-width: 100% !important;
+  max-height: 280px !important;
+  object-fit: contain !important;
+  border-radius: var(--radius-md) !important;
+}
+.drop-zone.has-image .drop-zone-remove {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  margin-top: 0 !important;
+  padding: 5px 12px !important;
+  background: rgba(15, 23, 42, 0.9) !important;
+  border: 1px solid rgba(239, 68, 68, 0.8) !important;
+  color: #fca5a5 !important;
+  font-size: 0.78rem !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7) !important;
+  z-index: 25 !important;
+}
+.drop-zone.has-image .drop-zone-remove:hover {
+  background: #ef4444 !important;
+  color: #ffffff !important;
 }
 .drop-zone-remove {
   display: none;
@@ -2383,16 +2422,6 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
                   <span style="font-weight:700; color:var(--gold); font-size:0.9rem; display:flex; align-items:center; gap:6px;"><i class="fas fa-clock"></i> 快速選取或調整交易時間</span>
                   <button type="button" onclick="applyQuickTimeNow(event)" class="btn-export" style="margin:0; padding:4px 10px; height:28px; font-size:0.78rem; background:rgba(56,189,248,0.18); border-color:#38bdf8; color:#38bdf8; border-radius:6px; display:inline-flex; align-items:center; gap:4px; cursor:pointer;"><i class="fas fa-bolt"></i> 現在時間</button>
                 </div>
-                <!-- 四大核心時段快捷點選鈕 -->
-                <div style="margin-bottom:14px;">
-                  <div style="font-size:0.76rem; color:var(--text-secondary); margin-bottom:8px; font-weight:600;">⚡ 四大核心交鋒時段快速一鍵設定:</div>
-                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-                    <button type="button" onclick="applyQuickSessionTime('08:00', event)" style="padding:7px; background:rgba(244,114,182,0.15); border:1px solid rgba(244,114,182,0.4); color:#f472b6; border-radius:6px; font-size:0.78rem; font-weight:700; cursor:pointer; text-align:center;">🌏 亞洲開盤 (08:00)</button>
-                    <button type="button" onclick="applyQuickSessionTime('14:00', event)" style="padding:7px; background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.4); color:#38bdf8; border-radius:6px; font-size:0.78rem; font-weight:700; cursor:pointer; text-align:center;">🇬🇧 倫敦早盤 (14:00)</button>
-                    <button type="button" onclick="applyQuickSessionTime('19:00', event)" style="padding:7px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); color:#c084fc; border-radius:6px; font-size:0.78rem; font-weight:700; cursor:pointer; text-align:center;">🇺🇸 紐約盤 (19:00)</button>
-                    <button type="button" onclick="applyQuickSessionTime('23:00', event)" style="padding:7px; background:rgba(14,116,144,0.25); border:1px solid rgba(56,189,248,0.5); color:#38bdf8; border-radius:6px; font-size:0.78rem; font-weight:700; cursor:pointer; text-align:center;">🇬🇧 倫敦晚盤 (23:00)</button>
-                  </div>
-                </div>
                 <!-- Hour & Minute Instant Select -->
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; background:rgba(15,23,42,0.6); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
                   <div>
@@ -3476,6 +3505,7 @@ function setupDropZone(dzId, inputId, previewId, removeId, idx) {
     rm.style.display = 'none';
     prev.src = '';
     fImg.value = '';
+    dz.classList.remove('has-image');
     showToast('🗑️ 已自上傳框移除附圖截圖', 'info');
   });
 }
@@ -3564,6 +3594,8 @@ function handleDualImageFile(file, idx, prevEl, rmEl) {
     rmEl.style.display = 'inline-flex';
     rmEl.style.alignItems = 'center';
     rmEl.style.gap = '6px';
+    const dzEl = prevEl.closest('.drop-zone');
+    if (dzEl) dzEl.classList.add('has-image');
     const labelStr = idx === 1 ? '圖一 (大時框)' : (idx === 2 ? '圖二 (進場圖)' : '心得附圖');
     showToast(`${labelStr} 已自動高畫質壓縮優化`, 'success');
   };
@@ -3650,25 +3682,6 @@ function quickUpdateCustomTime() {
     input.dispatchEvent(new Event('input'));
     input.dispatchEvent(new Event('change'));
   }
-}
-
-function applyQuickSessionTime(timeStr, event) {
-  if (event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-  const input = document.getElementById('fTradeTime');
-  if (input) {
-    input.value = timeStr;
-    input.dispatchEvent(new Event('input'));
-    input.dispatchEvent(new Event('change'));
-  }
-  const parts = timeStr.split(':');
-  const hourSel = document.getElementById('customPickerHour');
-  const minSel = document.getElementById('customPickerMin');
-  if (hourSel && parts[0]) hourSel.value = parts[0];
-  if (minSel && parts[1]) minSel.value = parts[1];
-  closeCustomTimePopup();
 }
 
 function toggleCustomTimePopup(event) {
@@ -3928,6 +3941,7 @@ tradeForm.addEventListener('submit', e => {
   if (rm2) rm2.style.display = 'none';
   if (prevL) { prevL.style.display = 'none'; prevL.src = ''; }
   if (rmL) rmL.style.display = 'none';
+  document.querySelectorAll('.drop-zone').forEach(dz => dz.classList.remove('has-image'));
 
   document.getElementById('posCalcDisplay').style.display = 'none';
   document.getElementById('sessionDetectDisplay').style.display = 'none';
@@ -4937,16 +4951,23 @@ async function init() {
   renderAnalytics();
   autoCheckAndNotifyCleanOldTrades();
 
-  // Attach Mouse-Follow Spotlight coordinate tracker
-  document.addEventListener('mousemove', e => {
+  // Attach Mouse-Follow & Touch-Follow Spotlight coordinate tracker
+  const updateSpotlightCoords = (clientX, clientY) => {
     document.querySelectorAll('.glass-panel, .kpi-card, .analytics-kpi-card, .pos-calc-card, .ledger-card, .dashboard-health-panel, .drop-zone, .btn-submit, .btn-export, .form-panel-box, .day-trade-card, .strategy-matrix-card, .calendar-day').forEach(card => {
       const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
       card.style.setProperty('--mouse-x', `${x}px`);
       card.style.setProperty('--mouse-y', `${y}px`);
     });
-  });
+  };
+  document.addEventListener('mousemove', e => updateSpotlightCoords(e.clientX, e.clientY), { passive: true });
+  document.addEventListener('touchstart', e => {
+    if (e.touches && e.touches[0]) updateSpotlightCoords(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+  document.addEventListener('touchmove', e => {
+    if (e.touches && e.touches[0]) updateSpotlightCoords(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
   // Attach Day Detail Modal events
   const dayModalCloseBtn = document.getElementById('dayModalClose');
   if (dayModalCloseBtn) dayModalCloseBtn.addEventListener('click', closeDayDetailModal);
