@@ -2401,7 +2401,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
         <div class="glass-panel form-panel-box">
           <!-- Section 1: Market Basics -->
           <div class="form-section-title"><i class="fas fa-chart-candlestick"></i> 行情基礎</div>
-          <div class="form-row market-basics-row" style="margin-bottom:22px;">
+          <div class="form-row market-basics-row" style="margin-bottom:22px; position:relative; z-index:10000; overflow:visible;">
             <div class="form-group" style="position:relative;">
               <label>日期 <span class="required">*</span></label>
               <div style="position:relative; width:100%;">
@@ -2409,38 +2409,38 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
                 <i class="fas fa-calendar-alt" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--text-secondary); pointer-events:none; font-size:0.95rem;"></i>
               </div>
             </div>
-            <div class="form-group" style="position:relative; z-index:50;">
+            <div class="form-group" style="position:relative; z-index:10000; overflow:visible;">
               <label>交易時間 (HH:MM)</label>
               <div style="position:relative; width:100%; display:flex; align-items:center;">
-                <input type="text" class="form-control" id="fTradeTime" placeholder="鍵盤輸入(如14:30)或點擊展開快捷選單..." style="cursor:text; font-family:var(--font-mono); font-size:0.95rem; font-weight:700; color:#ffffff !important; background:rgba(15, 23, 42, 0.85); box-sizing:border-box; width:100%; max-width:100%; padding-right:76px; border:1px solid rgba(212,175,55,0.45); border-radius:8px; height:42px;" onclick="toggleCustomTimePopup(event)" title="可以直接用鍵盤輸入時間如 14:30，或點擊選擇右方快捷選單">
-                <button type="button" onclick="applyQuickTimeNow(event)" title="填入目前當前時間" style="position:absolute; right:38px; background:rgba(56,189,248,0.2); border:1px solid #38bdf8; color:#38bdf8; border-radius:5px; padding:3px 7px; font-size:0.75rem; font-weight:700; cursor:pointer; z-index:2;">現在</button>
-                <i class="fas fa-clock" onclick="toggleCustomTimePopup(event)" style="position:absolute; right:12px; color:var(--gold); cursor:pointer; font-size:1.1rem; z-index:2;" title="點擊展開四大核心時段快速選取與時間設定"></i>
+                <input type="text" class="form-control" id="fTradeTime" placeholder="鍵盤輸入(如14:30)或點擊展開快捷選單..." style="cursor:text; font-family:var(--font-mono); font-size:0.95rem; font-weight:700; color:#ffffff !important; background:rgba(15, 23, 42, 0.85); box-sizing:border-box; width:100%; max-width:100%; padding-right:76px; border:1px solid rgba(212,175,55,0.45); border-radius:8px; height:42px;" onclick="openCustomTimePopup(event)" onfocus="openCustomTimePopup(event)" title="可以直接用鍵盤輸入時間如 14:30，或點擊選擇右方快捷選單">
+                <button type="button" onclick="applyQuickTimeNow(event)" title="填入目前當前時間" style="position:absolute; right:36px; top:50%; transform:translateY(-50%); background:rgba(56,189,248,0.22); border:1px solid #38bdf8; color:#38bdf8; border-radius:5px; padding:3px 8px; font-size:0.75rem; font-weight:700; cursor:pointer; z-index:15; pointer-events:auto; touch-action:manipulation;">現在</button>
+                <i class="fas fa-clock" onclick="toggleCustomTimePopup(event)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--gold); cursor:pointer; font-size:1.1rem; z-index:15; pointer-events:auto;" title="點擊展開快捷選取與時間設定"></i>
               </div>
               <!-- Pitch-Black Custom Time Picker Popup Menu -->
-              <div id="customTimePopup" class="custom-time-popup" style="display:none; position:absolute; z-index:99999; background:#070a13 !important; border:1px solid var(--gold); border-radius:var(--radius-md); padding:16px; box-shadow:0 18px 50px rgba(0,0,0,0.98), 0 0 28px rgba(212,175,55,0.35); width:310px; top:100%; left:0; margin-top:6px; color:#ffffff !important; box-sizing:border-box;">
+              <div id="customTimePopup" class="custom-time-popup" style="display:none; position:absolute; z-index:100000; background:#070a13 !important; border:1px solid var(--gold); border-radius:var(--radius-md); padding:16px; box-shadow:0 18px 50px rgba(0,0,0,0.98), 0 0 28px rgba(212,175,55,0.35); width:310px; top:100%; left:0; margin-top:6px; color:#ffffff !important; box-sizing:border-box; pointer-events:auto;">
                 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.12); padding-bottom:10px; margin-bottom:12px;">
                   <span style="font-weight:700; color:var(--gold); font-size:0.9rem; display:flex; align-items:center; gap:6px;"><i class="fas fa-clock"></i> 快速選取或調整交易時間</span>
-                  <button type="button" onclick="applyQuickTimeNow(event)" class="btn-export" style="margin:0; padding:4px 10px; height:28px; font-size:0.78rem; background:rgba(56,189,248,0.18); border-color:#38bdf8; color:#38bdf8; border-radius:6px; display:inline-flex; align-items:center; gap:4px; cursor:pointer;"><i class="fas fa-bolt"></i> 現在時間</button>
+                  <button type="button" onclick="applyQuickTimeNow(event)" class="btn-export" style="margin:0; padding:4px 10px; height:28px; font-size:0.78rem; background:rgba(56,189,248,0.18); border-color:#38bdf8; color:#38bdf8; border-radius:6px; display:inline-flex; align-items:center; gap:4px; cursor:pointer; pointer-events:auto; touch-action:manipulation;"><i class="fas fa-bolt"></i> 現在時間</button>
                 </div>
                 <!-- Hour & Minute Instant Select -->
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; background:rgba(15,23,42,0.6); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
                   <div>
                     <div style="font-size:0.76rem; color:var(--text-secondary); margin-bottom:6px; font-weight:600; text-align:center;">時 (Hour)</div>
-                    <select id="customPickerHour" class="form-control" onchange="quickUpdateCustomTime()" style="width:100%; height:36px; background:#0b0f19 !important; color:#ffffff !important; border:1px solid rgba(255,255,255,0.25); border-radius:6px; padding:4px; font-family:var(--font-mono); font-size:0.95rem; text-align:center; cursor:pointer; color-scheme:dark !important;">
+                    <select id="customPickerHour" class="form-control" onchange="quickUpdateCustomTime()" style="width:100%; height:36px; background:#0b0f19 !important; color:#ffffff !important; border:1px solid rgba(255,255,255,0.25); border-radius:6px; padding:4px; font-family:var(--font-mono); font-size:0.95rem; text-align:center; cursor:pointer; color-scheme:dark !important; pointer-events:auto; touch-action:manipulation;">
                       <!-- JS fills 00-23 -->
                     </select>
                   </div>
                   <div>
                     <div style="font-size:0.76rem; color:var(--text-secondary); margin-bottom:6px; font-weight:600; text-align:center;">分 (Minute)</div>
-                    <select id="customPickerMin" class="form-control" onchange="quickUpdateCustomTime()" style="width:100%; height:36px; background:#0b0f19 !important; color:#ffffff !important; border:1px solid rgba(255,255,255,0.25); border-radius:6px; padding:4px; font-family:var(--font-mono); font-size:0.95rem; text-align:center; cursor:pointer; color-scheme:dark !important;">
+                    <select id="customPickerMin" class="form-control" onchange="quickUpdateCustomTime()" style="width:100%; height:36px; background:#0b0f19 !important; color:#ffffff !important; border:1px solid rgba(255,255,255,0.25); border-radius:6px; padding:4px; font-family:var(--font-mono); font-size:0.95rem; text-align:center; cursor:pointer; color-scheme:dark !important; pointer-events:auto; touch-action:manipulation;">
                       <!-- JS fills 00-59 -->
                     </select>
                   </div>
                 </div>
                 <div style="display:flex; justify-content:space-between; gap:8px;">
-                  <button type="button" onclick="clearCustomTime(event)" class="btn-export" style="flex:1; margin:0; padding:6px; height:36px; font-size:0.82rem; background:rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.45); color:#fca5a5; border-radius:8px; cursor:pointer;"><i class="fas fa-trash-alt"></i> 清除</button>
-                  <button type="button" onclick="closeCustomTimePopup(event)" class="btn-export" style="flex:1; margin:0; padding:6px; height:36px; font-size:0.82rem; background:rgba(148,163,184,0.15); border-color:rgba(148,163,184,0.45); color:#cbd5e1; border-radius:8px; cursor:pointer;">關閉</button>
-                  <button type="button" onclick="confirmCustomTime(event)" class="btn-submit" style="flex:1.4; margin:0; padding:6px; height:36px; font-size:0.85rem; background:var(--gold); border-color:var(--gold); color:#000; font-weight:800; border-radius:8px; cursor:pointer; box-shadow:0 4px 12px rgba(212,175,55,0.3);"><i class="fas fa-check"></i> 確定</button>
+                  <button type="button" onclick="clearCustomTime(event)" class="btn-export" style="flex:1; margin:0; padding:6px; height:36px; font-size:0.82rem; background:rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.45); color:#fca5a5; border-radius:8px; cursor:pointer; pointer-events:auto; touch-action:manipulation;"><i class="fas fa-trash-alt"></i> 清除</button>
+                  <button type="button" onclick="closeCustomTimePopup(event)" class="btn-export" style="flex:1; margin:0; padding:6px; height:36px; font-size:0.82rem; background:rgba(148,163,184,0.15); border-color:rgba(148,163,184,0.45); color:#cbd5e1; border-radius:8px; cursor:pointer; pointer-events:auto; touch-action:manipulation;">關閉</button>
+                  <button type="button" onclick="confirmCustomTime(event)" class="btn-submit" style="flex:1.4; margin:0; padding:6px; height:36px; font-size:0.85rem; background:var(--gold); border-color:var(--gold); color:#000; font-weight:800; border-radius:8px; cursor:pointer; box-shadow:0 4px 12px rgba(212,175,55,0.3); pointer-events:auto; touch-action:manipulation;"><i class="fas fa-check"></i> 確定</button>
                 </div>
               </div>
             </div>
@@ -3684,7 +3684,7 @@ function quickUpdateCustomTime() {
   }
 }
 
-function toggleCustomTimePopup(event) {
+function openCustomTimePopup(event) {
   if (event) {
     event.stopPropagation();
   }
@@ -3693,29 +3693,39 @@ function toggleCustomTimePopup(event) {
   const input = document.getElementById('fTradeTime');
   if (!popup || !input) return;
 
-  if (popup.style.display === 'none' || !popup.style.display) {
-    const val = input.value || '';
-    const hourSel = document.getElementById('customPickerHour');
-    const minSel = document.getElementById('customPickerMin');
-    if (val.includes(':')) {
-      const parts = val.split(':');
-      if (hourSel) hourSel.value = parts[0];
-      if (minSel) minSel.value = parts[1];
-    } else {
-      const now = new Date();
-      if (hourSel) hourSel.value = String(now.getHours()).padStart(2, '0');
-      if (minSel) minSel.value = String(now.getMinutes()).padStart(2, '0');
-    }
-    popup.style.display = 'block';
+  const val = input.value || '';
+  const hourSel = document.getElementById('customPickerHour');
+  const minSel = document.getElementById('customPickerMin');
+  if (val.includes(':')) {
+    const parts = val.split(':');
+    if (hourSel && parts[0]) hourSel.value = parts[0];
+    if (minSel && parts[1]) minSel.value = parts[1];
   } else {
-    popup.style.display = 'none';
+    const now = new Date();
+    if (hourSel) hourSel.value = String(now.getHours()).padStart(2, '0');
+    if (minSel) minSel.value = String(now.getMinutes()).padStart(2, '0');
+  }
+  popup.style.display = 'block';
+}
+
+function toggleCustomTimePopup(event) {
+  if (event) {
+    event.stopPropagation();
+  }
+  initCustomTimePicker();
+  const popup = document.getElementById('customTimePopup');
+  if (!popup) return;
+  if (popup.style.display === 'none' || !popup.style.display) {
+    openCustomTimePopup(event);
+  } else {
+    closeCustomTimePopup(event);
   }
 }
 
 function closeCustomTimePopup(event) {
   if (event) {
-    event.preventDefault();
-    event.stopPropagation();
+    if (event.preventDefault) event.preventDefault();
+    if (event.stopPropagation) event.stopPropagation();
   }
   const popup = document.getElementById('customTimePopup');
   if (popup) popup.style.display = 'none';
@@ -3723,8 +3733,8 @@ function closeCustomTimePopup(event) {
 
 function applyQuickTimeNow(event) {
   if (event) {
-    event.preventDefault();
-    event.stopPropagation();
+    if (event.preventDefault) event.preventDefault();
+    if (event.stopPropagation) event.stopPropagation();
   }
   const now = new Date();
   const h = String(now.getHours()).padStart(2, '0');
@@ -3740,21 +3750,26 @@ function applyQuickTimeNow(event) {
   if (hourSel) hourSel.value = h;
   if (minSel) minSel.value = m;
   closeCustomTimePopup();
+  showToast(`⚡ 已填入目前時間：${h}:${m}`, 'success');
 }
 
 function confirmCustomTime(event) {
   if (event) {
-    event.preventDefault();
-    event.stopPropagation();
+    if (event.preventDefault) event.preventDefault();
+    if (event.stopPropagation) event.stopPropagation();
   }
   quickUpdateCustomTime();
   closeCustomTimePopup();
+  const input = document.getElementById('fTradeTime');
+  if (input && input.value) {
+    showToast(`✅ 交易時間已確定設定為：${input.value}`, 'success');
+  }
 }
 
 function clearCustomTime(event) {
   if (event) {
-    event.preventDefault();
-    event.stopPropagation();
+    if (event.preventDefault) event.preventDefault();
+    if (event.stopPropagation) event.stopPropagation();
   }
   const input = document.getElementById('fTradeTime');
   if (input) {
@@ -3762,7 +3777,12 @@ function clearCustomTime(event) {
     input.dispatchEvent(new Event('input'));
     input.dispatchEvent(new Event('change'));
   }
+  const hourSel = document.getElementById('customPickerHour');
+  const minSel = document.getElementById('customPickerMin');
+  if (hourSel) hourSel.value = '12';
+  if (minSel) minSel.value = '00';
   closeCustomTimePopup();
+  showToast('🗑️ 已清除交易時間', 'info');
 }
 
 function isLegacyStrategy(name) {
@@ -4951,14 +4971,17 @@ async function init() {
   renderAnalytics();
   autoCheckAndNotifyCleanOldTrades();
 
-  // Attach Mouse-Follow & Touch-Follow Spotlight coordinate tracker
+  // Attach Mouse-Follow & Touch-Follow Spotlight coordinate tracker (Throttled with requestAnimationFrame for 0 delay/lag)
+  let _spotlightRaf = null;
   const updateSpotlightCoords = (clientX, clientY) => {
-    document.querySelectorAll('.glass-panel, .kpi-card, .analytics-kpi-card, .pos-calc-card, .ledger-card, .dashboard-health-panel, .drop-zone, .btn-submit, .btn-export, .form-panel-box, .day-trade-card, .strategy-matrix-card, .calendar-day').forEach(card => {
-      const rect = card.getBoundingClientRect();
-      const x = clientX - rect.left;
-      const y = clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
+    if (_spotlightRaf) return;
+    _spotlightRaf = requestAnimationFrame(() => {
+      _spotlightRaf = null;
+      document.querySelectorAll('.glass-panel, .kpi-card, .analytics-kpi-card, .pos-calc-card, .ledger-card, .dashboard-health-panel, .drop-zone, .btn-submit, .btn-export, .form-panel-box, .day-trade-card, .strategy-matrix-card, .calendar-day').forEach(card => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', `${clientX - rect.left}px`);
+        card.style.setProperty('--mouse-y', `${clientY - rect.top}px`);
+      });
     });
   };
   document.addEventListener('mousemove', e => updateSpotlightCoords(e.clientX, e.clientY), { passive: true });
