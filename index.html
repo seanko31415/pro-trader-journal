@@ -2736,7 +2736,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
     <div class="analytics-filter-bar" id="sessionFilterBar" style="margin-bottom:18px;">
       <span class="filter-label"><i class="fas fa-filter" style="margin-right:4px;color:var(--gold);"></i> 交易時段過濾:</span>
       <button class="filter-btn active" data-session="All">全部時段</button>
-      <button class="filter-btn" data-session="Asia">🌏 亞洲開盤 (08:00-12:00)</button>
+      <button class="filter-btn" data-session="Asia">Asia 亞洲開盤 (08:00-12:00)</button>
       <button class="filter-btn" data-session="London Early">🇬🇧 倫敦早盤 (14:00-17:05)</button>
       <button class="filter-btn" data-session="New York">🇺🇸 紐約盤 (19:00-23:00)</button>
       <button class="filter-btn" data-session="London Late">🇬🇧 倫敦晚盤 (23:00-00:05)</button>
@@ -3121,7 +3121,7 @@ const autoDetectSessionFromTime = detectSession;
 
 function getSessionLabel(session) {
   const map = {
-    'Asia': '🌏 亞洲開盤',
+    'Asia': 'Asia 亞洲開盤',
     'London Early': '🇬🇧 倫敦早盤',
     'London Late': '🇬🇧 倫敦晚盤',
     'London': '🇬🇧 倫敦早盤',
@@ -5385,7 +5385,7 @@ function renderDynamicRadar() {
   const closed = filtered.filter(t => t.status !== 'Open');
 
   const sessions = [
-    { key: 'Asia', label: '🌏 亞洲開盤 (08:00-12:00)', color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
+    { key: 'Asia', label: 'Asia 亞洲開盤 (08:00-12:00)', color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
     { key: 'London Early', label: '🇬🇧 倫敦早盤 (14:00-17:05)', color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
     { key: 'New York', label: '🇺🇸 紐約盤 (19:00-23:00)', color: '#d4af37', bg: 'rgba(212,175,55,0.1)' },
     { key: 'London Late', label: '🇬🇧 倫敦晚盤 (23:00-00:05)', color: '#a855f7', bg: 'rgba(168,85,247,0.1)' }
