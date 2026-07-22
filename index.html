@@ -745,6 +745,65 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
 .emotion-badge.revenge { color: var(--red); background: var(--red-bg); }
 .emotion-badge.anxious { color: var(--purple); background: var(--purple-bg); }
 
+/* Hero Currency Selection Buttons */
+.symbol-hero-btn {
+  flex: 1;
+  min-width: 140px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+}
+.symbol-hero-btn:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.15);
+}
+.symbol-hero-btn.active {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(212, 175, 55, 0.1) 100%);
+  border: 1.5px solid var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
+}
+
+/* Symbol Quick Selection Buttons */
+.symbol-quick-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+.symbol-quick-btn:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-1px);
+}
+.symbol-quick-btn.active {
+  background: rgba(212, 175, 55, 0.22);
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.28);
+}
+
 /* ---- KPI CARDS ---- */
 .kpi-grid {
   display: grid;
@@ -2366,8 +2425,8 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
       <button class="btn-export" id="btnExportPDF" title="匯出 PDF">
         <i class="fas fa-file-pdf"></i> 匯出 PDF
       </button>
-      <button class="btn-export" onclick="openCloudSyncModal()" title="設定全平台跨裝置同步與雲端備份中心" style="background:var(--gold-glow);border-color:var(--gold);color:var(--gold);">
-        <i class="fas fa-cloud-arrow-up"></i> 跨裝置雲端同步
+      <button class="btn-export" id="btnGoogleLogin" onclick="handleGoogleLogin()" title="Google 雲端帳號登入與全自動同步" style="background:rgba(66, 133, 244, 0.15); border-color:#4285f4; color:#4285f4; display: flex; align-items: center; gap: 6px;">
+        <i class="fab fa-google"></i> <span id="googleLoginBtnText">Google 登入</span>
       </button>
     </div>
   </header>
@@ -2403,9 +2462,16 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
       <div class="glass-panel ledger-panel">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
           <h3 style="margin:0;"><i class="fas fa-scroll"></i> 歷史交易流水帳</h3>
-          <button class="btn-submit" onclick="promptCleanOldTrades()" style="padding: 4px 12px; font-size: 0.75rem; background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.45); color: #fca5a5; box-shadow: none; border-radius: 6px; cursor: pointer;" title="清理三個月前的過期紀錄以釋放儲存空間">
-            <i class="fas fa-broom"></i> 清除3個月前舊單 (釋放空間)
-          </button>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <div style="display:flex;gap:4px;background:rgba(0,0,0,0.3);padding:3px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);" id="ledgerSymbolFilterGroup">
+              <button class="filter-btn active" onclick="filterLedgerBySymbol('ALL', this)" style="padding:3px 10px;font-size:0.75rem;font-weight:700;">全部標的</button>
+              <button class="filter-btn" onclick="filterLedgerBySymbol('BTC', this)" style="padding:3px 10px;font-size:0.75rem;font-weight:700;"><i class="fab fa-bitcoin" style="color:#f7931a;"></i> BTC</button>
+              <button class="filter-btn" onclick="filterLedgerBySymbol('ETH', this)" style="padding:3px 10px;font-size:0.75rem;font-weight:700;"><i class="fab fa-ethereum" style="color:#627eea;"></i> ETH</button>
+            </div>
+            <button class="btn-submit" onclick="promptCleanOldTrades()" style="padding: 4px 12px; font-size: 0.75rem; background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.45); color: #fca5a5; box-shadow: none; border-radius: 6px; cursor: pointer;" title="清理三個月前的過期紀錄以釋放儲存空間">
+              <i class="fas fa-broom"></i> 清除3個月前舊單
+            </button>
+          </div>
         </div>
         <div class="ledger-scroll" id="ledgerScroll"></div>
       </div>
@@ -2513,6 +2579,53 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
               </div>
             </div>
           </div>
+
+          <!-- Hero Currency Selection Section -->
+          <div class="glass-panel" style="background:rgba(212,175,55,0.06); border:1px solid rgba(212,175,55,0.3); border-radius:12px; padding:16px 18px; margin-bottom:20px; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <span style="font-size:0.95rem; font-weight:800; color:var(--gold); display:flex; align-items:center; gap:8px;">
+                <i class="fas fa-coins" style="font-size:1.1rem;"></i> 選擇交易幣種 / 標的 (Select Currency) <span class="required">*</span>
+              </span>
+              <span style="font-size:0.75rem; color:var(--text-secondary); background:rgba(255,255,255,0.08); padding:2px 10px; border-radius:10px;">一鍵點選或自由輸入</span>
+            </div>
+            
+            <!-- Quick Choice Buttons (BTC & ETH + custom options) -->
+            <div id="symbolQuickBtnContainer" style="display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
+              <button type="button" class="symbol-hero-btn active" data-symbol="BTC" onclick="selectQuickSymbol('BTC')">
+                <i class="fab fa-bitcoin" style="color:#f7931a; font-size:1.4rem;"></i>
+                <div style="text-align:left;">
+                  <div style="font-size:1rem; font-weight:900; line-height:1.2;">BTC</div>
+                  <div style="font-size:0.68rem; opacity:0.8;">Bitcoin 比特幣</div>
+                </div>
+              </button>
+              <button type="button" class="symbol-hero-btn" data-symbol="ETH" onclick="selectQuickSymbol('ETH')">
+                <i class="fab fa-ethereum" style="color:#627eea; font-size:1.4rem;"></i>
+                <div style="text-align:left;">
+                  <div style="font-size:1rem; font-weight:900; line-height:1.2;">ETH</div>
+                  <div style="font-size:0.68rem; opacity:0.8;">Ethereum 以太坊</div>
+                </div>
+              </button>
+            </div>
+
+            <!-- Input Field for custom currency -->
+            <div style="position:relative; width:100%;">
+              <input type="text" class="form-control" id="fSymbol" placeholder="✍️ 或手動輸入任何自訂幣種/標的 (如 SOL, DOGE, EURUSD, XAUUSD)..." value="BTC" required oninput="updateSymbolButtonsState()" style="font-family:var(--font-mono); font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:var(--gold); background:rgba(10, 15, 26, 0.9) !important; border:1.5px solid var(--gold) !important; height:44px; font-size:0.98rem; padding-left:14px; padding-right:40px;">
+              <i class="fas fa-edit" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--gold); pointer-events:none;"></i>
+            </div>
+          </div>
+
+          <!-- Permanent URL / Chart Permalink Section -->
+          <div class="form-group" style="margin-bottom:18px;">
+            <label style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span><i class="fas fa-link" style="color:#38bdf8; margin-right:4px;"></i> K線圖表 / 分析永久網址</span>
+              <span style="font-size:0.76rem; color:var(--text-muted); font-weight:normal;">貼上 TradingView 分析網址或永久連結</span>
+            </label>
+            <div style="position:relative; width:100%; display:flex; align-items:center;">
+              <input type="url" class="form-control" id="fTradeUrl" placeholder="請貼上 TradingView 分析永久網址 (如 https://www.tradingview.com/x/...)..." style="font-family:var(--font-mono); font-size:0.88rem; color:#38bdf8 !important; background:rgba(15, 23, 42, 0.85); border:1px solid rgba(56,189,248,0.35); padding-right:85px; height:42px;">
+              <button type="button" onclick="testOpenTradeUrl()" title="測試開啟輸入的網址" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:rgba(56,189,248,0.2); border:1px solid #38bdf8; color:#38bdf8; border-radius:6px; padding:4px 10px; font-size:0.75rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-external-link-alt"></i> 測試</button>
+            </div>
+          </div>
+
           <div class="form-row cols-2" style="gap:24px 28px; margin-bottom:12px;">
             <div class="form-group">
               <label>時間級別 <span class="required">*</span></label>
@@ -2962,6 +3075,9 @@ async function saveTrades() {
     if (localStorage.getItem('protrader_cloud_token')) {
       setTimeout(() => { try { pushToCloudSync(true); } catch(e){} }, 400);
     }
+    if (typeof googleAccessToken !== 'undefined' && googleAccessToken) {
+      setTimeout(() => { try { autoPushToGoogleDrive(); } catch(e){} }, 400);
+    }
   } catch(e) {}
 
   updateStorageStatus();
@@ -3340,6 +3456,7 @@ function openDayDetailModal(dateStr) {
             <span class="ledger-status-badge ${statusCls}" style="padding:1px 5px;font-size:0.65rem;">${statusLabel}</span>
           </div>
           <div class="dt-info-row">
+            <span style="background:rgba(212,175,55,0.15);color:var(--gold);padding:1px 6px;border-radius:4px;font-weight:700;font-size:0.72rem;margin-right:6px;font-family:var(--font-mono);"><i class="fas fa-coins" style="font-size:0.65rem;margin-right:2px;"></i>${t.symbol || 'BTC'}</span>
             <span>${t.timeframe || ''} ${t.strategy || '未知策略'}</span>
             ${emotionBadge}
           </div>
@@ -3351,6 +3468,7 @@ function openDayDetailModal(dateStr) {
             <div style="font-size:0.7rem;color:var(--text-muted);">${t.status === 'Open' ? '進行中' : (pctVal >= 0 ? '獲利' : '虧損')}</div>
           </div>
           <div class="dt-actions">
+            ${t.tradeUrl ? `<a href="${t.tradeUrl.startsWith('http') ? t.tradeUrl : 'https://' + t.tradeUrl}" target="_blank" rel="noopener noreferrer" class="dt-btn" title="開啟K線分析永久網址" style="color:var(--blue);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;"><i class="fas fa-external-link-alt"></i></a>` : ''}
             ${(t.img || t.img1 || t.img2 || t.imgSpeedRatio || t.imgLearning) ? `<button class="dt-btn" onclick="openImageModal('${t.id}')" title="查看K線與心得截圖"><i class="fas fa-image"></i></button>` : ''}
             <button class="dt-btn del" onclick="deleteDayTrade('${t.id}')" title="刪除此筆記錄"><i class="fas fa-trash-alt"></i></button>
           </div>
@@ -3454,7 +3572,7 @@ window.openTradeDetailModal = function(tradeId, event) {
   const emotionBadge = t.emotion ? `<span class="emotion-badge ${t.emotion.toLowerCase()}">${t.emotion}</span>` : '<span style="color:var(--text-muted)">—</span>';
 
   if (title) title.innerHTML = `<i class="fas fa-file-invoice-dollar" style="color:var(--gold);"></i> 「${t.date || '未知日期'}${t.tradeTime ? ' ' + t.tradeTime : ''}」 單筆交易覆盤明細`;
-  if (subtitle) subtitle.innerHTML = `策略: <strong style="color:var(--gold);">${t.strategy || '未知策略'}</strong> | 方向: <strong class="ledger-dir ${dirCls}" style="padding:2px 8px;border-radius:4px;">${dirLabel}</strong> | 狀態: <strong class="ledger-status-badge ${statusCls}" style="padding:2px 8px;border-radius:4px;">${statusLabel}</strong>`;
+  if (subtitle) subtitle.innerHTML = `幣種: <strong style="color:var(--gold);font-family:var(--font-mono);">${t.symbol || 'BTC'}</strong> | 策略: <strong style="color:var(--gold);">${t.strategy || '未知策略'}</strong> | 方向: <strong class="ledger-dir ${dirCls}" style="padding:2px 8px;border-radius:4px;">${dirLabel}</strong> | 狀態: <strong class="ledger-status-badge ${statusCls}" style="padding:2px 8px;border-radius:4px;">${statusLabel}</strong>`;
 
   let imgsHtml = '';
   if (t.img1 || t.img2 || t.imgSpeedRatio || t.imgLearning || t.img) {
@@ -3479,6 +3597,17 @@ window.openTradeDetailModal = function(tradeId, event) {
       <button onclick="openTradeDetailModal('${nextTrade ? nextTrade.id : ''}')" ${!nextTrade ? 'disabled' : ''} style="padding:6px 14px;border-radius:6px;background:${nextTrade ? 'rgba(212,175,55,0.22)' : 'rgba(255,255,255,0.05)'};border:1px solid ${nextTrade ? 'var(--gold)' : 'rgba(255,255,255,0.1)'};color:${nextTrade ? 'var(--gold)' : 'var(--text-muted)'};cursor:${nextTrade ? 'pointer' : 'not-allowed'};font-weight:700;transition:all 0.2s;">下一筆覆盤 (${nextTrade ? nextTrade.date : '無'}) <i class="fas fa-arrow-right"></i></button>
     </div>` : ''}
 
+    ${t.tradeUrl ? `<div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.3);border-radius:10px;padding:14px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <i class="fas fa-link" style="color:#38bdf8;font-size:1.2rem;"></i>
+        <div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:2px;">K線圖表 / 分析永久網址</div>
+          <a href="${t.tradeUrl.startsWith('http') ? t.tradeUrl : 'https://' + t.tradeUrl}" target="_blank" rel="noopener noreferrer" style="font-size:0.88rem;color:#38bdf8;font-weight:700;font-family:var(--font-mono);word-break:break-all;text-decoration:underline;">${t.tradeUrl}</a>
+        </div>
+      </div>
+      <a href="${t.tradeUrl.startsWith('http') ? t.tradeUrl : 'https://' + t.tradeUrl}" target="_blank" rel="noopener noreferrer" class="btn-submit" style="padding:6px 14px;font-size:0.82rem;width:auto;background:rgba(56,189,248,0.22);border-color:#38bdf8;color:#38bdf8;display:inline-flex;align-items:center;gap:6px;text-decoration:none;"><i class="fas fa-external-link-alt"></i> 前往開啟永久網址</a>
+    </div>` : ''}
+
     <div style="background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
       <div>
         <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:4px;">單筆最終損益百分比</div>
@@ -3491,7 +3620,11 @@ window.openTradeDetailModal = function(tradeId, event) {
       </div>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px;">
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);padding:12px 14px;border-radius:8px;">
+        <div style="font-size:0.75rem;color:var(--text-muted);">交易幣種 / 標的</div>
+        <div style="font-size:0.95rem;font-weight:800;color:var(--gold);margin-top:4px;font-family:var(--font-mono);"><i class="fas fa-coins" style="font-size:0.8rem;margin-right:4px;"></i>${t.symbol || 'BTC'}</div>
+      </div>
       <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);padding:12px 14px;border-radius:8px;">
         <div style="font-size:0.75rem;color:var(--text-muted);">市場偏見 / 大局觀</div>
         <div style="font-size:0.9rem;font-weight:700;color:var(--text-primary);margin-top:4px;">${t.bias || '—'}</div>
@@ -3561,6 +3694,9 @@ window.editTradeDirectly = function(tradeId) {
   const setVal = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined && val !== null) el.value = val; };
   setVal('fDate', t.date || '');
   setVal('fTradeTime', t.tradeTime || '');
+  setVal('fSymbol', t.symbol || 'BTC');
+  updateSymbolButtonsState();
+  setVal('fTradeUrl', t.tradeUrl || '');
   setVal('fTimeframe', t.timeframe || 'M15');
   setVal('fDirection', t.direction || 'LONG');
   setVal('fStatus', t.status || 'TP');
@@ -3658,13 +3794,30 @@ document.getElementById('calNext').addEventListener('click', () => {
 });
 
 /* ---- 4b. LEDGER ---- */
+let activeSymbolFilter = 'ALL';
+
+function filterLedgerBySymbol(symbol, btn) {
+  activeSymbolFilter = symbol;
+  document.querySelectorAll('#ledgerSymbolFilterGroup .filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderLedger();
+}
+
 function renderLedger() {
   const el = document.getElementById('ledgerScroll');
   if (trades.length === 0) {
     el.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>尚無交易記錄<br>前往「記錄交易」新增第一筆</p></div>`;
     return;
   }
-  const sorted = [...trades].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  let filtered = [...trades];
+  if (activeSymbolFilter !== 'ALL') {
+    filtered = filtered.filter(t => (t.symbol || 'BTC').toUpperCase() === activeSymbolFilter.toUpperCase());
+  }
+  if (filtered.length === 0) {
+    el.innerHTML = `<div class="empty-state"><i class="fas fa-filter"></i><p>尚無「${activeSymbolFilter}」之交易紀錄</p></div>`;
+    return;
+  }
+  const sorted = filtered.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
   el.innerHTML = sorted.map(t => {
     const pctVal = parseFloat(t.pct) || 0;
     const pctCls = t.status === 'Open' ? 'open' : (pctVal >= 0 ? 'win' : 'loss');
@@ -3686,11 +3839,13 @@ function renderLedger() {
           </div>
         </div>
         <div class="ledger-card-bottom">
+          <span class="ledger-symbol" style="background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.35);color:var(--gold);padding:1px 6px;border-radius:4px;font-size:0.75rem;font-weight:700;font-family:var(--font-mono);"><i class="fas fa-coins" style="margin-right:3px;font-size:0.68rem;"></i>${t.symbol || 'BTC'}</span>
           <span class="ledger-dir ${dirCls}">${dirLabel}</span>
           <span class="ledger-status-badge ${statusCls}">${statusLabel}</span>
           <span class="session-badge ${sessionCls}">${getSessionLabel(session)}</span>
           ${emotionBadge}
           <span class="ledger-strategy">${t.strategy || '—'}</span>
+          ${t.tradeUrl ? `<a href="${t.tradeUrl.startsWith('http') ? t.tradeUrl : 'https://' + t.tradeUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" title="開啟K線分析永久網址 (${t.tradeUrl})" style="color:#38bdf8;font-size:0.72rem;padding:1px 6px;border-radius:4px;background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.3);text-decoration:none;display:inline-flex;align-items:center;gap:3px;font-weight:600;"><i class="fas fa-link" style="font-size:0.65rem;"></i>網址</a>` : ''}
         </div>
       </div>`;
   }).join('');
@@ -4346,6 +4501,109 @@ function loadSavedStrategyOptions() {
   });
 }
 
+/* ---- Symbol Quick Selection Helpers ---- */
+function selectQuickSymbol(sym) {
+  const input = document.getElementById('fSymbol');
+  if (input) {
+    input.value = sym;
+    updateSymbolButtonsState();
+  }
+}
+
+function updateSymbolButtonsState() {
+  const input = document.getElementById('fSymbol');
+  if (!input) return;
+  const currentVal = (input.value || '').trim().toUpperCase();
+  document.querySelectorAll('.symbol-hero-btn, .symbol-quick-btn').forEach(btn => {
+    if ((btn.dataset.symbol || '').toUpperCase() === currentVal) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+function loadSavedSymbolOptions() {
+  const container = document.getElementById('symbolQuickBtnContainer');
+  if (!container) return;
+
+  let saved = [];
+  try {
+    saved = JSON.parse(localStorage.getItem('protrader_custom_symbols') || '[]');
+  } catch(e) { saved = []; }
+
+  if (Array.isArray(trades)) {
+    trades.forEach(t => {
+      if (t.symbol && typeof t.symbol === 'string') {
+        const s = t.symbol.trim().toUpperCase();
+        if (s && s !== 'BTC' && s !== 'ETH' && !saved.includes(s)) {
+          saved.push(s);
+        }
+      }
+    });
+  }
+
+  const presets = ['BTC', 'ETH'];
+  const allSymbols = [...presets];
+  saved.forEach(s => {
+    if (s && !allSymbols.includes(s.toUpperCase())) {
+      allSymbols.push(s.toUpperCase());
+    }
+  });
+
+  const currentInputVal = (document.getElementById('fSymbol')?.value || 'BTC').trim().toUpperCase();
+
+  container.innerHTML = allSymbols.map(sym => {
+    let iconHtml = '<i class="fas fa-coins" style="color:var(--gold); font-size:1.4rem;"></i>';
+    let subText = '加密貨幣 / 標的';
+    if (sym === 'BTC') {
+      iconHtml = '<i class="fab fa-bitcoin" style="color:#f7931a; font-size:1.4rem;"></i>';
+      subText = 'Bitcoin 比特幣';
+    } else if (sym === 'ETH') {
+      iconHtml = '<i class="fab fa-ethereum" style="color:#627eea; font-size:1.4rem;"></i>';
+      subText = 'Ethereum 以太坊';
+    }
+    const isActive = sym === currentInputVal;
+    return `<button type="button" class="symbol-hero-btn ${isActive ? 'active' : ''}" data-symbol="${sym}" onclick="selectQuickSymbol('${sym}')">
+      ${iconHtml}
+      <div style="text-align:left;">
+        <div style="font-size:1rem; font-weight:900; line-height:1.2;">${sym}</div>
+        <div style="font-size:0.68rem; opacity:0.8;">${subText}</div>
+      </div>
+    </button>`;
+  }).join('');
+
+  updateSymbolButtonsState();
+}
+
+function addCustomSymbolToQuickButtons(symbol) {
+  if (!symbol) return;
+  const symUpper = symbol.trim().toUpperCase();
+  if (!symUpper || symUpper === 'BTC' || symUpper === 'ETH') return;
+
+  let saved = [];
+  try {
+    saved = JSON.parse(localStorage.getItem('protrader_custom_symbols') || '[]');
+  } catch(e) { saved = []; }
+
+  if (!saved.includes(symUpper)) {
+    saved.push(symUpper);
+    localStorage.setItem('protrader_custom_symbols', JSON.stringify(saved));
+    loadSavedSymbolOptions();
+  }
+}
+
+function testOpenTradeUrl() {
+  const input = document.getElementById('fTradeUrl');
+  const url = (input?.value || '').trim();
+  if (!url) {
+    showToast('⚠️ 請先輸入或貼上永久網址！', 'warning');
+    return;
+  }
+  const validUrl = (url.startsWith('http://') || url.startsWith('https://')) ? url : 'https://' + url;
+  window.open(validUrl, '_blank');
+}
+
 const fStrategySelect = document.getElementById('fStrategy');
 const fStrategyCustomInput = document.getElementById('fStrategyCustom');
 if (fStrategySelect && fStrategyCustomInput) {
@@ -4376,11 +4634,15 @@ tradeForm.addEventListener('submit', e => {
     }
   }
 
+  const symbolVal = (document.getElementById('fSymbol')?.value || 'BTC').trim().toUpperCase();
+
   const trade = {
     id: Date.now(),
     date: document.getElementById('fDate').value,
     tradeTime: tradeTime,
     session: session,
+    symbol: symbolVal,
+    tradeUrl: (document.getElementById('fTradeUrl')?.value || '').trim(),
     timeframe: document.getElementById('fTimeframe').value,
     direction: document.getElementById('fDirection').value,
     strategy: chosenStrategy,
@@ -4404,11 +4666,17 @@ tradeForm.addEventListener('submit', e => {
 
   trades.push(trade);
   addCustomStrategyToOptions(trade.strategy);
+  addCustomSymbolToQuickButtons(trade.symbol);
   saveTrades();
 
   // Keep the date you just saved instead of jumping back to today, so you can smoothly record multiple trades for the exact same day!
   const savedDate = trade.date;
   tradeForm.reset();
+  const fSymInput = document.getElementById('fSymbol');
+  if (fSymInput) fSymInput.value = 'BTC';
+  updateSymbolButtonsState();
+  const fUrlInput = document.getElementById('fTradeUrl');
+  if (fUrlInput) fUrlInput.value = '';
   if (fStrategyCustomInput) {
     fStrategyCustomInput.style.display = 'none';
     fStrategyCustomInput.required = false;
@@ -4972,13 +5240,33 @@ async function fetchGoogleUserProfile() {
 
 function updateGoogleAuthStatusUI() {
   const statusEl = document.getElementById('googleAuthStatus');
-  if (!statusEl) return;
+  const topBtnText = document.getElementById('googleLoginBtnText');
+  const topBtn = document.getElementById('btnGoogleLogin');
+  
   if (googleAccessToken && googleUserInfo) {
-    statusEl.innerHTML = `<span style="color:var(--green);"><i class="fas fa-circle-check"></i> 已登入授權 (${googleUserInfo.email || googleUserInfo.name})</span>`;
+    if (statusEl) statusEl.innerHTML = `<span style="color:var(--green);"><i class="fas fa-circle-check"></i> 已登入授權 (${(googleUserInfo.email || googleUserInfo.name || '使用者')})</span>`;
+    if (topBtnText) topBtnText.innerText = `已登入: ${(googleUserInfo.name || (googleUserInfo.email ? googleUserInfo.email.split('@')[0] : '使用者'))}`;
+    if (topBtn) {
+      topBtn.style.borderColor = 'var(--green)';
+      topBtn.style.color = 'var(--green)';
+      topBtn.style.background = 'rgba(16, 185, 129, 0.15)';
+    }
   } else if (googleAccessToken) {
-    statusEl.innerHTML = `<span style="color:var(--green);"><i class="fas fa-circle-check"></i> 已登入授權 Google Drive</span>`;
+    if (statusEl) statusEl.innerHTML = `<span style="color:var(--green);"><i class="fas fa-circle-check"></i> 已登入授權 Google Drive</span>`;
+    if (topBtnText) topBtnText.innerText = `已登入 (自動同步中)`;
+    if (topBtn) {
+      topBtn.style.borderColor = 'var(--green)';
+      topBtn.style.color = 'var(--green)';
+      topBtn.style.background = 'rgba(16, 185, 129, 0.15)';
+    }
   } else {
-    statusEl.innerHTML = `<span style="color:var(--amber);"><i class="fas fa-circle-exclamation"></i> 未登入授權</span>`;
+    if (statusEl) statusEl.innerHTML = `<span style="color:var(--amber);"><i class="fas fa-circle-exclamation"></i> 未登入授權</span>`;
+    if (topBtnText) topBtnText.innerText = `Google 登入`;
+    if (topBtn) {
+      topBtn.style.borderColor = '#4285f4';
+      topBtn.style.color = '#4285f4';
+      topBtn.style.background = 'rgba(66, 133, 244, 0.15)';
+    }
   }
 }
 
@@ -4995,45 +5283,48 @@ function saveGoogleClientId() {
   initGoogleIdentity();
 }
 
-function loginToGoogleDrive() {
-  const savedId = localStorage.getItem('pt_google_client_id');
+function handleGoogleLogin() {
+  if (googleAccessToken) {
+    showToast('✅ 已經登入 Google 雲端！系統會在背景自動為您同步所有資料。', 'success');
+    autoPullFromGoogleDrive();
+    return;
+  }
+  const savedId = localStorage.getItem('pt_google_client_id') || DEFAULT_GOOGLE_CLIENT_ID;
   if (!savedId) {
-    showToast('請先在步驟 1 填入並儲存您的 Google Client ID，才能喚起 Google 授權視窗！', 'error');
-    const inp = document.getElementById('googleClientIdInput');
-    if (inp) inp.focus();
+    showToast('系統缺少 Google Client ID！', 'error');
     return;
   }
   if (!gapiTokenClient) {
     initGoogleIdentity();
   }
   if (gapiTokenClient) {
+    gapiTokenClient.callback = (tokenResponse) => {
+      if (tokenResponse && tokenResponse.access_token) {
+        googleAccessToken = tokenResponse.access_token;
+        showToast('🎉 Google 登入成功！準備拉取雲端資料...', 'success');
+        fetchGoogleUserProfile();
+        autoPullFromGoogleDrive();
+      } else {
+        showToast('❌ Google 登入授權遭取消或發生錯誤', 'error');
+      }
+    };
     gapiTokenClient.requestAccessToken({ prompt: '' });
   } else {
-    showToast('❌ Google 授權模組尚未準備就緒，請確認網路連線或 Client ID 是否正確', 'error');
+    showToast('❌ Google 授權模組尚未準備就緒，請確認網路連線', 'error');
   }
 }
 
-async function pushToGoogleDrive() {
-  if (!googleAccessToken) {
-    showToast('請先點擊「登入 Google 雲端授權」登入並取得授權！', 'error');
-    loginToGoogleDrive();
-    return;
-  }
-  showToast('⏳ 正在打包全站單據與多媒體附圖，準備上傳 Google Drive...', 'info');
+function loginToGoogleDrive() {
+  handleGoogleLogin();
+}
+
+async function autoPushToGoogleDrive() {
+  if (!googleAccessToken) return;
   try {
     const searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='pro_trader_journal_backup.json' and trashed=false&spaces=drive", {
       headers: { Authorization: `Bearer ${googleAccessToken}` }
     });
-    if (!searchRes.ok) {
-      if (searchRes.status === 401) {
-        googleAccessToken = null;
-        updateGoogleAuthStatusUI();
-        showToast('🔑 授權已過期，請重新登入 Google 雲端硬碟', 'error');
-      } else {
-        throw new Error('Drive API search error');
-      }
-      return;
-    }
+    if (!searchRes.ok) return;
     const searchData = await searchRes.json();
     const existingFileId = searchData.files && searchData.files.length > 0 ? searchData.files[0].id : null;
 
@@ -5045,7 +5336,7 @@ async function pushToGoogleDrive() {
     const jsonStr = JSON.stringify(exportPayload, null, 2);
 
     if (existingFileId) {
-      const patchRes = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existingFileId}?uploadType=media`, {
+      await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existingFileId}?uploadType=media`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${googleAccessToken}`,
@@ -5053,24 +5344,15 @@ async function pushToGoogleDrive() {
         },
         body: jsonStr
       });
-      if (!patchRes.ok) throw new Error('Drive PATCH error');
-      showToast('✅ 成功覆蓋同步！最新交易紀錄與截圖已完整儲存於您的 Google Drive (`pro_trader_journal_backup.json`)！', 'success');
     } else {
-      const metadata = {
-        name: 'pro_trader_journal_backup.json',
-        mimeType: 'application/json'
-      };
+      const metadata = { name: 'pro_trader_journal_backup.json', mimeType: 'application/json' };
       const boundary = '-------ProTraderJournalBoundary' + Math.random().toString(36).substring(2);
       const multipartBody = 
-        `--${boundary}\r\n` +
-        `Content-Type: application/json; charset=UTF-8\r\n\r\n` +
-        JSON.stringify(metadata) + `\r\n` +
-        `--${boundary}\r\n` +
-        `Content-Type: application/json\r\n\r\n` +
-        jsonStr + `\r\n` +
-        `--${boundary}--`;
+        `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n` +
+        JSON.stringify(metadata) + `\r\n--${boundary}\r\nContent-Type: application/json\r\n\r\n` +
+        jsonStr + `\r\n--${boundary}--`;
 
-      const postRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+      await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${googleAccessToken}`,
@@ -5078,66 +5360,70 @@ async function pushToGoogleDrive() {
         },
         body: multipartBody
       });
-      if (!postRes.ok) throw new Error('Drive POST error');
-      showToast('🎉 成功在您的 Google 雲端硬碟建立 `pro_trader_journal_backup.json` 並完成首次備份！', 'success');
     }
   } catch (err) {
-    console.error('Google Drive push error:', err);
-    showToast('❌ 上傳 Google Drive 發生錯誤，請檢查網路連線或授權權限', 'error');
+    console.error('Auto Push error:', err);
   }
 }
 
-async function pullFromGoogleDrive() {
-  if (!googleAccessToken) {
-    showToast('請先點擊「登入 Google 雲端授權」登入並取得授權！', 'error');
-    loginToGoogleDrive();
-    return;
-  }
-  showToast('⏳ 正在去您的 Google Drive 尋找 `pro_trader_journal_backup.json` 下載中...', 'info');
+async function autoPullFromGoogleDrive() {
+  if (!googleAccessToken) return;
+  showToast('⏳ 正在從 Google 雲端拉取最新資料...', 'info');
   try {
     const searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='pro_trader_journal_backup.json' and trashed=false&spaces=drive", {
       headers: { Authorization: `Bearer ${googleAccessToken}` }
     });
-    if (!searchRes.ok) {
-      if (searchRes.status === 401) {
-        googleAccessToken = null;
-        updateGoogleAuthStatusUI();
-        showToast('🔑 授權已過期，請重新登入 Google 雲端硬碟', 'error');
-      } else {
-        throw new Error('Drive API search error');
-      }
-      return;
-    }
+    if (!searchRes.ok) throw new Error('Drive search fail');
     const searchData = await searchRes.json();
     if (!searchData.files || searchData.files.length === 0) {
-      showToast('⚠️ 您的 Google 雲端硬碟中尚未找到備份檔案 `pro_trader_journal_backup.json`，請先在原裝置點擊備份上傳！', 'error');
+      showToast('⚠️ 您在 Google 雲端尚未有交易紀錄，目前為全新狀態！', 'info');
+      autoPushToGoogleDrive();
       return;
     }
     const fileId = searchData.files[0].id;
     const downloadRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
       headers: { Authorization: `Bearer ${googleAccessToken}` }
     });
-    if (!downloadRes.ok) throw new Error('Drive download error');
+    if (!downloadRes.ok) throw new Error('Download fail');
     const json = await downloadRes.json();
     const imported = json.trades || (json.record ? json.record.trades : json);
-    if (!Array.isArray(imported)) throw new Error('Drive file data format invalid');
+    if (!Array.isArray(imported)) throw new Error('Format invalid');
+    
     const updatedAt = json.updatedAt ? new Date(json.updatedAt).toLocaleString() : '未知時間';
-
-    if (!confirm(`☁️ 【Google 雲端硬碟還原確認】\n\n自您的 Google Drive ('pro_trader_journal_backup.json') 成功下載到 ${imported.length} 筆交易單紀錄。\n最後備份時間：${updatedAt}\n\n確定要在本裝置匯入並覆蓋現有紀錄嗎？`)) return;
+    
+    if (trades.length > 0) {
+      if (!confirm(`☁️ 【Google 雲端同步】\n\n雲端有 ${imported.length} 筆紀錄 (更新於 ${updatedAt})。\n您本地有 ${trades.length} 筆。\n是否要用雲端資料覆蓋本地資料？`)) {
+        return;
+      }
+    }
 
     trades = imported;
-    await saveTrades();
+    try {
+        await dbHelper.saveAll(trades);
+        const lightTrades = trades.map(({ img, img1, img2, imgSpeedRatio, imgLearning, ...rest }) => rest);
+        localStorage.setItem('protrader_trades', JSON.stringify(lightTrades));
+    } catch(e) {}
+
     renderDashboard();
     renderAnalytics();
-    closeCloudSyncModal();
-    showToast(`🎉 成功從 Google Drive 還原 ${trades.length} 筆跨裝置紀錄！`, 'success');
+    
+    if (typeof closeCloudSyncModal === 'function') closeCloudSyncModal();
+    showToast(`🎉 成功從雲端同步了 ${trades.length} 筆紀錄！`, 'success');
   } catch (err) {
-    console.error('Google Drive pull error:', err);
-    showToast('❌ 下載 Google Drive 備份時發生錯誤，請確認網路與授權權限', 'error');
+    console.error('Auto Pull error:', err);
+    showToast('❌ 自動拉取雲端資料失敗', 'error');
   }
 }
 
-/* ---- 6c. Emotion Correlation Insight ---- */
+async function pushToGoogleDrive() {
+  showToast('⏳ 正在手動上傳 Google Drive...', 'info');
+  await autoPushToGoogleDrive();
+  showToast('✅ 成功覆蓋同步！', 'success');
+}
+
+async function pullFromGoogleDrive() {
+  await autoPullFromGoogleDrive();
+}
 function renderEmotionInsight() {
   const grid = document.getElementById('emotionInsightGrid');
   const filtered = getFilteredTrades();
@@ -5680,7 +5966,7 @@ async function init() {
     }
   } catch (err) {
     console.error('IndexedDB error, fallback to localStorage:', err);
-    trades = JSON.parse(localStorage.getItem('protrader_trades') || '[]');
+    try { trades = JSON.parse(localStorage.getItem('protrader_trades') || '[]'); } catch(e) { trades = []; }
   }
 
   // Request persistent storage lock from browser to ensure IndexedDB is never cleared
@@ -5692,6 +5978,7 @@ async function init() {
 
   updateStorageStatus();
   loadSavedStrategyOptions();
+  loadSavedSymbolOptions();
   renderDashboard();
   renderAnalytics();
   window._dashboardRenderedOnce = true;
