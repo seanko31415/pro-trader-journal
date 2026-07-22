@@ -2580,49 +2580,20 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
             </div>
           </div>
 
-          <!-- Hero Currency Selection Section -->
-          <div class="glass-panel" style="background:rgba(212,175,55,0.06); border:1px solid rgba(212,175,55,0.3); border-radius:12px; padding:16px 18px; margin-bottom:20px; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-              <span style="font-size:0.95rem; font-weight:800; color:var(--gold); display:flex; align-items:center; gap:8px;">
-                <i class="fas fa-coins" style="font-size:1.1rem;"></i> 選擇交易幣種 / 標的 (Select Currency) <span class="required">*</span>
-              </span>
-              <span style="font-size:0.75rem; color:var(--text-secondary); background:rgba(255,255,255,0.08); padding:2px 10px; border-radius:10px;">一鍵點選或自由輸入</span>
-            </div>
-            
-            <!-- Quick Choice Buttons (BTC & ETH + custom options) -->
-            <div id="symbolQuickBtnContainer" style="display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
-              <button type="button" class="symbol-hero-btn active" data-symbol="BTC" onclick="selectQuickSymbol('BTC')">
-                <i class="fab fa-bitcoin" style="color:#f7931a; font-size:1.4rem;"></i>
-                <div style="text-align:left;">
-                  <div style="font-size:1rem; font-weight:900; line-height:1.2;">BTC</div>
-                  <div style="font-size:0.68rem; opacity:0.8;">Bitcoin 比特幣</div>
-                </div>
-              </button>
-              <button type="button" class="symbol-hero-btn" data-symbol="ETH" onclick="selectQuickSymbol('ETH')">
-                <i class="fab fa-ethereum" style="color:#627eea; font-size:1.4rem;"></i>
-                <div style="text-align:left;">
-                  <div style="font-size:1rem; font-weight:900; line-height:1.2;">ETH</div>
-                  <div style="font-size:0.68rem; opacity:0.8;">Ethereum 以太坊</div>
-                </div>
-              </button>
-            </div>
-
-            <!-- Input Field for custom currency -->
-            <div style="position:relative; width:100%;">
-              <input type="text" class="form-control" id="fSymbol" placeholder="✍️ 或手動輸入任何自訂幣種/標的 (如 SOL, DOGE, EURUSD, XAUUSD)..." value="BTC" required oninput="updateSymbolButtonsState()" style="font-family:var(--font-mono); font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:var(--gold); background:rgba(10, 15, 26, 0.9) !important; border:1.5px solid var(--gold) !important; height:44px; font-size:0.98rem; padding-left:14px; padding-right:40px;">
-              <i class="fas fa-edit" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--gold); pointer-events:none;"></i>
-            </div>
-          </div>
-
-          <!-- Permanent URL / Chart Permalink Section -->
+          <!-- Simplified Currency Selection Section -->
           <div class="form-group" style="margin-bottom:18px;">
-            <label style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <span><i class="fas fa-link" style="color:#38bdf8; margin-right:4px;"></i> K線圖表 / 分析永久網址</span>
-              <span style="font-size:0.76rem; color:var(--text-muted); font-weight:normal;">貼上 TradingView 分析網址或永久連結</span>
-            </label>
-            <div style="position:relative; width:100%; display:flex; align-items:center;">
-              <input type="url" class="form-control" id="fTradeUrl" placeholder="請貼上 TradingView 分析永久網址 (如 https://www.tradingview.com/x/...)..." style="font-family:var(--font-mono); font-size:0.88rem; color:#38bdf8 !important; background:rgba(15, 23, 42, 0.85); border:1px solid rgba(56,189,248,0.35); padding-right:85px; height:42px;">
-              <button type="button" onclick="testOpenTradeUrl()" title="測試開啟輸入的網址" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:rgba(56,189,248,0.2); border:1px solid #38bdf8; color:#38bdf8; border-radius:6px; padding:4px 10px; font-size:0.75rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-external-link-alt"></i> 測試</button>
+            <label>選擇交易幣種 / 標的 (Select Currency) <span class="required">*</span></label>
+            <div id="symbolQuickBtnContainer" style="display:flex; gap:10px; margin-bottom:10px;">
+              <button type="button" class="symbol-hero-btn active" data-symbol="BTC" style="justify-content:center;" onclick="selectQuickSymbol('BTC')">
+                <i class="fab fa-bitcoin" style="color:#f7931a; font-size:1.2rem;"></i> BTC
+              </button>
+              <button type="button" class="symbol-hero-btn" data-symbol="ETH" style="justify-content:center;" onclick="selectQuickSymbol('ETH')">
+                <i class="fab fa-ethereum" style="color:#627eea; font-size:1.2rem;"></i> ETH
+              </button>
+            </div>
+            <div style="position:relative; width:100%;">
+              <input type="text" class="form-control" id="fSymbol" placeholder="✍️ 或手動輸入自訂幣種 (如 SOL, XAUUSD)..." value="BTC" required oninput="updateSymbolButtonsState()" style="font-family:var(--font-mono); font-weight:800; text-transform:uppercase; color:var(--gold); border:1px solid var(--gold) !important; padding-left:14px; font-size:0.95rem; height:42px;">
+              <i class="fas fa-edit" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--gold); pointer-events:none;"></i>
             </div>
           </div>
 
@@ -2829,14 +2800,17 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
             </div>
           </div>
 
-          <div class="form-actions" style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);">
-            <button type="submit" class="btn-submit" id="btnSubmitTrade" style="width:100%;justify-content:center;font-size:1rem;padding:15px;">
-              <i class="fas fa-save"></i> 儲存交易紀錄至無限資料庫 (自動高畫質雙圖對照)
-            </button>
-          </div>
         </div>
       </div>
 
+      <!-- Full-Width Save Button (Spans across the bottom of both columns) -->
+      <div style="grid-column: 1 / -1; margin-top: -10px;">
+        <div class="glass-panel form-panel-box" style="padding: 16px 28px !important; text-align: center; border-color: var(--gold) !important; background: rgba(212, 175, 55, 0.05) !important;">
+          <button type="submit" class="btn-submit" id="btnSubmitTrade" style="width:100%; justify-content:center; font-size:1.15rem; padding:18px; box-shadow: 0 8px 30px rgba(212, 175, 55, 0.25);">
+            <i class="fas fa-save"></i> 儲存交易紀錄至無限資料庫 (自動背景雲端同步)
+          </button>
+        </div>
+      </div>
     </form>
   </section>
 
