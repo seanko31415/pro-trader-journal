@@ -5149,6 +5149,10 @@ let googleUserInfo = null;
 const DEFAULT_GOOGLE_CLIENT_ID = '246719222938-ev0rq3chhdlpjpteo1vfuboccqo1ftu8.apps.googleusercontent.com';
 
 function initGoogleIdentity() {
+  if (window.location.protocol === 'file:') {
+    showToast('⚠️ Google 登入不支援 file:// 本機端開啟，請發布至線上或使用 Local Server！', 'error');
+  }
+
   const gIdInput = document.getElementById('googleClientIdInput');
   let savedId = localStorage.getItem('pt_google_client_id');
 
@@ -5177,7 +5181,8 @@ function initGoogleIdentity() {
           showToast('🎉 Google 授權成功！已連線您的 Google 雲端硬碟 15GB 空間。', 'success');
           fetchGoogleUserProfile();
         } else {
-          showToast('❌ Google 登入授權遭取消或發生錯誤', 'error');
+          console.error('Google Auth Error:', tokenResponse);
+          showToast('❌ 授權失敗: ' + (tokenResponse.error_description || tokenResponse.error || '未完成驗證或已被封鎖儲存權'), 'error');
         }
       },
     });
@@ -5268,10 +5273,11 @@ function handleGoogleLogin() {
         fetchGoogleUserProfile();
         autoPullFromGoogleDrive();
       } else {
-        showToast('❌ Google 登入授權遭取消或發生錯誤', 'error');
+        console.error('Google Auth Error:', tokenResponse);
+        showToast('❌ 授權失敗: ' + (tokenResponse.error_description || tokenResponse.error || '未完成驗證或已被封鎖儲存權'), 'error');
       }
     };
-    gapiTokenClient.requestAccessToken({ prompt: '' });
+    gapiTokenClient.requestAccessToken();
   } else {
     showToast('❌ Google 授權模組尚未準備就緒，請確認網路連線', 'error');
   }
