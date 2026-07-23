@@ -5286,7 +5286,7 @@ function openGoogleProfile() {
     document.getElementById('googleProfileName').innerText = googleUserInfo.name || '使用者';
     document.getElementById('googleProfileEmail').innerText = googleUserInfo.email || '';
     if (googleUserInfo.picture) {
-      document.getElementById('googleProfileAvatarContainer').innerHTML = <img src="" alt="Avatar" style="width:72px; height:72px; border-radius:50%; border:2px solid var(--gold);">;
+      document.getElementById('googleProfileAvatarContainer').innerHTML = `<img src="${googleUserInfo.picture}" alt="Avatar" style="width:72px; height:72px; border-radius:50%; border:2px solid var(--gold);">`;
     }
   }
   modal.classList.add('active');
