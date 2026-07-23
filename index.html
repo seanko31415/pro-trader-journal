@@ -2299,12 +2299,21 @@
       align-items: stretch;
     }
 
-    .journal-col-left,
+    .journal-col-left {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      height: 100%;
+      position: relative;
+      z-index: 99999;
+    }
     .journal-col-right {
       display: flex;
       flex-direction: column;
       gap: 16px;
       height: 100%;
+      position: relative;
+      z-index: 1;
     }
 
     .form-panel-box {
@@ -2765,10 +2774,10 @@
 
       /* 平板下行情基礎與所有表單雙欄自動降為單垂直直列，100% 寬度不重疊不破框 */
       .market-basics-row {
-        display: flex !important;
-        flex-direction: column !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
         width: 100% !important;
-        gap: 18px !important;
+        gap: 16px !important;
       }
 
       .form-row.cols-3,
@@ -2815,7 +2824,6 @@
         grid-template-columns: 1fr !important;
       }
 
-      .market-basics-row,
       .form-row.cols-2,
       .form-row.cols-3,
       .form-row.cols-4 {
@@ -2857,7 +2865,6 @@
         grid-template-columns: 1fr 1fr;
       }
 
-      .market-basics-row,
       .form-row.cols-3,
       .form-row.cols-2,
       .form-row.cols-4 {
