@@ -5289,12 +5289,12 @@ function openGoogleProfile() {
       document.getElementById('googleProfileAvatarContainer').innerHTML = `<img src="${googleUserInfo.picture}" alt="Avatar" style="width:72px; height:72px; border-radius:50%; border:2px solid var(--gold);">`;
     }
   }
-  modal.classList.add('active');
+  modal.classList.add('show');
 }
 
 function closeGoogleProfile() {
   const modal = document.getElementById('modalGoogleProfile');
-  if (modal) modal.classList.remove('active');
+  if (modal) modal.classList.remove('show');
 }
 
 function logoutGoogle() {
