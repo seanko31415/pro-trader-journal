@@ -2069,9 +2069,9 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   .sm-grid { grid-template-columns: 1fr !important; }
   .table-scroll { width: 100% !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
   /* 平板下行情基礎與所有表單雙欄自動降為單垂直直列，100% 寬度不重疊不破框 */
-  .market-basics-row { grid-template-columns: minmax(0, 1fr) !important; gap: 18px !important; }
-  .form-row.cols-3, .form-row.cols-4 { grid-template-columns: minmax(0, 1fr) !important; gap: 18px !important; }
-  .form-row.cols-2 { grid-template-columns: minmax(0, 1fr) !important; gap: 18px !important; }
+  .market-basics-row { display: flex !important; flex-direction: column !important; width: 100% !important; gap: 18px !important; }
+  .form-row.cols-3, .form-row.cols-4 { display: flex !important; flex-direction: column !important; width: 100% !important; gap: 18px !important; }
+  .form-row.cols-2 { display: flex !important; flex-direction: column !important; width: 100% !important; gap: 18px !important; }
   .form-panel-box { padding: 22px 20px !important; }
 }
 @media (max-width: 820px) {
@@ -2080,7 +2080,9 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   .tab-btn { white-space: nowrap; flex-shrink: 0; }
   .journal-form-grid, .dual-dropzone-grid { grid-template-columns: 1fr !important; }
   .market-basics-row, .form-row.cols-2, .form-row.cols-3, .form-row.cols-4 {
-    grid-template-columns: minmax(0, 1fr) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
     gap: 16px !important;
   }
   .form-control {
@@ -2100,7 +2102,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   .tab-btn { padding: 10px 16px; font-size: 0.78rem; }
   .kpi-grid { grid-template-columns: 1fr 1fr; }
   .analytics-kpi-row { grid-template-columns: 1fr 1fr; }
-  .form-row.cols-3, .form-row.cols-2, .form-row.cols-4 { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .market-basics-row, .form-row.cols-3, .form-row.cols-2, .form-row.cols-4 { display: flex; flex-direction: column; width: 100%; gap: 16px; }
   .journal-form { padding: 20px 16px; }
   .calendar-grid { gap: 3px; }
   .calendar-day { min-height: 56px; padding: 4px 2px; gap: 4px; }
@@ -2702,6 +2704,15 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
             <textarea class="form-control" id="fReason" rows="5" style="min-height: 145px !important;" placeholder="詳述你的進場邏輯、共振訊號、資金流向與止損止盈規劃..." required></textarea>
           </div>
 
+          <!-- Section 5: Permanent URL -->
+          <div class="form-section-title" style="margin-top:22px;"><i class="fas fa-link"></i> 圖表分析永久網址 (TradingView 等)</div>
+          <div class="form-group">
+            <div style="position:relative; width:100%; display:flex; align-items:center;">
+              <input type="url" class="form-control" id="fTradeUrl" placeholder="貼上 TradingView 或其他覆盤網站的永久網址連結..." style="width:100%; max-width:100%; padding-right:90px; box-sizing:border-box; font-family:var(--font-mono); font-size:0.85rem;">
+              <button type="button" class="btn-export" onclick="testOpenTradeUrl()" title="測試開啟網址" style="position:absolute; right:6px; top:50%; transform:translateY(-50%); height:30px; padding:0 12px; font-size:0.75rem; margin:0; border-radius:6px;"><i class="fas fa-external-link-alt"></i> 測試</button>
+            </div>
+          </div>
+
           </div>
       </div>
 
@@ -2794,6 +2805,10 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
         </div>
       </div>
 
+      <!-- Submit Button Row -->
+      <div style="grid-column: 1 / -1; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 20px;">
+        <button type="submit" class="btn-submit" style="width: 100%; max-width: 420px; padding: 16px; font-size: 1.15rem; font-weight: 800; border-radius: var(--radius-xl); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);"><i class="fas fa-save"></i> 儲存交易紀錄</button>
+      </div>
       
     </form>
   </section>
