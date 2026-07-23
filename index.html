@@ -2794,12 +2794,15 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
 
         </div>
 
-        <!-- Submit Button (Bottom Right, inside the right panel) -->
-        <div style="display: flex; justify-content: flex-end; margin-top: 24px; padding: 20px; background: rgba(0,0,0,0.25); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); width: 100%;">
-          <button type="submit" class="btn-submit" style="width: auto; padding: 16px 48px; font-size: 1.15rem; font-weight: 800; border-radius: var(--radius-xl); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); transition: all 0.3s;"><i class="fas fa-save"></i> 儲存交易紀錄</button>
-        </div>
-
       </div> <!-- Close form-panel-box -->
+      </div> <!-- Close journal-col-right -->
+
+      <!-- Submit Button (Spanning full width, centered) -->
+      <div class="glass-panel" style="grid-column: 1 / -1; display: flex; justify-content: center; align-items: center; padding: 35px 20px; margin-top: 15px; border-radius: var(--radius-xl); background: rgba(20,20,20,0.4); border: 1px solid rgba(255,255,255,0.08);">
+        <button type="submit" class="btn-submit" style="width: auto; min-width: 380px; padding: 20px 60px; font-size: 1.4rem; font-weight: 800; border-radius: var(--radius-xl); box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4); transition: all 0.3s; letter-spacing: 2px;">
+          <i class="fas fa-save" style="margin-right: 12px; font-size: 1.5rem;"></i> 儲存交易紀錄
+        </button>
+      </div>
 
     </form>
   </section>
@@ -2968,18 +2971,30 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
        MODAL: Google Profile & Logout
        ========================================== -->
   <div class="modal-overlay" id="modalGoogleProfile">
-    <div class="modal-content" style="max-width:400px; text-align:center;">
-      <div class="modal-header">
-        <h2 style="font-size: 1.25rem;"><i class="fab fa-google" style="color:#4285F4;"></i> Google 帳號狀態</h2>
-        <button class="close-modal" onclick="closeGoogleProfile()"><i class="fas fa-times"></i></button>
+    <div class="modal-content" style="max-width:420px; text-align:center; padding:0; overflow:hidden; border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-xl);">
+      
+      <!-- Banner Background -->
+      <div style="height: 120px; background: linear-gradient(135deg, rgba(66, 133, 244, 0.8), rgba(15, 15, 15, 0.9)); position: relative;">
+        <button class="close-modal" onclick="closeGoogleProfile()" style="position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,0.5); border-radius: 50%; width: 36px; height: 36px; color: white;"><i class="fas fa-times"></i></button>
       </div>
-      <div class="modal-body" style="padding: 24px 0 10px 0;">
-        <div id="googleProfileAvatarContainer" style="margin-bottom: 16px;">
-          <i class="fas fa-user-circle" style="font-size: 4rem; color: var(--text-muted);"></i>
+
+      <!-- Avatar Overlapping Banner -->
+      <div style="margin-top: -50px; position: relative; z-index: 2;">
+        <div id="googleProfileAvatarContainer" style="display:inline-block; border-radius:50%; padding:4px; background:var(--bg-card); box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+          <i class="fas fa-user-circle" style="font-size: 5rem; color: var(--text-muted);"></i>
         </div>
-        <h3 id="googleProfileName" style="font-size: 1.3rem; margin-bottom: 6px; color: var(--text-primary); font-weight: 700;">使用者</h3>
-        <p id="googleProfileEmail" style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 28px;">email@example.com</p>
-        <button class="btn-submit" onclick="logoutGoogle()" style="background: rgba(239, 68, 68, 0.15) !important; border-color: rgba(239, 68, 68, 0.5) !important; color: #ef4444 !important; width: 100%;"><i class="fas fa-sign-out-alt"></i> 安全登出</button>
+      </div>
+
+      <div class="modal-body" style="padding: 16px 32px 32px 32px;">
+        <h3 id="googleProfileName" style="font-size: 1.5rem; margin-bottom: 8px; color: var(--text-primary); font-weight: 800; letter-spacing: 0.5px;">使用者</h3>
+        <p id="googleProfileEmail" style="font-size: 1rem; color: var(--text-muted); margin-bottom: 32px;">email@example.com</p>
+        
+        <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: left;">
+          <div style="font-size: 0.9rem; color: var(--gold); font-weight: 600; margin-bottom: 8px;"><i class="fas fa-cloud-check"></i> 雲端硬碟已連結</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">您的交易紀錄將會自動安全地備份至您個人的 Google Drive 隱藏應用程式資料夾中。</div>
+        </div>
+
+        <button class="btn-submit" onclick="logoutGoogle()" style="background: linear-gradient(135deg, rgba(239,68,68,0.2), rgba(239,68,68,0.05)) !important; border: 1px solid rgba(239, 68, 68, 0.4) !important; color: #ef4444 !important; width: 100%; border-radius: 12px; padding: 14px; font-weight: 700; font-size: 1.05rem; transition: all 0.3s;"><i class="fas fa-sign-out-alt"></i> 登出帳號並清除授權</button>
       </div>
     </div>
   </div>
