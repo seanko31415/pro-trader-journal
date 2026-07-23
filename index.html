@@ -14,6 +14,7 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
+body { overflow-x: hidden; width: 100vw; max-width: 100%; }
 /* ========================================================================
    0. CSS CUSTOM PROPERTIES (Design Tokens)
    ======================================================================== */
@@ -406,6 +407,7 @@ button:active, .btn-export:active, .tab-btn:active, .calendar-nav-btn:active, .b
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  max-width: 100%;
 }
 .btn-export {
   display: inline-flex;
@@ -2064,8 +2066,8 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
   .analytics-top { grid-template-columns: 1fr !important; }
   .analytics-kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-  .journal-form-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
-  .dual-dropzone-grid { grid-template-columns: 1fr !important; gap: 18px !important; }
+  .journal-form-grid { display: flex !important; flex-direction: column !important; width: 100% !important; gap: 24px !important; }
+  .dual-dropzone-grid { display: flex !important; flex-direction: column !important; width: 100% !important; gap: 18px !important; }
   .sm-grid { grid-template-columns: 1fr !important; }
   .table-scroll { width: 100% !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
   /* 平板下行情基礎與所有表單雙欄自動降為單垂直直列，100% 寬度不重疊不破框 */
