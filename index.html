@@ -3467,7 +3467,7 @@
               </div>
               <div style="position:relative; width:100%;">
                 <input type="text" class="form-control" id="fSymbol" placeholder="✍️ 或手動輸入自訂幣種 (如 SOL, XAUUSD)..."
-                  value="BTC" required oninput="updateSymbolButtonsState()"
+                  value="BTC" oninput="updateSymbolButtonsState()"
                   style="font-family:var(--font-mono); font-weight:800; text-transform:uppercase; color:var(--gold); border:1px solid var(--gold) !important; padding-left:14px; font-size:0.95rem; height:42px;">
                 <i class="fas fa-edit"
                   style="position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--gold); pointer-events:none;"></i>
@@ -3477,7 +3477,7 @@
             <div class="form-row cols-2" style="gap:24px 28px; margin-bottom:12px;">
               <div class="form-group">
                 <label>時間級別 <span class="required">*</span></label>
-                <select class="form-control" id="fTimeframe" required>
+                <select class="form-control" id="fTimeframe">
                   <option value="">請選擇...</option>
                   <option value="M1">M1</option>
                   <option value="M5">M5</option>
@@ -3491,7 +3491,7 @@
               </div>
               <div class="form-group">
                 <label>方向 <span class="required">*</span></label>
-                <select class="form-control" id="fDirection" required>
+                <select class="form-control" id="fDirection">
                   <option value="">請選擇...</option>
                   <option value="Long">多 Long</option>
                   <option value="Short">空 Short</option>
@@ -3510,7 +3510,7 @@
             <div class="form-row cols-2">
               <div class="form-group">
                 <label>交易策略 <span class="required">*</span></label>
-                <select class="form-control" id="fStrategy" required style="cursor:pointer;">
+                <select class="form-control" id="fStrategy" style="cursor:pointer;">
                   <option value="">請選擇交易策略...</option>
                   <option value="3+1">⚡ 3+1</option>
                   <option value="馬刺">🔥 馬刺</option>
@@ -3528,7 +3528,7 @@
             <div class="form-row cols-2" style="margin-top:14px;">
               <div class="form-group">
                 <label>訂單狀態 <span class="required">*</span></label>
-                <select class="form-control" id="fStatus" required>
+                <select class="form-control" id="fStatus">
                   <option value="">請選擇...</option>
                   <option value="TP">止盈 Take Profit</option>
                   <option value="SL">止損 Stop Loss</option>
@@ -5493,7 +5493,7 @@
 
     /* ---- Symbol Quick Selection Helpers ---- */
     function selectQuickSymbol(sym) {
-      const input = document.getElementById('fSymbol');
+      const input = document.getElementById('fSymbolHidden');
       if (input) {
         input.value = sym;
         updateSymbolButtonsState();
@@ -5501,7 +5501,7 @@
     }
 
     function updateSymbolButtonsState() {
-      const input = document.getElementById('fSymbol');
+      const input = document.getElementById('fSymbolHidden');
       if (!input) return;
       const currentVal = (input.value || '').trim().toUpperCase();
       document.querySelectorAll('.symbol-hero-btn, .symbol-quick-btn').forEach(btn => {
@@ -5541,7 +5541,7 @@
         }
       });
 
-      const currentInputVal = (document.getElementById('fSymbol')?.value || 'BTC').trim().toUpperCase();
+      const currentInputVal = (document.getElementById('fSymbolHidden')?.value || 'BTC').trim().toUpperCase();
 
       container.innerHTML = allSymbols.map(sym => {
         let iconHtml = '<i class="fas fa-coins" style="color:var(--gold); font-size:1.4rem;"></i>';
@@ -5629,7 +5629,7 @@
         }
       }
 
-      const symbolVal = (document.getElementById('fSymbol')?.value || 'BTC').trim().toUpperCase();
+      const symbolVal = (document.getElementById('fSymbolHidden')?.value || 'BTC').trim().toUpperCase();
 
       const trade = {
         id: Date.now(),
@@ -5667,7 +5667,7 @@
       // Keep the date you just saved instead of jumping back to today, so you can smoothly record multiple trades for the exact same day!
       const savedDate = trade.date;
       tradeForm.reset();
-      const fSymInput = document.getElementById('fSymbol');
+      const fSymInput = document.getElementById('fSymbolHidden');
       if (fSymInput) fSymInput.value = 'BTC';
       updateSymbolButtonsState();
       const fUrlInput = document.getElementById('fTradeUrl');
