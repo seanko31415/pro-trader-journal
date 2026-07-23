@@ -6369,6 +6369,15 @@
         const searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='pro_trader_journal_backup.json' and trashed=false&spaces=drive", {
           headers: { Authorization: `Bearer ${googleAccessToken}` }
         });
+        if (searchRes.status === 401 || searchRes.status === 403) {
+          showToast('⚠️ Google 雲端連線已過期，請重新登入以同步此筆交易！', 'error');
+          googleAccessToken = null;
+          const statusEl = document.getElementById('cloudSyncStatus');
+          if (statusEl) statusEl.innerHTML = `<span style="color:var(--text-muted);"><i class="fas fa-cloud-upload-alt"></i> 尚未連接雲端</span>`;
+          const topBtnText = document.getElementById('googleLoginBtnText');
+          if (topBtnText) topBtnText.innerText = '登入 Google 同步';
+          return;
+        }
         if (!searchRes.ok) return;
         const searchData = await searchRes.json();
         const existingFileId = searchData.files && searchData.files.length > 0 ? searchData.files[0].id : null;
