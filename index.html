@@ -2704,6 +2704,7 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
             <textarea class="form-control" id="fReason" rows="5" style="min-height: 145px !important;" placeholder="詳述你的進場邏輯、共振訊號、資金流向與止損止盈規劃..." required></textarea>
           </div>
       </div>
+    </div> <!-- Close journal-col-left -->
 
       <!-- RIGHT COLUMN: Learning Notes, Dedicated Image, and DUAL K-LINE CHARTS -->
       <div class="journal-col-right">
@@ -2796,8 +2797,8 @@ select.form-control option { background: #1e293b; color: var(--text-primary); }
       </div> <!-- Close form-panel-box -->
 
       <!-- Submit Button (Bottom Right, Below both columns) -->
-      <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 24px; margin-bottom: 10px; width: 100%;">
-        <button type="submit" class="btn-submit" style="width: auto; padding: 14px 40px; font-size: 1.15rem; font-weight: 800; border-radius: var(--radius-xl); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);"><i class="fas fa-save"></i> 儲存交易紀錄</button>
+      <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 30px; margin-bottom: 20px; padding-right: 8px; width: 100%;">
+        <button type="submit" class="btn-submit" style="width: auto; padding: 16px 48px; font-size: 1.15rem; font-weight: 800; border-radius: var(--radius-xl); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); transition: all 0.3s;"><i class="fas fa-save"></i> 儲存交易紀錄</button>
       </div>
 
     </form>
@@ -5151,9 +5152,12 @@ const DEFAULT_GOOGLE_CLIENT_ID = '246719222938-ev0rq3chhdlpjpteo1vfuboccqo1ftu8.
 function initGoogleIdentity() {
   if (window.location.protocol === 'file:') {
     showToast('⚠️ Google 登入不支援 file:// 本機端開啟，請發布至線上或使用 Local Server！', 'error');
-  } else if (window.location.hostname === 'seanko31415.github.io' && localStorage.getItem('pt_google_client_id') === DEFAULT_GOOGLE_CLIENT_ID) {
-    showToast('⚠️ 嚴重警告：您正在線上網站使用預設的 Google Client ID！這會導致「已封鎖儲存權」錯誤。請至設定頁面輸入您自己的 Client ID！', 'error');
-    alert('Google 登入設定錯誤：\n\n系統偵測到您正在 seanko31415.github.io 上使用「預設」的 Google Client ID。\n\n預設的 Client ID 並沒有把這個網址加入白名單，因此必定會出現「封鎖儲存權」或「未完成驗證」的錯誤！\n\n請您務必到 Google Cloud Console 申請自己的 OAuth Client ID，然後在系統的設定畫面中填入！');
+  } else {
+    let checkId = localStorage.getItem('pt_google_client_id');
+    if (window.location.hostname === 'seanko31415.github.io' && (!checkId || checkId === DEFAULT_GOOGLE_CLIENT_ID)) {
+      showToast('⚠️ 嚴重警告：您正在線上網站使用預設的 Google Client ID！這會導致「已封鎖儲存權」錯誤。請至設定頁面輸入您自己的 Client ID！', 'error');
+      alert('Google 登入設定錯誤：\n\n系統偵測到您正在 seanko31415.github.io 上使用「預設」的 Google Client ID。\n\n預設的 Client ID 並沒有把這個網址加入白名單，因此必定會出現「封鎖儲存權」或「未完成驗證」的錯誤！\n\n請您務必到 Google Cloud Console 申請自己的 OAuth Client ID，然後在右上角的設定畫面中填入！');
+    }
   }
 
   const gIdInput = document.getElementById('googleClientIdInput');
