@@ -7067,6 +7067,7 @@
       }
 
       updateStorageStatus();
+      if (typeof initGoogleIdentity === 'function') initGoogleIdentity();
       loadSavedStrategyOptions();
       loadSavedSymbolOptions();
       renderDashboard();
