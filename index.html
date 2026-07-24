@@ -3456,13 +3456,11 @@
             <div class="form-group" style="margin-bottom:18px;">
               <label>選擇交易幣種 / 標的 (Select Currency) <span class="required">*</span></label>
               <div id="symbolQuickBtnContainer" style="display:flex; gap:10px; margin-bottom:10px;">
-                <button type="button" class="symbol-hero-btn active" data-symbol="BTC" style="justify-content:center;"
-                  onclick="selectQuickSymbol('BTC')">
-                  <i class="fab fa-bitcoin" style="color:#f7931a; font-size:1.2rem;"></i> BTC
+                <button type="button" class="symbol-hero-btn active" data-symbol="BTC" style="justify-content:center;">
+                  <i class="fab fa-bitcoin" style="color:#f7931a; font-size:1.2rem; pointer-events:none;"></i> <span style="pointer-events:none;">BTC</span>
                 </button>
-                <button type="button" class="symbol-hero-btn" data-symbol="ETH" style="justify-content:center;"
-                  onclick="selectQuickSymbol('ETH')">
-                  <i class="fab fa-ethereum" style="color:#627eea; font-size:1.2rem;"></i> ETH
+                <button type="button" class="symbol-hero-btn" data-symbol="ETH" style="justify-content:center;">
+                  <i class="fab fa-ethereum" style="color:#627eea; font-size:1.2rem; pointer-events:none;"></i> <span style="pointer-events:none;">ETH</span>
                 </button>
               </div>
               <div style="position:relative; width:100%;">
@@ -3591,6 +3589,14 @@
               <textarea class="form-control" id="fReason" rows="5" style="min-height: 145px !important;"
                 placeholder="詳述你的進場邏輯、共振訊號、資金流向與止損止盈規劃..."></textarea>
             </div>
+            
+            <div class="form-group" style="margin-top:14px;">
+              <label><i class="fas fa-link" style="color:var(--blue); margin-right:4px;"></i> K線圖表 / 分析永久網址</label>
+              <div style="display:flex; gap:8px;">
+                <input type="url" class="form-control" id="fTradeUrl" placeholder="貼上 TradingView 或其他圖表分享網址..." style="flex:1;">
+                <button type="button" class="btn-submit" onclick="testOpenTradeUrl()" style="width:auto; padding:0 16px; font-size:0.85rem; background:rgba(56,189,248,0.15); border-color:var(--blue); color:var(--blue);"><i class="fas fa-external-link-alt"></i> 測試</button>
+              </div>
+            </div>
           </div>
         </div> <!-- Close journal-col-left -->
 
@@ -3613,6 +3619,14 @@
                 <textarea class="form-control" id="fLearning" rows="4"
                   style="min-height: 135px !important; font-size: 0.95rem;"
                   placeholder="今天從市場或此筆交易中，淬鍊與學到了最重要的教訓與核心思維是什麼..."></textarea>
+              </div>
+
+              <!-- Section 3 (Right): Improvement Notes -->
+              <div class="form-section-title" style="margin-top:22px;"><i class="fas fa-wrench" style="color:var(--amber);"></i> 改進空間與檢討</div>
+              <div class="form-group">
+                <textarea class="form-control" id="fImprove" rows="3"
+                  style="min-height: 100px !important; font-size: 0.95rem;"
+                  placeholder="這筆交易哪裡沒做好？下次碰到相同情況可以如何改進？..."></textarea>
               </div>
 
               <!-- Learning Notes & Speed Ratio Image Attachments (Two Dedicated Zones) -->
@@ -4707,11 +4721,11 @@
         }
         if (foundStrategy) {
           fStrategyEl.value = t.strategy;
-          if (document.getElementById('fStrategyCustomInput')) document.getElementById('fStrategyCustomInput').style.display = 'none';
+          if (document.getElementById('fStrategyCustom')) document.getElementById('fStrategyCustom').style.display = 'none';
         } else {
           fStrategyEl.value = 'CUSTOM';
-          if (document.getElementById('fStrategyCustomInput')) {
-            document.getElementById('fStrategyCustomInput').style.display = 'block';
+          if (document.getElementById('fStrategyCustom')) {
+            document.getElementById('fStrategyCustom').style.display = 'block';
             document.getElementById('fStrategyCustom').value = t.strategy || '';
             document.getElementById('fStrategyCustom').required = true;
           }
@@ -5492,16 +5506,18 @@
     }
 
     /* ---- Symbol Quick Selection Helpers ---- */
-    function selectQuickSymbol(sym) {
-      const input = document.getElementById('fSymbolHidden');
+    window.selectQuickSymbol = function(sym) {
+      const input = document.getElementById('fSymbol');
       if (input) {
         input.value = sym;
-        updateSymbolButtonsState();
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        window.updateSymbolButtonsState();
       }
-    }
+    };
 
-    function updateSymbolButtonsState() {
-      const input = document.getElementById('fSymbolHidden');
+    window.updateSymbolButtonsState = function() {
+      const input = document.getElementById('fSymbol');
       if (!input) return;
       const currentVal = (input.value || '').trim().toUpperCase();
       document.querySelectorAll('.symbol-hero-btn, .symbol-quick-btn').forEach(btn => {
@@ -5511,7 +5527,7 @@
           btn.classList.remove('active');
         }
       });
-    }
+    };
 
     function loadSavedSymbolOptions() {
       const container = document.getElementById('symbolQuickBtnContainer');
@@ -5541,7 +5557,7 @@
         }
       });
 
-      const currentInputVal = (document.getElementById('fSymbolHidden')?.value || 'BTC').trim().toUpperCase();
+      const currentInputVal = (document.getElementById('fSymbol')?.value || 'BTC').trim().toUpperCase();
 
       container.innerHTML = allSymbols.map(sym => {
         let iconHtml = '<i class="fas fa-coins" style="color:var(--gold); font-size:1.4rem;"></i>';
@@ -5629,7 +5645,7 @@
         }
       }
 
-      const symbolVal = (document.getElementById('fSymbolHidden')?.value || 'BTC').trim().toUpperCase();
+      const symbolVal = (document.getElementById('fSymbol')?.value || 'BTC').trim().toUpperCase();
 
       const trade = {
         id: Date.now(),
@@ -5667,7 +5683,7 @@
       // Keep the date you just saved instead of jumping back to today, so you can smoothly record multiple trades for the exact same day!
       const savedDate = trade.date;
       tradeForm.reset();
-      const fSymInput = document.getElementById('fSymbolHidden');
+      const fSymInput = document.getElementById('fSymbol');
       if (fSymInput) fSymInput.value = 'BTC';
       updateSymbolButtonsState();
       const fUrlInput = document.getElementById('fTradeUrl');
